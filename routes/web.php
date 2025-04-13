@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\auth\RegisterController;
+use App\Http\Controllers\sections\AccountController;
 use App\Http\Controllers\sections\DashboardController;
 use App\Http\Controllers\sections\CalendarController;
 use App\Http\Controllers\sections\UserController;
@@ -30,7 +31,7 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/main', [DashboardController::class, 'create'])->name('dashboard.create');
-
+    Route::get('/profile/{id?}', [AccountController::class, 'index'])->name('account.index');
     // Calendario
     Route::prefix('calendar')->name('calendar.')->group(function () {
         Route::get('/', [CalendarController::class, 'index'])->name('index');

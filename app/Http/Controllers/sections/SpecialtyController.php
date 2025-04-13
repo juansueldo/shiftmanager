@@ -84,6 +84,10 @@ class SpecialtyController extends Controller
     public function list(){
         $specialties= Specialty::all();
         $data=[];
+        $data[]=[
+            'value' => '',
+            'text' => 'Select Specialty',
+        ];
         foreach($specialties as $specialty){
             $data[]=[
                 'value' => $specialty->id,

@@ -22,7 +22,9 @@
         'resources/js/menu.js',
         'resources/js/config.js',
         'resources/js/dashboards-analytics.js',
-        'resources/js/main.js'])
+        'resources/js/main.js',
+        'resources/js/select2.full.min.js',
+        'resources/css/select2.css',])
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

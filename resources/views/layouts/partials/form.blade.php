@@ -98,43 +98,65 @@ $(document).ready(function () {
 
     // Manejar selects con data-ajax-url
     $('.form-floating select[data-ajax-url]').each(function () {
-        let selectElement = $(this);
-        let ajaxUrl = selectElement.data('ajax-url');
-        let method = selectElement.data('ajax-method') || 'GET';
+    let $select = $(this);
+    let ajaxUrl = $select.data('ajax-url');
+    let method = $select.data('ajax-method') || 'GET';
 
-        // Función para cargar las opciones dinámicamente
-        const loadOptions = function () {
-            $.ajax({
-                url: ajaxUrl,
-                method: method,
-                success: function (response) {
-                    // Limpiar las opciones existentes
-                    selectElement.empty();
+    // Si tiene el atributo `multi`, se convierte en multiple
+    if ($select.attr('multi') !== undefined) {
+        $select.attr('multiple', 'multiple');
+    }
 
-                    // Agregar una opción por defecto (opcional)
-                    selectElement.append('<option value="">Seleccione una opción</option>');
-                    console.log(response);
-                    // Poblar el select con las opciones obtenidas
-                    if (response && Array.isArray(response)) {
-                        response.forEach(option => {
-                            selectElement.append(
-                                `<option value="${option.value}">${option.text}</option>`
-                            );
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error al cargar las opciones:', error);
+    const theme = $select.data('theme') || 'default';
+
+    const initSelect2 = function () {
+        $select.select2({
+            minimumResultsForSearch: Infinity,
+            width: '100%',
+            placeholder: "Seleccione una opción",
+            allowClear: true,
+            theme: theme,
+            dropdownParent: $('.offcanvas-body')
+        });
+    };
+
+    const loadOptions = function () {
+        $.ajax({
+            url: ajaxUrl,
+            method: method,
+            success: function (response) {
+                // Destruir select2 si ya está inicializado
+                if ($select.hasClass('select2-hidden-accessible')) {
+                    $select.select2('destroy');
                 }
-            });
-        };
 
-        // Cargar las opciones al inicializar
-        loadOptions();
+                $select.empty();
 
-        // Opcional: Recargar las opciones si el select cambia
-        //selectElement.on('change', loadOptions);
-    });
+
+                if (response && Array.isArray(response)) {
+                    response.forEach(option => {
+                        $select.append(
+                            $('<option>', {
+                                value: option.value,
+                                text: option.text
+                            })
+                        );
+                    });
+                }
+
+                // Iniciar select2 luego de cargar opciones
+                initSelect2();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error al cargar las opciones:', error);
+            }
+        });
+    };
+
+    loadOptions();
+});
+
+
 });
 
 </script>
