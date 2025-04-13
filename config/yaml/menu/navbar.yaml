@@ -1,0 +1,16 @@
+menu:
+  - name: My Profile
+    data-ajax-source: "/profile"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-user-3-line"
+  - name: Settings
+    data-ajax-source: "/settings"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-settings-3-line"
+  - name: Users
+    data-ajax-source: "/users"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-group-line"

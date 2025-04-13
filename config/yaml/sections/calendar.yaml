@@ -1,0 +1,61 @@
+inputs:
+  - type: hidden
+    name: id
+    value: 0
+    col: 12
+  - type: text
+    name: title
+    label: Title
+    value: ''
+    col: 12
+    placeholder: Title
+  - type: text
+    name: description
+    label: Description
+    value: ''
+    col: 12
+    placeholder: Description
+  - type: date
+    name: date
+    label: Date
+    value: ''
+    col: 6
+  - type: time
+    name: time
+    label: Time
+    value: ''
+    col: 6
+  - type: text
+    name: identifier
+    label: Patient indentification
+    data:
+      fs-validate: "true"
+      fs-number: "true"
+      fs-minlength: "7"
+      fs-maxlength: "8"
+      fs-error-minlength: "Debe tener al menos 7 caracteres"
+      fs-error-maxlength: "No puede tener más de 8 caracteres"
+      fs-error-number: "El identificador solo puede contener números"
+    value: ''
+    checker: /patients/checkidentifier
+    minlength: "7"
+    container: '["#firstname", "#lastname"]'
+    method: replaceValue
+    col: 12
+  - type: text
+    name: firstname
+    label: First name
+    value: ''
+    col: 6
+  - type: text
+    name: lastname
+    label: Last name
+    value: ''
+    col: 6
+form:
+  id: 'event_form'
+  title: Add event
+  source: /calendar/save
+  method: replaceHtml
+  container: 'span#content-wrapper'
+  then: afterSaveCallback

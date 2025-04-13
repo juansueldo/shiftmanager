@@ -1,0 +1,175 @@
+table:
+  name: "Patients"
+  id: "patient_table"
+  path: '/patients/data'
+  actions:
+    - class: btn-edit
+      icon: edit
+      data:
+        data-ajax-source: /patients/form/{0}
+        data-ajax-method: replaceHtml
+        data-ajax-container: '#offcanvasEnd'
+        data-bs-toggle: "offcanvas" 
+        data-bs-target: "#offcanvasEnd"
+        aria-controls: "offcanvasEnd"
+        action: edit
+      dropdown: false
+    - class: btn-delete
+      icon: delete-bin-5
+      data:
+        data-ajax-source: /patients/delete/{0}
+        data-ajax-method: replaceHtml
+        data-ajax-container: 'span#content-wrapper'
+        data-ajax-then: afterSaveCallback
+        action: delete
+      dropdown: false
+    - dropdown: true
+      options:
+      - label: View Details
+        data:
+          action: view
+      - label: Send Email
+        data:
+          action: email"
+  headers:
+  - name: "Patient ID"
+    key: "id"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "Firstname"
+    key: "firstname"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "Lastname"
+    key: "lastname"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "Identifier"
+    key: "identifier"
+    orderable: true
+    searchable: false
+    visible: true
+  - name: 'Email'
+    key: "email"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: 'Status'
+    key: "status_name"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: 'actions'
+    key: "actions"
+    orderable: false
+    searchable: false
+    visible: true
+    actions:
+      - name: "View"
+        icon: "ri-eye-line"
+        action: "view"
+      - name: "Edit"
+        icon: "ri-pencil-line"
+        action: "edit"
+      - name: "Delete"
+        icon: "ri-delete-bin-line"
+        action: "delete"
+inputs:
+  - type: hidden
+    name: id
+    value: 0
+    col: 12
+  - type: text
+    name: firstname
+    label: First Name
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-minlength: 3
+      fs-error-required: "The first name is required"
+      fs-error-minlength: "Minimum 3 characters required"
+    value: ''
+    col: 6
+    placeholder: John
+  - type: text
+    name: lastname
+    label: Last Name
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-minlength: 3
+      fs-error-required: "The last name is required"
+      fs-error-minlength: "Minimum 3 characters required"
+    value: ''
+    placeholder: Doe
+    col: 6
+  - type: date
+    name: date_of_birth
+    label: Date of Birth
+    value: ''
+    col: 12
+  - type: email
+    name: email
+    label: Email
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-email: "true"
+      fs-remote: "true"
+      fs-error-required: "El correo es obligatorio"
+      fs-error-email: "Formato inválido"
+    value: ''
+    col: 12
+  - type: text
+    name: phone
+    label: Phone
+    value: ''
+    col: 12
+  - type: text
+    name: address
+    label: Address
+    value: ''
+    col: 12
+  - type: text
+    name: city
+    label: City
+    value: ''
+    col: 6
+  - type: text
+    name: state
+    label: State
+    value: ''
+    col: 6
+  - type: text
+    name: country
+    label: Country
+    value: ''
+    col: 6
+  - type: text
+    name: zip
+    label: Zip code
+    value: ''
+    col: 6
+  - type: text
+    name: identifier
+    label: Identifier
+    data:
+      fs-validate: "true"
+      fs-number: "true"
+      fs-minlength: "7"
+      fs-maxlength: "8"
+      fs-error-minlength: "Debe tener al menos 7 caracteres"
+      fs-error-maxlength: "No puede tener más de 8 caracteres"
+      fs-error-number: "El identificador solo puede contener números"
+    value: ''
+    col: 12
+form:
+  id: 'patient_form'
+  title: Add patient
+  source: /patients/save
+  method: replaceHtml
+  container: 'span#content-wrapper'
+  then: afterSaveCallback

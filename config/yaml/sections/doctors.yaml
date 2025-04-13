@@ -1,0 +1,149 @@
+table:
+  name: "Doctors"
+  id: "doctor_table"
+  path: '/doctors/data'
+  actions:
+    - class: btn-edit
+      icon: edit
+      data:
+        data-ajax-source: /doctors/form/{0}
+        data-ajax-method: replaceHtml
+        data-ajax-container: '#offcanvasEnd'
+        data-bs-toggle: "offcanvas" 
+        data-bs-target: "#offcanvasEnd"
+        aria-controls: "offcanvasEnd"
+        action: edit
+    - class: btn-delete
+      icon: delete-bin-5
+      data:
+        data-ajax-source: /doctors/delete/{0}
+        data-ajax-method: replaceHtml
+        data-ajax-container: 'span#content-wrapper'
+        data-ajax-then: afterSaveCallback
+        action: delete
+      dropdown: false
+    - dropdown: true
+      options:
+      - label: View Details
+        data:
+          data-ajax-source: /doctors/view/{0}
+          data-ajax-method: replaceHtml
+          data-ajax-container: '#offcanvasEnd'
+          data-bs-toggle: "offcanvas" 
+          data-bs-target: "#offcanvasEnd"
+          aria-controls: "offcanvasEnd"
+          action: view
+      - label: Send Email
+        data:
+          id: 1
+          action: email"
+  headers:
+  - name: "ID"
+    key: "id"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "Firstname"
+    key: "firstname"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "Lastname"
+    key: "lastname"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "Email"
+    key: "email"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: Status
+    key: status_name
+    orderable: true
+    searchable: true
+    visible: true
+  - name: 'actions'
+    key: "actions"
+    orderable: false
+    searchable: false
+    visible: true
+    actions:
+      - name: "View"
+        icon: "ri-eye-line"
+        action: "view"
+      - name: "Edit"
+        icon: "ri-pencil-line"
+        action: "edit"
+      - name: "Delete"
+        icon: "ri-delete-bin-line"
+        action: "delete"
+inputs:
+  - type: hidden
+    name: id
+    value: 0
+    col: 12
+  - type: text
+    name: firstname
+    label: First Name
+    value: ''
+    col: 6
+    placeholder: John
+  - type: text
+    name: lastname
+    label: Last Name
+    value: ''
+    placeholder: Doe
+    col: 6
+  - type: date
+    name: date_of_birth
+    label: Date of Birth
+    value: ''
+    col: 12
+  - type: email
+    name: email
+    label: Email
+    value: ''
+    col: 12
+  - type: text
+    name: phone
+    label: Phone
+    value: ''
+    col: 12
+  - type: text
+    name: address
+    label: Address
+    value: ''
+    col: 12
+  - type: text
+    name: city
+    label: City
+    value: ''
+    col: 6
+  - type: text
+    name: state
+    label: State
+    value: ''
+    col: 6
+  - type: text
+    name: country
+    label: Country
+    value: ''
+    col: 6
+  - type: text
+    name: zip
+    label: Zip code
+    value: ''
+    col: 6
+  - type: text
+    name: identifier
+    label: Identifier
+    value: ''
+    col: 12
+form:
+  id: 'doctor_form'
+  title: Add user
+  source: /doctors/save
+  method: replaceHtml
+  container: 'span#content-wrapper'
+  then: afterSaveCallback
