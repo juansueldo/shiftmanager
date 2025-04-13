@@ -62,33 +62,35 @@ class SpecialtyController extends Controller
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255|unique:specialties,name,' . $request->id,
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:specialties,name,' . $request->id,
+        ]);
 
-    try {
-        if ($request->id > 0) {
-            // Editar el registro existente
-            $specialty = Specialty::findOrFail($request->id);
-            $specialty->update([
-                'name' => $request->input('name')
-            ]);
-
-            return redirect()->route('specialty.index')->with('success', 'Specialty updated successfully!');
-        } else {
-            // Crear un nuevo registro
-            Specialty::create([
-                'name' => $request->input('name')
-            ]);
-
-            return redirect()->route('specialty.index')->with('success', 'Specialty created successfully!');
+        try {
+            if ($request->id > 0) {
+                $specialty = Specialty::findOrFail($request->id);
+                $specialty->update(['name' => $request->input('name')]);
+                return redirect()->route('specialty.index')->with('success', 'Specialty updated successfully!');
+            } else {
+                Specialty::create(['name' => $request->input('name')]);
+                return redirect()->route('specialty.index')->with('success', 'Specialty created successfully!');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong!');
         }
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Something went wrong!');
     }
-}
 
-
+    public function list(){
+        $specialties= Specialty::all();
+        $data=[];
+        foreach($specialties as $specialty){
+            $data[]=[
+                'value' => $specialty->id,
+                'text' => $specialty->name,
+            ];
+        }
+        return response()->json($data);
+    }
 
 }

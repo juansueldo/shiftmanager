@@ -105,6 +105,13 @@ inputs:
     label: Email
     value: ''
     col: 12
+  - type: select
+    name: specialty
+    label: Specialty
+    value: ''
+    url: '/specialty/list'
+    multiple: "true"
+    col: 12
   - type: text
     name: phone
     label: Phone

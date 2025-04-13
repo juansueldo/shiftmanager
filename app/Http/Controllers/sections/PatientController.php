@@ -25,12 +25,10 @@ class PatientController extends Controller
     public function data(Request $request){
         $query = Patient::filter($request->all());
         
-        // Paginación para DataTables
         $perPage = $request->input('length', 10);
         $page = $request->input('start', 0) / $perPage + 1;
         $data = $query->paginate($perPage, ['*'], 'page', $page);
 
-        // Formatear datos
         foreach ($data as $key => $value) {
             $data[$key]['status_name']= $this->showStatus($data[$key]['status_name']);
             $data[$key]['actions'] = $this->getActions($this->yamlconfig['table']['actions'], [$value['id']]); // Puedes agregar más lógica aquí
@@ -71,48 +69,45 @@ class PatientController extends Controller
         ]);
     }
 
-    public function store(StorePatientRequest $request)
-{
-    $this->authorize('create', Patient::class);
+    public function store(StorePatientRequest $request){
+        $this->authorize('create', Patient::class);
 
-    $data = $request->validated();
-    $id = $request->id;
+        $data = $request->validated();
+        $id = $request->id;
 
-    try {
-        if ($id && $id != 0) {
-            // Modo editar
-            $patient = Patient::findOrFail($id);
+        try {
+            if ($id && $id != 0) {
+                $patient = Patient::findOrFail($id);
 
-            // Verificar si el email o el identificador ya están en uso por otro paciente
-            if (Patient::where('email', $request->email)->where('id', '!=', $id)->exists()) {
-                return redirect()->back()->with('error', 'El email ya está en uso.');
+                if (Patient::where('email', $request->email)->where('id', '!=', $id)->exists()) {
+                    return redirect()->back()->with('error', 'El email ya está en uso.');
+                }
+
+                if (Patient::where('identifier', $request->identifier)->where('id', '!=', $id)->exists()) {
+                    return redirect()->back()->with('error', 'El identificador ya está en uso.');
+                }
+
+                $patient->update($data);
+
+                return redirect()->route('patients.index')->with('success', 'Paciente actualizado correctamente.');
+            } else {
+
+                if (Patient::where('email', $request->email)->exists()) {
+                    return redirect()->back()->with('error', 'El email ya está en uso.');
+                }
+
+                if (Patient::where('identifier', $request->identifier)->exists()) {
+                    return redirect()->back()->with('error', 'El identificador ya está en uso.');
+                }
+
+                Patient::create($data);
+
+                return redirect()->route('patients.index')->with('success', 'Paciente creado correctamente.');
             }
 
-            if (Patient::where('identifier', $request->identifier)->where('id', '!=', $id)->exists()) {
-                return redirect()->back()->with('error', 'El identificador ya está en uso.');
-            }
-
-            $patient->update($data);
-
-            return redirect()->route('patients.index')->with('success', 'Paciente actualizado correctamente.');
-        } else {
-            // Modo crear
-            if (Patient::where('email', $request->email)->exists()) {
-                return redirect()->back()->with('error', 'El email ya está en uso.');
-            }
-
-            if (Patient::where('identifier', $request->identifier)->exists()) {
-                return redirect()->back()->with('error', 'El identificador ya está en uso.');
-            }
-
-            Patient::create($data);
-
-            return redirect()->route('patients.index')->with('success', 'Paciente creado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ocurrió un error: ' . $e->getMessage());
         }
-
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Ocurrió un error: ' . $e->getMessage());
-    }
-}
+    } 
 
 }

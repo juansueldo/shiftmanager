@@ -69,5 +69,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/data', [SpecialtyController::class, 'data'])->name('data');
         Route::get('/form/{id?}', [SpecialtyController::class, 'add'])->name('form');
         Route::post('/save', [SpecialtyController::class, 'store'])->name('save');
+        Route::get('/list', [SpecialtyController::class, 'list'])->name('list');
     });
 });

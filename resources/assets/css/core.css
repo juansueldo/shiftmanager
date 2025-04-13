@@ -170,7 +170,7 @@
   --bs-offcanvas-padding-x: 1.25rem;
   --bs-offcanvas-padding-y: 1.25rem;
   --bs-offcanvas-color: #6d6777;
-  --bs-offcanvas-bg: #fff;
+  --bs-offcanvas-bg: var(--bs-card-bg);
   --bs-offcanvas-border-width: 0px;
   --bs-offcanvas-border-color: #e6e5e8;
   --bs-offcanvas-box-shadow: 0 0.5rem 1.75rem 0 rgba(46, 38, 61, 0.24);
@@ -195,6 +195,8 @@
   --bs-bg-select-color: #f6f7fb;
   --bs-bg-floating-color: var(--bs-offcanvas-bg);
   --bs-input-icon-color:  invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg);
+  --bs-form-select-bg-img: none;
+  --bs-form-select-bg-img: url('data:image/svg+xml,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 22" fill="none"%3e%3cpath d="M10.9999 12.0743L15.5374 7.53676L16.8336 8.83292L10.9999 14.6666L5.16626 8.83292L6.46243 7.53676L10.9999 12.0743Z" fill="%23000000" fill-opacity="0.9"/%3e%3c/svg%3e');
 }
 
 [data-bs-theme=dark] {
@@ -359,13 +361,13 @@
   --bs-offcanvas-padding-x: 1.25rem;
   --bs-offcanvas-padding-y: 1.25rem;
   --bs-offcanvas-color: #b0acc7;
-  --bs-offcanvas-bg: #28272e;
+  --bs-offcanvas-bg: var(--bs-card-bg);
   --bs-offcanvas-border-width: 0px;
   --bs-offcanvas-border-color: #2f2d3b;
   --bs-offcanvas-box-shadow: 0 .5rem 1.75rem 0 rgba(17, 16, 24, 0.28);
   --bs-offcanvas-transition: transform .25sease-in-out;
   --bs-offcanvas-title-line-height: 1.375;
-  --bs-bg-backdrop: #201d29;
+  --bs-bg-backdrop: #18161d;
   --bs-table-color-type: initial;
   --bs-table-bg-type: initial;
   --bs-table-color-state: initial;
@@ -384,6 +386,7 @@
   --bs-bg-select-color: #1a1a1b;
   --bs-bg-floating-color: var(--bs-offcanvas-bg);
   --bs-input-icon-color: invert(100%) sepia(0%) saturate(100%) hue-rotate(0deg);
+  --bs-form-select-bg-img: url('data:image/svg+xml,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 22" fill="none"%3e%3cpath d="M10.9999 12.0743L15.5374 7.53676L16.8336 8.83292L10.9999 14.6666L5.16626 8.83292L6.46243 7.53676L10.9999 12.0743Z" fill="%23ffffff" fill-opacity="0.9"/%3e%3c/svg%3e');
 }
 
 *,
@@ -2905,7 +2908,7 @@ textarea.form-control-lg {
 }
 
 .form-select {
-  --bs-form-select-bg-img: url('data:image/svg+xml,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 22" fill="none"%3e%3cpath d="M10.9999 12.0743L15.5374 7.53676L16.8336 8.83292L10.9999 14.6666L5.16626 8.83292L6.46243 7.53676L10.9999 12.0743Z" fill="%232e263d" fill-opacity="0.9"/%3e%3c/svg%3e');
+  
   display: block;
   width: 100%;
   padding: 0.8555rem 2rem 0.8555rem 1rem;
@@ -24414,7 +24417,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
   background: #8c57ff;
 }
 .form-select{
-  background: var(--bs-bg-select-color) !important;
+  background: var(--bs-card-bg) !important;
 }
 /*# sourceMappingURL=core.css.map */
 
@@ -24476,4 +24479,42 @@ input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration {
   filter: var(--bs-input-icon-color);
+}
+
+.page-link{
+  color: #000 !important;
+}
+li.dt-paging-button.page-item.active > button {
+  color: #fff !important;
+}
+.layout-navbar{
+  background: var(--bs-card-bg) !important;
+  padding: 10px !important;
+  margin-top: 10px !important;
+  border-radius: 5px !important;
+}
+
+
+.bg-success{
+  background-color: rgb(25 135 84 / 35%) !important;
+  color: #35c935 !important;
+}
+.bg-warning {
+  background-color: rgb(255 193 7 / 35%) !important;
+  color: #ffc107 !important;
+}
+
+.bg-danger {
+  background-color: rgb(220 53 69 / 35%) !important;
+  color: #dc3545 !important;
+}
+
+.bg-secondary {
+  background-color: rgb(108 117 125 / 35%) !important;
+  color: #6c757d !important;
+}
+
+.bg-primary {
+  background-color: rgb(13 110 253 / 35%) !important;
+  color: #0d6efd !important;
 }
