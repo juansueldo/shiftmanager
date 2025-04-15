@@ -30,4 +30,8 @@ class DashboardController extends Controller
         $user = Auth::user();
         return view('sections.dashboard', compact('user'));
     }
+
+    public function landing(){
+        return view('auth.landing');
+    }
 }

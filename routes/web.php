@@ -16,6 +16,8 @@ Route::get('/', function () {
     return redirect()->route('dashboard.index');
 })->middleware('auth');
 
+Route::get('/landing', [DashboardController::class, 'landing'])->name('home');
+
 // Rutas de autenticación
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
