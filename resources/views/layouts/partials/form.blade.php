@@ -51,8 +51,8 @@
         @endforeach
     </div>
     <div class="offcanvas-body my-auto mx-0 flex-grow-0">
-        <button type="submit" class="btn btn-primary mb-2 d-grid w-100">Continue</button>
-        <button type="button" class="btn btn-outline-secondary d-grid w-100" data-bs-dismiss="offcanvas">Cancel</button>
+        <button type="submit" class="btn btn-primary mb-2 d-grid w-100">{{__('messages.save')}}</button>
+        <button type="button" class="btn btn-outline-secondary d-grid w-100" data-bs-dismiss="offcanvas">{{__('messages.cancel')}}</button>
     </div>
 </form>
 

@@ -12,14 +12,17 @@
             ><i class="ri-add-line"></i> {{__('calendar.add_event')}}</button>
     </div>
     <div id="calendar" data-ajax-data="{{ $calendarevents}}"></div>
+    <div id="language" data-ajax-data="{{ $user->language }}"></div>
 </div>
 
 @include('layouts.partials.alert', ['session'=> $session ?? ''])
 <script>
     $(document).ready(function() {
         var $calendarElement = $('#calendar'); 
+        let $languageElement = $('#language');
+        let language = $languageElement.data('ajax-data');
         if ($calendarElement.length) {
-            initializeCalendar($calendarElement[0]); 
+            initializeCalendar($calendarElement[0], language); 
         }
     });
 </script>

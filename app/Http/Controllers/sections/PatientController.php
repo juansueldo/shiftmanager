@@ -7,7 +7,7 @@ use App\Http\Requests\StorePatientRequest;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
+use Illuminate\Support\Facades\Auth;
 class PatientController extends Controller
 {
     use AuthorizesRequests;
@@ -19,8 +19,9 @@ class PatientController extends Controller
     }
 
     public function index(){
+        $user = Auth::user();
         $table = $this->yamlconfig['table'];
-        return view('sections.patients', compact('table'));
+        return view('sections.patients', compact('table', 'user'));
     }
 
     public function data(Request $request){

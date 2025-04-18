@@ -35,4 +35,5 @@ return [
     'deactivate_account' => 'Deactivate account',
     'save'=>'Save',
     'account_updated' => 'Profile updated successfully!',
+    'cancel' => 'Cancel',
 ];

@@ -105,7 +105,14 @@
                         name="password"
                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                         aria-describedby="password"
-                        required />
+                        required
+                        data-fs-validate="true"
+                        data-fs-minlength="8"
+                        data-fs-required="true"
+                        data-pattern= "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$"
+                        data-fs-error-required= {{ __('register.password_error_required') }}
+                        data-fs-error-pattern {{ __('register.password_pattern') }}
+                        data-fs-error-minlength= {{ __('register.password_minlength') }} />
                       <label for="password">{{__('register.password')}}</label>
                     </div>
                     <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line ri-20px"></i></span>

@@ -1,6 +1,6 @@
 
-<div id="table-default" class="table-responsive">
-    <table class="table my-3" id="{{ $table['id'] }}" data-path="{{ $table['path'] }}" data-columns="{{ json_encode($table['headers']) }}">
+<div id="table-default" class="table-responsive" >
+    <table class="table my-3" id="{{ $table['id'] }}" data-lang="{{ $user->language }}" data-path="{{ $table['path'] }}" data-columns="{{ json_encode($table['headers']) }}">
         <thead>
             <tr>
                 @foreach($table['headers'] as $header)

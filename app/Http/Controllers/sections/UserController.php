@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     protected $yamlconfig;
@@ -19,7 +20,8 @@ class UserController extends Controller
     public function index()
     {
         $table = $this->yamlconfig['table'];
-        return view('sections.users', compact('table'));
+        $user = Auth::user();
+        return view('sections.users', compact('table', 'user'));
     }
 
     public function data(Request $request){

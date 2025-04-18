@@ -5,7 +5,7 @@ namespace App\Http\Controllers\sections;
 use App\Http\Controllers\Controller;
 use App\Models\Specialty;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class SpecialtyController extends Controller
 {
     protected $yamlconfig;
@@ -18,8 +18,9 @@ class SpecialtyController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
         $table = $this->yamlconfig['table'];
-        return view('sections.specialties', compact('table'));
+        return view('sections.specialties', compact('table', 'user'));
     }
 
     public function data(Request $request){

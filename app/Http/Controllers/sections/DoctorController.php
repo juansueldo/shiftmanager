@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreDoctorRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
 {
@@ -20,8 +21,9 @@ class DoctorController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
         $table = $this->yamlconfig['table'];
-        return view('sections.doctors', compact('table'));
+        return view('sections.doctors', compact('table', 'user'));
     }
 
     public function data(Request $request){

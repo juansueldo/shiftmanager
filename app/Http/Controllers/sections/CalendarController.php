@@ -10,6 +10,7 @@ use App\Models\Calendar;
 use App\Models\Patient;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CalendarController extends Controller
 {
@@ -23,8 +24,9 @@ class CalendarController extends Controller
     }
     public function index()
     {
+        $user= Auth::user();
         $calendarevents = Calendar::all();
-        return view('sections.calendar', compact('calendarevents'));
+        return view('sections.calendar', compact('calendarevents', 'user'));
     }
 
     public function add($id = 0)

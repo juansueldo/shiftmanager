@@ -2,9 +2,10 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import allLocales from '@fullcalendar/core/locales-all';
 const base_url = 'http://127.0.0.1:8000';
 
-function initializeCalendar(calendarElement) {
+function initializeCalendar(calendarElement, lang) {
     // Obtener los eventos desde el atributo data-ajax-data
     var eventsData = calendarElement.getAttribute('data-ajax-data');
     var events = JSON.parse(eventsData);
@@ -12,6 +13,8 @@ function initializeCalendar(calendarElement) {
     var calendar = new Calendar(calendarElement, {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
+        locales: allLocales,
+        locale: lang,
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
