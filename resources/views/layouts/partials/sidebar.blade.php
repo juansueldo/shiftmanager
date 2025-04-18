@@ -21,7 +21,7 @@
                 data-ajax-method="{{ $value['data-ajax-method'] }}" 
                 data-ajax-container="{{ $value['data-ajax-container'] }}">
                 <i class="menu-icon tf-icons {{ $value['icon'] }}"></i>
-                <div data-i18n="Dashboards">{{ $value['name'] }}</div>
+                <div data-i18n="Dashboards">{{ __("{$value['name']}") }}</div>
             </a>
         </li>
         @endforeach   

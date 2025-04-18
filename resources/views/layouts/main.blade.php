@@ -73,7 +73,7 @@
                     <script>
                       document.write(new Date().getFullYear());
                     </script>
-                    , made with <span class="text-danger"><i class="tf-icons ri-heart-fill"></i></span> by
+                    , {{ __('dashboard.made_with') }} <span class="text-danger"><i class="tf-icons ri-heart-fill"></i></span> {{ __('dashboard.by') }}
                     <a href="https://themeselection.com" target="_blank" class="footer-link">Juan Sueldo</a>
                   </div>
                   

@@ -2,6 +2,7 @@ table:
   name: "Patients"
   id: "patient_table"
   path: '/patients/data'
+  file: 'patient'
   actions:
     - class: btn-edit
       icon: edit

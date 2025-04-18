@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'welcome' => 'Bienvenido',
+    'dashboard' => 'Panel de control',
+    'calendar' => 'Calendario',
+    'medical_history' => 'Historia médica',
+    'patients' => 'Pacientes',
+    'specialties' => 'Especialidades',
+    'doctors' => 'Doctores',
+    'settings' => 'Configuracion',
+    'english' => 'Inglés',
+    'spanish' => 'Español',
+    'french' => 'Frances',
+    'german' => 'Alemán',
+    'italian' => 'Italiano',
+    'portuguese' => 'Portugués',
+    'russian' => 'Ruso',
+    'made_with' => 'Hecho con',
+    'by' => 'por',
+    'my_profile' => 'Mi perfil',
+    'users' => 'Usuarios',
+    'logout' => 'Cerrar Sesión',
+    'error' => 'Error',
+    'success' => 'Exito',
+];

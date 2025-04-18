@@ -1,6 +1,6 @@
 
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h3>Calendar <span class="text-muted text-small">/ Manage your calendar</span></h3>
+    <h3>{{__('calendar.title')}} <span class="text-muted text-small">{{ __('calendar.span') }}</span></h3>
     <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-primary waves-effect waves-light"  
             data-bs-toggle="offcanvas"
@@ -9,7 +9,7 @@
             data-ajax-source="/calendar/add"
             data-ajax-method="replaceHtml"
             data-ajax-container="#offcanvasEnd"
-            ><i class="ri-add-line"></i> Add new event</button>
+            ><i class="ri-add-line"></i> {{__('calendar.add_event')}}</button>
     </div>
     <div id="calendar" data-ajax-data="{{ $calendarevents}}"></div>
 </div>

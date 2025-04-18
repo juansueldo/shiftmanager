@@ -11,6 +11,10 @@ use stdClass;
 
 class AccountController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
     public function index()
     {
         $user = Auth::user();
@@ -19,17 +23,22 @@ class AccountController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->only(['firstname', 'lastname', 'email']);
-        if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
+        try{
+            $data = $request->only(['firstname', 'lastname', 'email']);
+            if ($request->filled('password')) {
+                $data['password'] = bcrypt($request->password);
+            }
+            if ($request->avatar) {
+                $data['avatar'] = $this->saveFile($request->avatar, 'users');
+            }
+            $user = User::find($request->id);
+            $user->update($data);
+            return redirect()->route('account.index')->with('success', __('user.account_updated'));
+
+        }catch(\Exception $e){
+            return redirect()->route('account.index')->with('error', __('user.error_occurred'));
         }
-        if ($request->avatar) {
-            $data['avatar'] = $this->saveFile($request->avatar, 'users');
-        }
-        $user = User::find($request->id);
-        $user->update($data);
         
-        return redirect()->route('account.index')->with('success', 'Perfil actualizado correctamente');
     }
 
 }

@@ -14,6 +14,7 @@ class PatientController extends Controller
     protected $yamlconfig;
 
     public function __construct(){
+        parent::__construct();
         $this->yamlconfig = $this->getYamlConfig('sections/patients');
     }
 

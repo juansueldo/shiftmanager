@@ -2,7 +2,7 @@
     <script>
         Swal.fire({
             icon: 'success',
-            title: 'Success',
+            title: "{{ __('dashboard.success') }}",
             text: "{{ session('success') }}",
             timer: 3000,
             showConfirmButton: false,
@@ -15,7 +15,7 @@
     <script>
         Swal.fire({
             icon: 'error',
-            title: 'Error!',
+            title: "{{ __('dashboard.error') }}",
             text: "{{ session('error') }}",
             timer: 3000,
             showConfirmButton: false,

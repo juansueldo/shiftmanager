@@ -18,6 +18,7 @@ class CalendarController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->yamlconfig = $this->getYamlConfig('/sections/calendar');
     }
     public function index()
@@ -74,7 +75,7 @@ class CalendarController extends Controller
                 ]);
             } catch (\Exception $e) {
                 Log::error('Error creating patient: ' . $e->getMessage());
-                return redirect()->route('calendar.index')->with('error', 'Something went wrong! ' . $e->getMessage());
+                return redirect()->route('calendar.index')->with('error', __('calendar.error_ocurred')  . $e->getMessage());
             }
         }
     
@@ -90,21 +91,21 @@ class CalendarController extends Controller
                 // Es una edición
                 $calendar = Calendar::find($request->id);
                 if (!$calendar) {
-                    return redirect()->route('calendar.index')->with('error', 'Calendar not found!');
+                    return redirect()->route('calendar.index')->with('error', __('calendar.error_occurred'));
                 }
     
                 $calendar->update($data);
     
-                return redirect()->route('calendar.index')->with('success', 'Calendar updated successfully!');
+                return redirect()->route('calendar.index')->with('success', __('calendar.event_updated'));
             } else {
                 // Es un nuevo turno
                 Calendar::create($data);
     
-                return redirect()->route('calendar.index')->with('success', 'Calendar created successfully!');
+                return redirect()->route('calendar.index')->with('success', __('calendar.event_created'));
             }
         } catch (\Exception $e) {
             Log::error('Error saving calendar: ' . $e->getMessage());
-            return redirect()->route('calendar.index')->with('error', 'Something went wrong! ' . $e->getMessage());
+            return redirect()->route('calendar.index')->with('error', __('calendar.error_occurred') . $e->getMessage());
         }
     }
     

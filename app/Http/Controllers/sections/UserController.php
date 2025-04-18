@@ -12,6 +12,7 @@ class UserController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->yamlconfig = $this->getYamlConfig('sections/users');
     }
 
@@ -120,4 +121,5 @@ class UserController extends Controller
             return redirect()->back()->with('error', __('user.error_occurred'));
         }
     }
+    
 }

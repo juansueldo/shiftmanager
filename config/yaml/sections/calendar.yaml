@@ -5,37 +5,37 @@ inputs:
     col: 12
   - type: text
     name: title
-    label: Title
+    label: title_form
     value: ''
     col: 12
     placeholder: Title
   - type: text
     name: description
-    label: Description
+    label: description
     value: ''
     col: 12
     placeholder: Description
   - type: date
     name: date
-    label: Date
+    label: date
     value: ''
     col: 6
   - type: time
     name: time
-    label: Time
+    label: time
     value: ''
     col: 6
   - type: text
     name: identifier
-    label: Patient indentification
+    label: patient_indentification
     data:
       fs-validate: "true"
       fs-number: "true"
       fs-minlength: "7"
       fs-maxlength: "8"
-      fs-error-minlength: "Debe tener al menos 7 caracteres"
-      fs-error-maxlength: "No puede tener más de 8 caracteres"
-      fs-error-number: "El identificador solo puede contener números"
+      fs-error-minlength: calendar.identification_error_minlength
+      fs-error-maxlength: calendar.identification_error_maxlength
+      fs-error-number: calendar.identification_error_numeric
     value: ''
     checker: /patients/checkidentifier
     minlength: "7"
@@ -44,17 +44,18 @@ inputs:
     col: 12
   - type: text
     name: firstname
-    label: First name
+    label: firstname
     value: ''
     col: 6
   - type: text
     name: lastname
-    label: Last name
+    label: lastname
     value: ''
     col: 6
 form:
   id: 'event_form'
-  title: Add event
+  file: 'calendar'
+  title: add_event
   source: /calendar/save
   method: replaceHtml
   container: 'span#content-wrapper'

@@ -1,15 +1,15 @@
 menu:
-  - name: My Profile
+  - name: dashboard.my_profile
     data-ajax-source: "/profile/{{user.id}}"
     data-ajax-method: "replaceHtml"
     data-ajax-container: "span#content-wrapper"
     icon: "ri-user-3-line"
-  - name: Settings
+  - name: dashboard.settings
     data-ajax-source: "/settings"
     data-ajax-method: "replaceHtml"
     data-ajax-container: "span#content-wrapper"
     icon: "ri-settings-3-line"
-  - name: Users
+  - name: dashboard.users
     data-ajax-source: "/users"
     data-ajax-method: "replaceHtml"
     data-ajax-container: "span#content-wrapper"

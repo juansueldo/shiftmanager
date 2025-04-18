@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\User;
 class DashboardController extends Controller
 {
     protected $yamlconfig;
@@ -16,6 +19,7 @@ class DashboardController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->yamlconfig = $this->getYamlConfig('/menu/sidebar');
         $this->navbarconfig = $this->getYamlConfig('/menu/navbar');
     }
@@ -44,11 +48,12 @@ class DashboardController extends Controller
         return view('auth.landing');
     }
 
-    public function setLanguage($lang)
+    public function setLanguage($locale)
     {
-        App::setLocale($lang);
-        Session::put('locale', $lang);
-        Log::info('Idioma cambiado a: ' . $lang);
-        return redirect()->route('dashboard.index');
+        $currentuser = Auth::user();
+        $user = User::find($currentuser->id);
+        $data['language']= $locale;
+        $user->update($data);
+        return redirect()->back();
     }
 }

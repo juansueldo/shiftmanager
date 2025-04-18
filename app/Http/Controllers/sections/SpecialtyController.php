@@ -12,6 +12,7 @@ class SpecialtyController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->yamlconfig = $this->getYamlConfig('sections/specialties');
     }
 

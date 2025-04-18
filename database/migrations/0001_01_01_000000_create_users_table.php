@@ -26,6 +26,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('language')->default('en');
             $table->unsignedBigInteger('status')->default(1);
             $table->foreign('status')->references('id')->on('statuses')
             ->onUpdate('cascade')

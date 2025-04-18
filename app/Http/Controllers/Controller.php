@@ -4,8 +4,27 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Yaml\Yaml;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 abstract class Controller
 {
+    public function __construct(){
+        $this->getLangue();
+    }
+
+    protected function getLangue(){
+        if (Auth::check()) {
+            $user = Auth::user();
+            App::setLocale($user->language); // Establecer el idioma del usuario
+            Session::put('locale', $user->language); // Guardar el idioma en la sesión
+        } else {
+            // Intentar obtener el idioma de las cookies
+            $locale = request()->cookie('locale', config('app.locale')); // Usar el idioma de las cookies o el predeterminado
+            App::setLocale($locale); // Establecer el idioma
+            Session::put('locale', $locale); // Guardar el idioma en la sesión
+        }
+    }
     protected function getYamlConfig($filename){
         return Yaml::parseFile(config_path("yaml/{$filename}.yaml"));
     }

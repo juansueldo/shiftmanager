@@ -42,17 +42,16 @@
               <a href="index.html" class="app-brand-link gap-3">
                 <span class="app-brand-logo demo">
                   <span style="color: #9055fd">
-                   
+                    <img src="{{ asset('img/logo.png') }}" alt="logo" width="70" height="70" class="rounded-circle" />
                   </span>
                 </span>
-                <span class="app-brand-text demo text-heading fw-semibold">Clinic app</span>
               </a>
             </div>
             <!-- /Logo -->
 
             <div class="card-body mt-1">
-              <h4 class="mb-1">Welcome to Clinic app! 👋🏻</h4>
-              <p class="mb-5">Please sign-in to your account and start the adventure</p>
+              <h4 class="mb-1">{{ __('login.welcome') }} 👋🏻</h4>
+              <p class="mb-5">{{ __('login.message') }}</p>
 
               <form id="formAuthentication" class="mb-5" action="{{ route('login.store') }}" method="POST">
                 @csrf
@@ -66,7 +65,7 @@
                     value="{{ old('email') }}"
                     required
                     autofocus />
-                  <label for="email">Email</label>
+                  <label for="email">{{__('login.email')}}</label>
                   @if ($errors->has('email'))
                     <div class="alert alert-danger mt-2">
                         {{ $errors->first('email') }}
@@ -85,7 +84,7 @@
                           placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                           aria-describedby="password"
                           required />
-                        <label for="password">Password</label>
+                        <label for="password">{{__('login.password')}}</label>
                       </div>
                       <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line ri-20px"></i></span>
                     </div>
@@ -99,14 +98,14 @@
                 <div class="mb-5 pb-2 d-flex justify-content-between pt-2 align-items-center">
                   <div class="form-check mb-0">
                     <input class="form-check-input" type="checkbox" id="remember-me" />
-                    <label class="form-check-label" for="remember-me"> Remember Me </label>
+                    <label class="form-check-label" for="remember-me"> {{ __('login.remember_me') }} </label>
                   </div>
                   <a href="auth-forgot-password-basic.html" class="float-end mb-1">
-                    <span>Forgot Password?</span>
+                    <span>{{ __('login.forgot_password') }}</span>
                   </a>
                 </div>
                 <div class="mb-5">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
+                  <button class="btn btn-primary d-grid w-100" type="submit">{{ __('login.login') }}</button>
                 </div>
               </form>
               @if ($errors->has('email') || $errors->has('password'))
@@ -123,9 +122,9 @@
                 </script>
               @endif
               <p class="text-center mb-5">
-                <span>New on our platform?</span>
+                <span>{{ __('login.new_here') }}</span>
                 <a href="{{ route('register.index') }}">
-                  <span>Create an account</span>
+                  <span>{{ __('login.create_account') }}</span>
                 </a>
               </p>
             </div>

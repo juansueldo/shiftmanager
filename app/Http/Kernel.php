@@ -9,9 +9,13 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'web' =>   [ 
+    ];
+
+    protected $middlewareGroups = [
+        'web' => [
             \App\Http\Middleware\SetLocale::class,
-        ]
+
+        ],
     ];
 
 }

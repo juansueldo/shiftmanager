@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'welcome' => 'Welcome',
+    'dashboard' => 'Dashboard',
+    'calendar' => 'Calendar',
+    'medical_history' => 'Medical History',
+    'patients' => 'Patients',
+    'specialties' => 'Specialties',
+    'doctors' => 'Doctors',
+    'settings' => 'Settings',
+    'english' => 'English',
+    'spanish' => 'Spanish',
+    'french' => 'French',
+    'german' => 'German',
+    'italian' => 'Italian',
+    'portuguese' => 'Portuguese',
+    'russian' => 'Russian',
+    'made_with' => 'Made with',
+    'by' => 'by',
+    'my_profile' => 'My Profile',
+    'users' => 'Users',
+    'logout' => 'Logout',
+    'error' => 'Error',
+    'success' => 'Success',
+];

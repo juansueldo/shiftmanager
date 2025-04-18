@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    public function __construct(){
+        parent::__construct();
+    }
     public function index()
     {
         return view('auth.login');
@@ -27,7 +30,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => __('login.login_error'),
         ])->onlyInput('email');
     }
 

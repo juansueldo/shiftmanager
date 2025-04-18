@@ -30,18 +30,18 @@
                   </a>
                 <ul class="dropdown-menu dropdown-menu-end mt-3 py-2">
                     <li>
-                        <a class="dropdown-item" href="#">
-                            <span class="align-middle">English</span>
+                        <a class="dropdown-item" href="{{ route('dashboard.language', ['lang' => 'en']) }}">
+                            <span class="align-middle">{{__('dashboard.english')}}</span>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{ route('dashboard.language', ['lang' => 'es']) }}"">
-                            <span class="align-middle">Spanish</span>
+                        <a class="dropdown-item" href="{{ route('dashboard.language', ['lang' => 'es']) }}">
+                            <span class="align-middle">{{__('dashboard.spanish')}}</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="#">
-                            <span class="align-middle">Portuges</span>
+                            <span class="align-middle">{{__('dashboard.portuguese')}}</span>
                         </a>
                     </li>
                 </ul>
@@ -143,7 +143,7 @@
                           data-ajax-method="{{ $value['data-ajax-method'] }}" 
                           data-ajax-container="{{ $value['data-ajax-container'] }}">
                           <i class="{{ $value['icon'] }} ri-22px me-2"></i>
-                          <span class="align-middle">{{ $value['name'] }}</span>
+                          <span class="align-middle">{{ __("{$value['name']}") }}</span>
                         </a>
                       </li>
                     @endforeach
@@ -155,7 +155,7 @@
                       <form action="{{ route('login.destroy') }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-danger d-flex w-100" href="javascript:void(0);">
-                          <small class="align-middle">Logout</small>
+                          <small class="align-middle">{{ __('dashboard.logout') }}</small>
                           <i class="ri-logout-box-r-line ms-2 ri-16px"></i>
                         </button>
                       </div>

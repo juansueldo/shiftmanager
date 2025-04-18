@@ -1,5 +1,5 @@
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h3>Account<span class="text-muted text-small"> / All information of your account</span></h3>
+    <h3>{{__('user.account')}} <span class="text-muted text-small"> {{ __('user.span_account') }}</span></h3>
               <div class="row">
                 <div class="col-md-12">
                     
@@ -14,7 +14,7 @@
                           id="uploadedAvatar" />
                         <div class="button-wrapper">
                           <label for="upload" class="btn btn-sm btn-primary me-3 mb-4" tabindex="0">
-                            <span class="d-none d-sm-block">Upload new photo</span>
+                            <span class="d-none d-sm-block">{{ __('user.upload_photo') }}</span>
                             <i class="ri-upload-2-line d-block d-sm-none"></i>
                             <input
                               type="file"
@@ -25,10 +25,10 @@
                           </label>
                           <button type="button" id="resetImage" class="btn btn-sm btn-outline-danger account-image-reset mb-4">
                             <i class="ri-refresh-line d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Reset</span>
+                            <span class="d-none d-sm-block">{{__('user.reset')}}</span>
                           </button>
 
-                          <div>Allowed JPG, GIF or PNG. Max size of 800K</div>
+                          <div>{{ __('user.allowed') }}</div>
                         </div>
                       </div>
                     </div>
@@ -54,13 +54,13 @@
                                 name="firstname"
                                 autofocus 
                                 value="{{ $user->firstname }}"/>
-                              <label for="firstname">First Name</label>
+                              <label for="firstname">{{__('user.firstname')}}</label>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-floating form-floating-outline">
                               <input class="form-control" type="text" name="lastname" id="lastname" value="{{$user->lastname}}" />
-                              <label for="lastname">Last Name</label>
+                              <label for="lastname">{{  __('user.lastname')}}</label>
                             </div>
                           </div>
                           <div class="col-md-6">
@@ -72,7 +72,7 @@
                                 name="email"
                                 value="{{$user->email}}"
                                 placeholder="john.doe@example.com" />
-                              <label for="email">E-mail</label>
+                              <label for="email">{{ __('user.email') }}</label>
                             </div>
                           </div>
                           
@@ -86,22 +86,22 @@
                                   class="form-control"
                                   placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" 
                                   />
-                                <label for="password">Password</label>
+                                <label for="password">{{ __('user.password') }}</label>
                               </div>
                               <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line ri-20px"></i></span>
                             </div>
                           </div>
                         </div> 
                         <div class="mt-6">
-                          <button type="submit" class="btn btn-primary me-3">Save changes</button>
-                          <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                          <button type="submit" class="btn btn-primary me-3">{{__('user.save')}}</button>
+                          <!--<button type="reset" class="btn btn-outline-secondary">Reset</button>-->
                         </div>
                       </form>
                     </div>
                     <!-- /Account -->
                   </div>
                   <div class="card">
-                    <h5 class="card-header">Delete Account</h5>
+                    <h5 class="card-header">{{ __('user.delete_account') }}</h5>
                     <div class="card-body">
                       <form id="formAccountDeactivation" onsubmit="return false">
                         <div class="form-check mb-6 ms-3">
@@ -111,11 +111,11 @@
                             name="accountActivation"
                             id="accountActivation" />
                           <label class="form-check-label" for="accountActivation"
-                            >I confirm my account deactivation</label
+                            >{{ __('user.delete_account_confirm') }}</label
                           >
                         </div>
                         <button type="submit" class="btn btn-danger deactivate-account" disabled="disabled">
-                          Deactivate Account
+                          {{__('user.deactivate_account')}}
                         </button>
                       </form>
                     </div>

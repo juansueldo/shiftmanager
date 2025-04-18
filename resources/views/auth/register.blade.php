@@ -22,6 +22,7 @@
 
       <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite([
+        'resources/js/app.js',
         'resources/css/app.css', 
         'resources/assets/css/theme-default.css', 
         'resources/assets/css/core.css', 
@@ -31,8 +32,8 @@
         'resources/js/helpers.js',
         'resources/js/menu.js',
         'resources/js/config.js',
-        'resources/js/main.js',
-        'resources/js/app.js'])
+        'resources/assets/js/validation.js',
+        'resources/js/main.js'])
   </head>
 
   <body>
@@ -48,74 +49,17 @@
               <a href="index.html" class="app-brand-link gap-3">
                 <span class="app-brand-logo demo">
                   <span style="color: var(--bs-primary)">
-                    <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12.3002 1.25469L56.655 28.6432C59.0349 30.1128 60.4839 32.711 60.4839 35.5089V160.63C60.4839 163.468 58.9941 166.097 56.5603 167.553L12.2055 194.107C8.3836 196.395 3.43136 195.15 1.14435 191.327C0.395485 190.075 0 188.643 0 187.184V8.12039C0 3.66447 3.61061 0.0522461 8.06452 0.0522461C9.56056 0.0522461 11.0271 0.468577 12.3002 1.25469Z"
-                        fill="currentColor" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M0 65.2656L60.4839 99.9629V133.979L0 65.2656Z"
-                        fill="black" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M0 65.2656L60.4839 99.0795V119.859L0 65.2656Z"
-                        fill="black" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M237.71 1.22393L193.355 28.5207C190.97 29.9889 189.516 32.5905 189.516 35.3927V160.631C189.516 163.469 191.006 166.098 193.44 167.555L237.794 194.108C241.616 196.396 246.569 195.151 248.856 191.328C249.605 190.076 250 188.644 250 187.185V8.09597C250 3.64006 246.389 0.027832 241.935 0.027832C240.444 0.027832 238.981 0.441882 237.71 1.22393Z"
-                        fill="currentColor" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M250 65.2656L189.516 99.8897V135.006L250 65.2656Z"
-                        fill="black" />
-                      <path
-                        opacity="0.077704"
-                        fill-rule="evenodd"
-                        d="M250 65.2656L189.516 99.0497V120.886L250 65.2656Z"
-                        fill="black" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z"
-                        fill="currentColor" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z"
-                        fill="white"
-                        fill-opacity="0.15" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z"
-                        fill="currentColor" />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z"
-                        fill="white"
-                        fill-opacity="0.3" />
-                    </svg>
+                  <img src="{{ asset('img/logo.png') }}" alt="logo" width="70" height="70" class="rounded-circle" />
                   </span>
                 </span>
-                <span class="app-brand-text demo text-heading fw-semibold">Materio</span>
               </a>
             </div>
             <!-- /Logo -->
             <div class="card-body mt-1">
-              <h4 class="mb-1">Adventure starts here 🚀</h4>
-              <p class="mb-5">Make your app management easy and fun!</p>
+              <h4 class="mb-1">{{__('register.title')}} 🚀</h4>
 
-              <form id="formAuthentication" class="mb-5" action="{{ route('register.store') }}" method="POST">
+              <form id="formAuthentication" class="mb-5" action="{{ route('register.store') }}" method="POST"
+              data-ajax-validated="true">
                 @csrf
                 <div class="form-floating form-floating-outline mb-5">
                   <input
@@ -124,9 +68,13 @@
                     id="firstname"
                     name="firstname"
                     placeholder="Enter your name"
-                    required
-                    autofocus />
-                  <label for="name">Firstname</label>
+                    required 
+                    data-fs-validate="true"
+                    data-fs-required="true"
+                    data-fs-minlength="3"
+                    data-fs-error-required= {{__('register.firstname_error_required')  }}
+                    data-fs-error-minlength={{__('register.firstname_error_min')}}/>
+                  <label for="name">{{__('register.firstname')}}</label>
                 </div>
                 <div class="form-floating form-floating-outline mb-5">
                   <input
@@ -136,12 +84,16 @@
                     name="lastname"
                     placeholder="Enter your lastname"
                     required
-                    autofocus />
-                  <label for="name">Lastname</label>
+                    data-fs-validate="true"
+                    data-fs-required="true"
+                    data-fs-minlength="3"
+                    data-fs-error-required= {{__('register.lastname_error_required')  }}
+                    data-fs-error-minlength={{__('register.lastname_error_min')}}/>
+                  <label for="name">{{__('register.lastname')}}</label>
                 </div>
                 <div class="form-floating form-floating-outline mb-5">
                   <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required />
-                  <label for="email">Email</label>
+                  <label for="email">{{__('register.email')}}</label>
                 </div>
                 <div class="mb-5 form-password-toggle">
                   <div class="input-group input-group-merge">
@@ -154,7 +106,7 @@
                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                         aria-describedby="password"
                         required />
-                      <label for="password">Password</label>
+                      <label for="password">{{__('register.password')}}</label>
                     </div>
                     <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line ri-20px"></i></span>
                   </div>
@@ -170,7 +122,7 @@
                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                         aria-describedby="password_confirmation"
                         required />
-                      <label for="password_confirmation">Confirm Password</label>
+                      <label for="password_confirmation">{{ __('register.confirm_password') }}</label>
                     </div>
                     <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line ri-20px"></i></span>
                   </div>
@@ -180,18 +132,18 @@
                   <div class="form-check mb-0">
                     <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
                     <label class="form-check-label" for="terms-conditions">
-                      I agree to
-                      <a href="javascript:void(0);">privacy policy & terms</a>
+                      {{__('register.agree')}}
+                      <a href="javascript:void(0);">{{ __('register.privacy') }}</a>
                     </label>
                   </div>
                 </div>
-                <button class="btn btn-primary d-grid w-100 mb-5">Sign up</button>
+                <button class="btn btn-primary d-grid w-100 mb-5">{{ __('register.sign_up') }}</button>
               </form>
 
               <p class="text-center mb-5">
-                <span>Already have an account?</span>
+                <span>{{__('register.already_have_account')}}</span>
                 <a href="{{ route('login') }}"  >
-                  <span>Sign in instead</span>
+                  <span>{{ __('register.sign_in') }}</span>
                 </a>
               </p>
             </div>
@@ -221,5 +173,10 @@
 
     <!-- Place this tag before closing body tag for github widget button. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const formValidator = new Formshield("#formAuthentication");
+    });
+    </script>
   </body>
 </html>
