@@ -11,6 +11,9 @@ use App\Policies\DoctorPolicy;
 use App\Policies\PatientPolicy;
 use App\Policies\CalendarPolicy;
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+
 class AppServiceProvider extends ServiceProvider
 {
     protected $policies = [
@@ -31,6 +34,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        App::setLocale(Session::get('locale', config('app.locale')));
     }
 }

@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'title' => 'Users',
+    'span' => '/ Manage your accounts',
+    'user_created' => 'User created successfully!',
+    'user_updated' => 'User updated successfully!',
+    'error_occurred' => 'Something went wrong!',
+    'add_user' => 'Add new users',
+    'id' => 'id',
+    'name' => 'name',
+    'status' => 'status',
+    'actions' => 'actions',
+    'firstname' => 'First name',
+    'lastname' => 'Last name',
+    'email' => 'Email',
+    'password' => 'Password',
+    'form_title' => 'User data',
+    'email_required'=> 'Email is required',
+    'email_invalid'=> 'Email is invalid',
+    'password_required'=> 'Password is required',
+    'firstname_required'=> 'First name is required',
+    'firstname_minlength'=> 'First name must be at least 3 characters',
+    'lastname_required'=> 'Last name is required',
+    'lastname_minlength'=> 'Last name must be at least 3 characters',
+    'password_minlength'=> 'Password must be at least 8 characters',
+    'password_pattern'=> 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+];

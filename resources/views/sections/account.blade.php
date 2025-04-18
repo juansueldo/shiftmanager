@@ -23,7 +23,7 @@
                               hidden
                               accept="image/png, image/jpeg" />
                           </label>
-                          <button type="button" class="btn btn-sm btn-outline-danger account-image-reset mb-4">
+                          <button type="button" id="resetImage" class="btn btn-sm btn-outline-danger account-image-reset mb-4">
                             <i class="ri-refresh-line d-block d-sm-none"></i>
                             <span class="d-none d-sm-block">Reset</span>
                           </button>
@@ -33,24 +33,34 @@
                       </div>
                     </div>
                     <div class="card-body pt-0">
-                      <form id="formAccountSettings" method="POST" onsubmit="return false">
+                      <form id="formAccountSettings" 
+                          class="form-floating" 
+                          data-ajax-validated="true"
+                          data-ajax-source="/account/update" 
+                          data-ajax-method="replaceHtml"
+                          data-ajax-container="span#content-wrapper"
+                          data-ajax-then="updateNavbar"
+                          >
+                          @csrf
+                          <input type="hidden" name="id" id="id" value="{{ $user->id }}">
+                          <input type="hidden" name="avatar" id="avatar">
                         <div class="row mt-1 g-5">
                           <div class="col-md-6">
                             <div class="form-floating form-floating-outline">
                               <input
                                 class="form-control"
                                 type="text"
-                                id="firstName"
-                                name="firstName"
+                                id="firstname"
+                                name="firstname"
                                 autofocus 
                                 value="{{ $user->firstname }}"/>
-                              <label for="firstName">First Name</label>
+                              <label for="firstname">First Name</label>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-floating form-floating-outline">
-                              <input class="form-control" type="text" name="lastName" id="lastName" value="{{$user->lastname}}" />
-                              <label for="lastName">Last Name</label>
+                              <input class="form-control" type="text" name="lastname" id="lastname" value="{{$user->lastname}}" />
+                              <label for="lastname">Last Name</label>
                             </div>
                           </div>
                           <div class="col-md-6">
@@ -113,3 +123,12 @@
                 </div>
               </div>
             </div>
+            @include('layouts.partials.alert', ['session'=> $session ?? ''])
+            <script>
+              $(document).ready(function(){
+                const originalAvatarUrl = "{{ asset($user->avatar) }}";
+                uploadFile($('#upload'), $('#uploadedAvatar'), $('#avatar'));
+                resetFile($('#resetImage'),$('#uploadedAvatar'), $('#avatar'), originalAvatarUrl)
+              });
+
+            </script>

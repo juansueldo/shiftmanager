@@ -122,7 +122,41 @@ function getCurrentTheme() {
     return document.documentElement.getAttribute('data-bs-theme') || 'light';
 }
 
+function uploadFile($uploadInput, $uploadedFile, $fileBase64Input) {
+    $uploadInput.on('change', function () {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                $uploadedFile.attr('src', e.target.result);
+                $fileBase64Input.val(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+function resetFile($resetButton,$uploadedFile, $fileBase64Input, $originalFile) {
+    $resetButton.on('click', function () {
+        $uploadedFile.attr('src', $originalFile);
+        $fileBase64Input.val('');
+    });
+}
+
+function updateNavbar(){
+    $.ajax({
+        url: base_url + '/navbar',
+        type: 'GET',
+        dataType: 'html',
+        success: function(response) {
+            $("#navbar-container").html(response);
+        }
+    });
+}
 
 window.updatePart = updatePart;
 window.afterSaveCallback = afterSaveCallback;
 window.getCurrentTheme = getCurrentTheme;
+window.uploadFile = uploadFile;
+window.resetFile = resetFile;
+window.updateNavbar = updateNavbar;

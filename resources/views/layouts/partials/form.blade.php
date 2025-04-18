@@ -1,5 +1,5 @@
 <div class="offcanvas-header" >
-    <h5 id="offcanvasEndLabel" class="offcanvas-title">{{ $formdata['title'] }}</h5>
+    <h5 id="offcanvasEndLabel" class="offcanvas-title">{{ __("{$formdata['file']}.{$formdata['title']}") }}</h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>
 <form  class="form-floating offcanvas-body" 
@@ -38,13 +38,13 @@
                     <input 
                     @if (isset($input['data']) && is_array($input['data']))
                         @foreach ($input['data'] as $dataKey => $dataValue)
-                            data-{{ $dataKey }}="{{ $dataValue }}"
+                            data-{{ $dataKey }}="{{ __($dataValue) }}"
                         @endforeach
                     @endif
                     type="{{ $input['type'] }}" id="{{ $input['name'] }}" name="{{ $input['name'] }}" class="form-control mb-2" placeholder="{{ $input['placeholder'] ?? '' }}" value="{{ $input['value'] }}" data-ajax-checker="{{ $input['checker'] ?? '' }}" data-ajax-minlength="{{ $input['minlength'] ?? ''}}" data-ajax-container="{{ $input['container'] ?? ''}}" data-ajax-method="{{ $input['method'] ?? ''}}"/>
                 @endif
                 @if (isset($input['label']))
-                    <label for="{{ $input['name'] }}">{{ $input['label'] }}</label>
+                    <label for="{{ $input['name'] }}">{{ __("{$formdata['file']}.{$input['label']}") }}</label>
                 @endif
                 </div>
             </div>

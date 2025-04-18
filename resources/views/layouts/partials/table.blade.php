@@ -8,7 +8,7 @@
                         data-searchable="{{ $header['searchable'] }}"
                         data-orderable="{{ $header['orderable'] }}"
                         data-visible="{{ $header['visible'] }}">
-                        {{ $header['name'] }}
+                        {{ __( "{$table['file']}.{$header['name']}") }}
                     </th>
                 @endforeach
             </tr>

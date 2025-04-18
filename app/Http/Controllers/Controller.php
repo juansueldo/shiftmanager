@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\Yaml\Yaml;
 abstract class Controller
 {
@@ -89,5 +91,32 @@ abstract class Controller
         return "<span class='badge {$element[$status_name]['class']}'>{$element[$status_name]['title']}</span>";
     }
 
+    public function saveFile($fileBase64, $path)
+    {
+        if (preg_match('/^data:image\/(\w+);base64,/', $fileBase64, $type)) {
+            $image = substr($fileBase64, strpos($fileBase64, ',') + 1);
+            $extension = strtolower($type[1]); // jpg, png, etc.
+
+            if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                return null; // Tipo de imagen no válido
+            }
+
+            $image = base64_decode($image);
+            if ($image === false) {
+                return null; // Error al decodificar
+            }
+
+            $fileName = Str::random(10) . '.' . $extension;
+            $filePath = 'uploads/' . trim($path, '/') . '/' . $fileName;
+
+            // Guardar en disco "public" (storage/app/public/)
+            Storage::disk('public')->put($filePath, $image);
+
+            // Retornar ruta accesible
+            return asset('storage/' . $filePath);
+        }
+
+        return null; // Formato inválido
+    }
     
 }

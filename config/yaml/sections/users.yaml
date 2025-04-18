@@ -2,6 +2,7 @@ table:
   name: "Users"
   id: "user_table"
   path: '/users/data'
+  file: 'user'
   actions:
     - class: btn-edit
       icon: edit
@@ -38,27 +39,27 @@ table:
           id: 1
           action: email"
   headers:
-  - name: "ID"
+  - name: "id"
     key: "id"
     orderable: true
     searchable: true
     visible: true
-  - name: "Firstname"
+  - name: "name"
     key: "firstname"
     orderable: true
     searchable: true
     visible: true
-  - name: "Lastname"
+  - name: "lastname"
     key: "lastname"
     orderable: true
     searchable: true
-    visible: true
-  - name: "Email"
+    visible: false
+  - name: "email"
     key: "email"
     orderable: true
     searchable: true
     visible: true
-  - name: Status
+  - name: status
     key: status_name
     orderable: true
     searchable: true
@@ -85,30 +86,56 @@ inputs:
     col: 12
   - type: text
     name: firstname
-    label: Firstname
+    label: firstname
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-minlength: 3
+      fs-error-required: user.firstname_required
+      fs-error-minlength: user.firstname_minlength
     value: ''
     placeholder: John
     col: 12
   - type: text
     name: lastname
-    label: Lastname
+    label: lastname
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-minlength: 3
+      fs-error-required: user.lastname_required
+      fs-error-minlength: user.lastname_minlength
     value: ''
     col: 12
     placeholder: Doe
   - type: email
     name: email
-    label: Email
+    label: email
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-email: "true"
+      fs-remote: "true"
+      fs-error-required: user.email_required
+      fs-error-email: user.email_invalid
     value: ''
     col: 12
     placeholder: johndoe@mail.com
   - type: password
     name: password
-    label: Password
+    label: password
+    data:
+      fs-validate: "true"
+      fs-minlength: 8
+      fs-pattern: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$
+      fs-error-pattern: user.password_pattern
+      fs-error-minlength: user.password_minlength
     value: ''
     col: 12
 form:
   id: 'user_form'
-  title: Add user
+  file: 'user'
+  title: form_title
   source: /users/save
   method: replaceHtml
   container: 'span#content-wrapper'

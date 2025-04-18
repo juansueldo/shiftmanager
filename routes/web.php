@@ -18,6 +18,7 @@ Route::get('/', function () {
 
 Route::get('/landing', [DashboardController::class, 'landing'])->name('home');
 
+Route::get('/language/{lang}', [DashboardController::class, 'setLanguage'])->name('dashboard.language');
 // Rutas de autenticación
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -33,7 +34,9 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/main', [DashboardController::class, 'create'])->name('dashboard.create');
+    Route::post('/account/update', [AccountController::class, 'update'])->name('account.update');
     Route::get('/profile/{id?}', [AccountController::class, 'index'])->name('account.index');
+    Route::get('/navbar', [DashboardController::class, 'navbar'])->name('dashboard.navbar');
     // Calendario
     Route::prefix('calendar')->name('calendar.')->group(function () {
         Route::get('/', [CalendarController::class, 'index'])->name('index');

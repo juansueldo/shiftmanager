@@ -48,8 +48,9 @@
         <!-- Layout container -->
         <div class="layout-page">
           <!-- Navbar -->
-
-         @include('layouts.partials.navbar', [ 'navbar' => $navbar, 'user' => $user])
+         <span id="navbar-container">
+           @include('layouts.partials.navbar', [ 'navbar' => $navbar, 'user' => $user])
+         </span>
 
           <!-- / Navbar -->
           
@@ -91,7 +92,31 @@
       <!-- Overlay -->
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
-   
+    <script>
+            
+            document.addEventListener("DOMContentLoaded", function () {
+    // Inicializa el evento al cargar la página
+    initializeThemeToggle();
+
+    // Escucha cambios en el DOM para recargar el evento si el navbar cambia
+    const navbarContainer = document.getElementById("layout-navbar");
+    if (navbarContainer) {
+        const observer = new MutationObserver(() => {
+            initializeThemeToggle();
+        });
+
+        observer.observe(navbarContainer, { childList: true, subtree: true });
+    }
+});
+
+function initializeThemeToggle() {
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeIcon = document.getElementById("theme-icon");
+    if (themeToggle && themeIcon) {
+        setupThemeToggle(themeToggle, themeIcon, document.documentElement);
+    }
+}
+          </script>
 
 </body>
 </html>
