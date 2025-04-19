@@ -23,4 +23,8 @@ return [
     'logout' => 'Logout',
     'error' => 'Error',
     'success' => 'Success',
+    'widget_created' => 'Widget created successfully',
+    'widget_deleted' => 'Widget deleted successfully',
+    'widget_exists' => 'Widget already exists',
+    'widget_not_found' => 'Widget not found',
 ];

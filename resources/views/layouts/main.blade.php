@@ -8,12 +8,12 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}" />
 
     @vite([
+        'resources/js/app.js',
         'resources/css/app.css', 
         'resources/assets/css/theme-default.css', 
         'resources/assets/css/core.css', 
         'resources/assets/css/demo.css',
         'resources/assets/fonts/remixicon/remixicon.css',
-        'resources/js/app.js',
         'resources/assets/js/request.js',
         'resources/assets/js/theme.js',
         'resources/assets/js/calendar.js',
@@ -95,31 +95,6 @@
       <!-- Overlay -->
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
-    <script>
-            
-            document.addEventListener("DOMContentLoaded", function () {
-    // Inicializa el evento al cargar la página
-    initializeThemeToggle();
-
-    // Escucha cambios en el DOM para recargar el evento si el navbar cambia
-    const navbarContainer = document.getElementById("layout-navbar");
-    if (navbarContainer) {
-        const observer = new MutationObserver(() => {
-            initializeThemeToggle();
-        });
-
-        observer.observe(navbarContainer, { childList: true, subtree: true });
-    }
-});
-
-function initializeThemeToggle() {
-    const themeToggle = document.getElementById("theme-toggle");
-    const themeIcon = document.getElementById("theme-icon");
-    if (themeToggle && themeIcon) {
-        setupThemeToggle(themeToggle, themeIcon, document.documentElement);
-    }
-}
-          </script>
-
+  
 </body>
 </html>

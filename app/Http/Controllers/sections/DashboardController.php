@@ -25,7 +25,7 @@ class DashboardController extends Controller
         $sidebar = $this->yamlconfig['menu'];
         $navbar = $this->navbarconfig['menu'];
         $user = Auth::user();
-        $widgets = DashboardWidget::where('user_id', $user->id)->get();
+        $widgets = DashboardWidget::where('user_id', $user->id, )->where('status', 1)->get();
         $dashboard = $this->create();
         return view('layouts.main', compact('sidebar', 'navbar', 'user', 'dashboard', 'widgets'));
     }
@@ -38,7 +38,7 @@ class DashboardController extends Controller
 
     public function create(){
         $user = Auth::user();
-        $widgets = DashboardWidget::where('user_id', $user->id)->get();
+        $widgets = DashboardWidget::where('user_id', $user->id, )->where('status', 1)->get();
         return view('sections.dashboard', compact('user', 'widgets'));
     }
 
@@ -54,6 +54,38 @@ class DashboardController extends Controller
         $user->update($data);
         return redirect()->back();
     }
+    public function createWidget($name)
+    {
+
+        $user = Auth::user();
+        // Verificar si el widget ya existe para el usuario
+        $existingWidget = DashboardWidget::where('user_id', $user->id)->where('name', $name)->first();
+        if ($existingWidget) {
+            return redirect()->route('dashboard.create')->with('error',__('dashboard.widget_exists'));
+        }
+        DashboardWidget::create([
+            'user_id' => $user->id,
+            'name' => $name,
+            'x' => 0, 
+            'y' => 0, 
+            'width' => 4, 
+            'height' => 2, 
+            'status' => 1,
+        ]);
+
+        return redirect()->route('dashboard.create')->with('success', __('dashboard.widget_created'));
+    }
+
+    public function deleteWidget($id){
+        $user = Auth::user();
+        $widget = DashboardWidget::where('id', $id)->where('user_id', $user->id)->first();
+        if ($widget) {
+            $widget->delete();
+            return redirect()->route('dashboard.create')->with('success', __('dashboard.widget_deleted'));
+        } else {
+            return response()->json(['success' => false, 'message' => __('dashboard.widget_not_found')]);
+        }
+    }
     public function updateWidgets(Request $request)
     {
         $user= Auth::user();
@@ -67,8 +99,8 @@ class DashboardController extends Controller
                     'width' => $widget['width'],
                     'height' => $widget['height'],
             ]);
-    }
+        }
 
-    return response()->json(['success' => true]);
+        return response()->json(['success' => true]);
     }
 }

@@ -58,18 +58,19 @@
                   <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
                       <i class="ri-dashboard-line ri-22px"></i>
                   </a>
+                  <meta name="csrf-token" content="{{ csrf_token() }}">
                   <ul class="dropdown-menu dropdown-menu-end mt-3 py-2" style="width: 300px;">
                       <table class="table table-bordered mb-0 text-center">
                           <tbody>
                               <tr>
                                   <td>
-                                      <a class="d-block text-decoration-none py-2 dropdown-item" href="#">
+                                      <a class="d-block text-decoration-none py-2 text-body" href="javascript:void(0)" data-ajax-source="/widgets/create/messages" data-ajax-method="repalceHtml" data-ajax-container="span#content-wrapper">
                                           <i class="ri-mail-line ri-22px d-block mb-1"></i>
                                           <span class="align-middle">New message</span>
                                       </a>
                                   </td>
                                   <td>
-                                      <a class="d-block text-decoration-none py-2" href="#">
+                                      <a class="d-block text-decoration-none py-2 text-body" href="javascript:void(0)" data-ajax-source="/widgets/create/users" data-ajax-method="repalceHtml" data-ajax-container="span#content-wrapper">
                                           <i class="ri-user-add-line ri-22px d-block mb-1"></i>
                                           <span class="align-middle">New user registered</span>
                                       </a>
@@ -77,13 +78,13 @@
                               </tr>
                               <tr>
                                   <td>
-                                      <a class="d-block text-decoration-none py-2" href="#">
+                                      <a class="d-block text-decoration-none py-2 text-body" href="javascript:void(0)" data-ajax-source="/widgets/create/settings" data-ajax-method="repalceHtml" data-ajax-container="span#content-wrapper">
                                           <i class="ri-settings-3-line ri-22px d-block mb-1"></i>
                                           <span class="align-middle">Settings updated</span>
                                       </a>
                                   </td>
                                   <td>
-                                      <a class="d-block text-decoration-none py-2" href="#">
+                                      <a class="d-block text-decoration-none py-2 text-body" href="javascript:void(0)" data-ajax-source="/widgets/create/analytics" data-ajax-method="repalceHtml" data-ajax-container="span#content-wrapper">
                                           <i class="ri-bar-chart-line ri-22px d-block mb-1"></i>
                                           <span class="align-middle">Analytics</span>
                                       </a>
@@ -91,13 +92,13 @@
                               </tr>
                               <tr>
                                   <td>
-                                      <a class="d-block text-decoration-none py-2" href="#">
+                                      <a class="d-block text-decoration-none py-2 text-body" href="javascript:void(0)" data-ajax-source="/widgets/create/reports" data-ajax-method="repalceHtml" data-ajax-container="span#content-wrapper">
                                           <i class="ri-pie-chart-line ri-22px d-block mb-1"></i>
                                           <span class="align-middle">Reports</span>
                                       </a>
                                   </td>
                                   <td>
-                                      <a class="d-block text-decoration-none py-2" href="#">
+                                      <a class="d-block text-decoration-none py-2 text-body" href="javascript:void(0)" data-ajax-source="/widgets/create/team" data-ajax-method="repalceHtml" data-ajax-container="span#content-wrapper">
                                           <i class="ri-group-line ri-22px d-block mb-1"></i>
                                           <span class="align-middle">Team Overview</span>
                                       </a>
@@ -196,4 +197,24 @@
               </ul>
             </div>
           </nav>
+          <script>
+            (function() {
+              function initializeThemeToggle() {
+                const themeToggle = document.getElementById("theme-toggle");
+                const themeIcon = document.getElementById("theme-icon");
+                if (themeToggle && themeIcon) {
+                  setupThemeToggle(themeToggle, themeIcon, document.documentElement);
+                }
+              }
+
+              if (typeof $ !== 'undefined' && $.isReady) {
+                initializeThemeToggle();
+              } else if (typeof $ !== 'undefined') {
+                $(document).ready(initializeThemeToggle);
+              } else {
+                document.addEventListener('DOMContentLoaded', initializeThemeToggle);
+              }
+            })();
+           
+          </script>
           

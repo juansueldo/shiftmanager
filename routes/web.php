@@ -41,7 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{id?}', [AccountController::class, 'index'])->name('account.index');
     Route::get('/navbar', [DashboardController::class, 'navbar'])->name('dashboard.navbar');
     Route::post('/widgets/update', [DashboardController::class, 'updateWidgets'])->name('dashboard.widgets.update');
-
+    Route::get('/widgets/create/{name}', [DashboardController::class, 'createWidget'])->name('dashboard.widgets.create');
+    Route::get('/widgets/delete/{id}', [DashboardController::class, 'deleteWidget'])->name('dashboard.widgets.delete');
     // Calendario
     Route::prefix('calendar')->name('calendar.')->group(function () {
         Route::get('/', [CalendarController::class, 'index'])->name('index');

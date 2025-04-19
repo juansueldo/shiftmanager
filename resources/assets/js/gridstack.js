@@ -5,8 +5,10 @@ function initGridStack($selector) {
     const grid = document.querySelector($selector);
     if (grid) {
         const gridInstance = GridStack.init({
-            cellHeight: 100,
+            cellHeight: 'auto',
             verticalMargin: 10,
+            margin: 8,
+            float: true,
             resizable: { handles: 'e, se, s' },
             draggable: { handle: '.drag-handle' },
         }, grid);

@@ -14,3 +14,9 @@ menu:
     data-ajax-method: "replaceHtml"
     data-ajax-container: "span#content-wrapper"
     icon: "ri-group-line"
+dashboard:
+  - name: dashboard.reports
+    data-ajax-source: "/widgets/create/reports"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-file-chart-line"
