@@ -82,33 +82,33 @@ class PatientController extends Controller
                 $patient = Patient::findOrFail($id);
 
                 if (Patient::where('email', $request->email)->where('id', '!=', $id)->exists()) {
-                    return redirect()->back()->with('error', 'El email ya está en uso.');
+                    return redirect()->back()->with('error', __('patient.email_in_use'));
                 }
 
                 if (Patient::where('identifier', $request->identifier)->where('id', '!=', $id)->exists()) {
-                    return redirect()->back()->with('error', 'El identificador ya está en uso.');
+                    return redirect()->back()->with('error', __('patient.identifier_in_use'));
                 }
 
                 $patient->update($data);
 
-                return redirect()->route('patients.index')->with('success', 'Paciente actualizado correctamente.');
+                return redirect()->route('patients.index')->with('success', __('patient.patient_updated'));
             } else {
 
                 if (Patient::where('email', $request->email)->exists()) {
-                    return redirect()->back()->with('error', 'El email ya está en uso.');
+                    return redirect()->back()->with('error', __('patient.email_in_use'));
                 }
 
                 if (Patient::where('identifier', $request->identifier)->exists()) {
-                    return redirect()->back()->with('error', 'El identificador ya está en uso.');
+                    return redirect()->back()->with('error', __('patient.identifier_in_use'));
                 }
 
                 Patient::create($data);
 
-                return redirect()->route('patients.index')->with('success', 'Paciente creado correctamente.');
+                return redirect()->route('patients.index')->with('success', __('patient.patient_created'));
             }
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Ocurrió un error: ' . $e->getMessage());
+            return redirect()->back()->with('error', __('messages.error_occurred') . $e->getMessage());
         }
     } 
 

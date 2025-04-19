@@ -8,7 +8,7 @@ return [
     'error_occurred' => 'Something went wrong!',
     'add_user' => 'Add new users',
     'id' => 'id',
-    'name' => 'name',
+    'name' => 'user',
     'status' => 'status',
     'actions' => 'actions',
     'firstname' => 'First name',

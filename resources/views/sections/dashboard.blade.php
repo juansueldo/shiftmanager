@@ -15,7 +15,9 @@
                     <a href="javascript:;" class="position-absolute top-0 end-0 m-2 btn-delete-widget text-body btn-delete" data-ajax-source="/widgets/delete/{{ $widget['id'] }}" data-ajax-method="replaceHtml" data-ajax-container="span#content-wrapper">
                         <i class="ri-delete-bin-5-line ti-sm me-2"></i>
                     </a>
-                    {{ $widget['name'] }}
+                    @include('layouts.partials.' . $widget['name'])
+
+                    
                 </div>
             </div>
         @endforeach

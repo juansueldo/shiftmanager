@@ -16,23 +16,6 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    /*public function store(RegisterRequest $request)
-    {
-        // Crear un nuevo usuario
-        $user = User::create([
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'avatar' => 'images/profile/avatar.png'
-        ]);
-
-        // Autenticar al usuario registrado
-        Auth::login($user);
-
-        // Redirigir al dashboard
-        return redirect()->route('dashboard.index');
-    }*/
 
     public function store(Request $request)
     {
@@ -50,7 +33,7 @@ class RegisterController extends Controller
             'lastname' => $request->lastname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'avatar' => 'images/profile/avatar.png'
+            'avatar' => 'http://127.0.0.1:8000/storage/uploads/users/9bcDcCzzjy.png'
         ]);
 
         // Autenticar al usuario registrado
