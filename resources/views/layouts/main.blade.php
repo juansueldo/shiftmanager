@@ -35,7 +35,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
       rel="stylesheet" />
 
-    <title>Shiftmanager | Dashboard</title>
+    <title>Shiftmanager | {{__('dashboard.dashboard')}}</title>
 </head>
 
 <body>
