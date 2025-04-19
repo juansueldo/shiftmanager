@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/account/update', [AccountController::class, 'update'])->name('account.update');
     Route::get('/profile/{id?}', [AccountController::class, 'index'])->name('account.index');
     Route::get('/navbar', [DashboardController::class, 'navbar'])->name('dashboard.navbar');
+    Route::post('/widgets/update', [DashboardController::class, 'updateWidgets'])->name('dashboard.widgets.update');
 
     // Calendario
     Route::prefix('calendar')->name('calendar.')->group(function () {

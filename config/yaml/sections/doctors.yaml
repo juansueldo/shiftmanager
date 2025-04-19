@@ -2,6 +2,7 @@ table:
   name: "Doctors"
   id: "doctor_table"
   path: '/doctors/data'
+  file: 'doctors'
   actions:
     - class: btn-edit
       icon: edit
@@ -150,6 +151,7 @@ inputs:
 form:
   id: 'doctor_form'
   title: Add user
+  file: 'doctors'
   source: /doctors/save
   method: replaceHtml
   container: 'span#content-wrapper'

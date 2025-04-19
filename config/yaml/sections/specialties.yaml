@@ -2,6 +2,7 @@ table:
   name: "Specialties"
   id: "specialty_table"
   path: '/specialty/data'
+  file: 'specialty'
   actions:
     - class: btn-edit
       icon: edit
@@ -82,6 +83,7 @@ inputs:
 form:
   id: 'specialty_form'
   title: Add specialty
+  file: 'specialty'
   source: /specialty/save
   method: replaceHtml
   container: 'span#content-wrapper'

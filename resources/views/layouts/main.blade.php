@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo.png') }}" />
+
     @vite([
         'resources/css/app.css', 
         'resources/assets/css/theme-default.css', 
@@ -24,7 +25,9 @@
         'resources/js/dashboards-analytics.js',
         'resources/js/main.js',
         'resources/js/select2.full.min.js',
-        'resources/css/select2.css',])
+        'resources/css/select2.css',
+        'resources/assets/js/gridstack.js',
+        ])
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -58,7 +61,7 @@
           <div class="content-wrapper">
             <!-- Content -->
             <span id="content-wrapper">
-              @include('sections.dashboard', ['user' => $user])
+              @include('sections.dashboard', ['user' => $user, 'widgets' => $widgets])
             </span>
            
             <!-- / Content -->

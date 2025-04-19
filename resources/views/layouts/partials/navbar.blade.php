@@ -55,31 +55,60 @@
 
                 
                 <li class="nav-item navbar-dropdown dropdown me-3">
-                <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
-                    data-bs-toggle="dropdown">
-                    <i class="ri-dashboard-line ri-22px"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end mt-3 py-2">
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="ri-mail-line ri-22px me-2"></i>
-                            <span class="align-middle">New message</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="ri-user-add-line ri-22px me-2"></i>
-                            <span class="align-middle">New user registered</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="ri-settings-3-line ri-22px me-2"></i>
-                            <span class="align-middle">Settings updated</span>
-                        </a>
-                    </li>
-                </ul>
+                  <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
+                      <i class="ri-dashboard-line ri-22px"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end mt-3 py-2" style="width: 300px;">
+                      <table class="table table-bordered mb-0 text-center">
+                          <tbody>
+                              <tr>
+                                  <td>
+                                      <a class="d-block text-decoration-none py-2 dropdown-item" href="#">
+                                          <i class="ri-mail-line ri-22px d-block mb-1"></i>
+                                          <span class="align-middle">New message</span>
+                                      </a>
+                                  </td>
+                                  <td>
+                                      <a class="d-block text-decoration-none py-2" href="#">
+                                          <i class="ri-user-add-line ri-22px d-block mb-1"></i>
+                                          <span class="align-middle">New user registered</span>
+                                      </a>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td>
+                                      <a class="d-block text-decoration-none py-2" href="#">
+                                          <i class="ri-settings-3-line ri-22px d-block mb-1"></i>
+                                          <span class="align-middle">Settings updated</span>
+                                      </a>
+                                  </td>
+                                  <td>
+                                      <a class="d-block text-decoration-none py-2" href="#">
+                                          <i class="ri-bar-chart-line ri-22px d-block mb-1"></i>
+                                          <span class="align-middle">Analytics</span>
+                                      </a>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td>
+                                      <a class="d-block text-decoration-none py-2" href="#">
+                                          <i class="ri-pie-chart-line ri-22px d-block mb-1"></i>
+                                          <span class="align-middle">Reports</span>
+                                      </a>
+                                  </td>
+                                  <td>
+                                      <a class="d-block text-decoration-none py-2" href="#">
+                                          <i class="ri-group-line ri-22px d-block mb-1"></i>
+                                          <span class="align-middle">Team Overview</span>
+                                      </a>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </ul>
                 </li>
+
+
                 
                 <li class="nav-item navbar-dropdown dropdown me-3">
                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"

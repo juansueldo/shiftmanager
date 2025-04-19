@@ -22,6 +22,7 @@
         "block-ui": "^2.70.1",
         "bootstrap": "^5.3.3",
         "datatables.net-bs5": "^2.2.2",
+        "gridstack": "^12.0.0",
         "highlight.js": "^11.11.1",
         "jquery": "^3.7.1",
         "node-waves": "^0.7.6",
