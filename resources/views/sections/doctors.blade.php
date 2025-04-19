@@ -1,8 +1,8 @@
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h3>Doctors <span class="text-muted text-small">/ Manage your accounts</span></h3>
+    <h3>{{__('doctors.title')}} <span class="text-muted text-small"> {{ __('doctors.span') }}</span></h3>
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Doctors</h5>
+            <h5 class="card-title">{{__('doctors.title')}}</h5>
             <div class="d-flex justify-content-end">
             <button class="btn btn-primary waves-effect waves-light"  
             data-bs-toggle="offcanvas"
@@ -11,7 +11,7 @@
             data-ajax-source="/doctors/form"
             data-ajax-method="replaceHtml"
             data-ajax-container="#offcanvasEnd"
-            ><i class="ri-add-line"></i> Add new doctor</button>
+            ><i class="ri-add-line"></i>{{ __('doctors.add_new_doctor') }}</button>
             </div>
         </div>
         <div class="card-body">

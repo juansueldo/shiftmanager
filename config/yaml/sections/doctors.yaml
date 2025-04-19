@@ -39,27 +39,27 @@ table:
           id: 1
           action: email"
   headers:
-  - name: "ID"
+  - name: "doctor_id"
     key: "id"
     orderable: true
     searchable: true
     visible: true
-  - name: "Firstname"
+  - name: "firstname"
     key: "firstname"
     orderable: true
     searchable: true
     visible: true
-  - name: "Lastname"
+  - name: "lastname"
     key: "lastname"
     orderable: true
     searchable: true
     visible: true
-  - name: "Email"
+  - name: "email"
     key: "email"
     orderable: true
     searchable: true
     visible: true
-  - name: Status
+  - name: status
     key: status_name
     orderable: true
     searchable: true
@@ -86,71 +86,71 @@ inputs:
     col: 12
   - type: text
     name: firstname
-    label: First Name
+    label: firstname
     value: ''
     col: 6
     placeholder: John
   - type: text
     name: lastname
-    label: Last Name
+    label: lastname
     value: ''
     placeholder: Doe
     col: 6
   - type: date
     name: date_of_birth
-    label: Date of Birth
+    label: date_of_birth
     value: ''
     col: 12
   - type: email
     name: email
-    label: Email
+    label: email
     value: ''
     col: 12
   - type: select
     name: specialty
-    label: Specialty
+    label: specialty
     value: ''
     url: '/specialty/list'
     multiple: "true"
     col: 12
   - type: text
     name: phone
-    label: Phone
+    label: phone
     value: ''
     col: 12
   - type: text
     name: address
-    label: Address
+    label: address
     value: ''
     col: 12
   - type: text
     name: city
-    label: City
+    label: city
     value: ''
     col: 6
   - type: text
     name: state
-    label: State
+    label: state
     value: ''
     col: 6
   - type: text
     name: country
-    label: Country
+    label: country
     value: ''
     col: 6
   - type: text
     name: zip
-    label: Zip code
+    label: zip_code
     value: ''
     col: 6
   - type: text
     name: identifier
-    label: Identifier
+    label: identifier
     value: ''
     col: 12
 form:
   id: 'doctor_form'
-  title: Add user
+  title: add_doctor
   file: 'doctors'
   source: /doctors/save
   method: replaceHtml

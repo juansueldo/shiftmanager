@@ -16,6 +16,7 @@ class DoctorController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->yamlconfig = $this->getYamlConfig('sections/doctors');
     }
 
@@ -72,10 +73,10 @@ class DoctorController extends Controller
         try {
             Doctor::create($request->validated());
 
-            return redirect()->route('doctors.index')->with('success', 'Doctor created successfully!');
+            return redirect()->route('doctors.index')->with('success', __('doctors.doctor_created'));
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Something went wrong!');
+            return redirect()->back()->with('error', __('messages.error_occurred') . $e->getMessage());
         }
     }
 }

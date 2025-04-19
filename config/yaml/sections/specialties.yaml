@@ -39,17 +39,17 @@ table:
           id: 1
           action: email"
   headers:
-  - name: "ID"
+  - name: "specialty_id"
     key: "id"
     orderable: true
     searchable: true
     visible: true
-  - name: "Name"
+  - name: "name"
     key: "name"
     orderable: true
     searchable: true
     visible: true
-  - name: Status
+  - name: status
     key: status_name
     orderable: true
     searchable: true
@@ -76,13 +76,13 @@ inputs:
     col: 12
   - type: text
     name: name
-    label: Name
+    label: name
     value: ''
     placeholder: Dentistry
     col: 12
 form:
   id: 'specialty_form'
-  title: Add specialty
+  title: add_specialty
   file: 'specialty'
   source: /specialty/save
   method: replaceHtml

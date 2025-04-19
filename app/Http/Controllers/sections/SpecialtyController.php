@@ -73,13 +73,13 @@ class SpecialtyController extends Controller
             if ($request->id > 0) {
                 $specialty = Specialty::findOrFail($request->id);
                 $specialty->update(['name' => $request->input('name')]);
-                return redirect()->route('specialty.index')->with('success', 'Specialty updated successfully!');
+                return redirect()->route('specialty.index')->with('success',__('specialty.specialty_updated'));
             } else {
                 Specialty::create(['name' => $request->input('name')]);
-                return redirect()->route('specialty.index')->with('success', 'Specialty created successfully!');
+                return redirect()->route('specialty.index')->with('success', __('specialty.specialty_created'));
             }
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Something went wrong!');
+            return redirect()->back()->with('error', __('messages.error_occurred') . ' ' . $e->getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ class SpecialtyController extends Controller
         $data=[];
         $data[]=[
             'value' => '',
-            'text' => 'Select Specialty',
+            'text' => __('specialty.select_specialty'),
         ];
         foreach($specialties as $specialty){
             $data[]=[
