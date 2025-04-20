@@ -24543,3 +24543,11 @@ table.dataTable thead .sorting_desc:after {
     display: block !important;
     opacity: 0.5 !important; /* Ajusta la opacidad si es necesario */
 }
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background: var(--bs-primary) !important;
+  color: #fff !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+  color: #fff !important;
+}

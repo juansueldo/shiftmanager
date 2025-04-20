@@ -7,4 +7,5 @@ return [
     'error_occurred' => 'Something went wrong!',
     'save' => 'Save',
     'cancel' => 'Cancel',
+    'select_placeholder' => 'Select an option',
 ];

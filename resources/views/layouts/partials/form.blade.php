@@ -98,65 +98,55 @@ $(document).ready(function () {
 
     // Manejar selects con data-ajax-url
     $('.form-floating select[data-ajax-url]').each(function () {
-    let $select = $(this);
-    let ajaxUrl = $select.data('ajax-url');
-    let method = $select.data('ajax-method') || 'GET';
+        let $select = $(this);
+        let ajaxUrl = $select.data('ajax-url');
+        let method = $select.data('ajax-method') || 'GET';
 
-    // Si tiene el atributo `multi`, se convierte en multiple
-    if ($select.attr('multi') !== undefined) {
-        $select.attr('multiple', 'multiple');
-    }
+        // Si tiene el atributo `multi`, se convierte en multiple
+        if ($select.attr('multi') !== undefined) {
+            $select.attr('multiple', 'multiple');
+        }
 
-    const theme = $select.data('theme') || 'default';
+        const theme = $select.data('theme') || 'default';
 
-    const initSelect2 = function () {
+        // Inicializar select2 con AJAX
         $select.select2({
-            minimumResultsForSearch: Infinity,
+            ajax: {
+                url: ajaxUrl,
+                type: method,
+                dataType: 'json',
+                delay: 250, // Retraso para evitar demasiadas solicitudes
+                data: function (params) {
+                    return {
+                        search: params.term, // Término de búsqueda ingresado por el usuario
+                        page: params.page || 1 // Número de página para la paginación
+                    };
+                },
+                processResults: function (data, params) {
+                    // Formatear los resultados para select2
+                    params.page = params.page || 1;
+
+                    return {
+                        results: data.map(option => ({
+                            id: option.value, // El valor del <option>
+                            text: option.text // El texto del <option>
+                        })),
+                        pagination: {
+                            more: data.length >= 10 // Indicar si hay más resultados para paginación
+                        }
+                    };
+                },
+                cache: true // Habilitar caché para mejorar el rendimiento
+            },
+            minimumResultsForSearch: 1, // Mostrar búsqueda si hay más de 1 opción
             width: '100%',
-            placeholder: "Seleccione una opción",
+            placeholder: "{{ __('messages.select_placeholder') }}",
             allowClear: true,
             theme: theme,
-            dropdownParent: $('.offcanvas-body')
+            dropdownParent: $(document.body)
         });
-    };
-
-    const loadOptions = function () {
-        $.ajax({
-            url: ajaxUrl,
-            method: method,
-            success: function (response) {
-                // Destruir select2 si ya está inicializado
-                if ($select.hasClass('select2-hidden-accessible')) {
-                    $select.select2('destroy');
-                }
-
-                $select.empty();
-
-
-                if (response && Array.isArray(response)) {
-                    response.forEach(option => {
-                        $select.append(
-                            $('<option>', {
-                                value: option.value,
-                                text: option.text
-                            })
-                        );
-                    });
-                }
-
-                // Iniciar select2 luego de cargar opciones
-                initSelect2();
-            },
-            error: function (xhr, status, error) {
-                console.error('Error al cargar las opciones:', error);
-            }
-        });
-    };
-
-    loadOptions();
+    });
 });
 
-
-});
 
 </script>

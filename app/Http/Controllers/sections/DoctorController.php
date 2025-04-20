@@ -71,7 +71,15 @@ class DoctorController extends Controller
        
         $this->authorize('create', Doctor::class);
         try {
-            Doctor::create($request->validated());
+            $doctor = Doctor::create($request->validated());
+
+            // Verificar si se enviaron especialidades en la request
+            if ($request->has('specialty') && is_array($request->specialty)) {
+                // Crear las relaciones en la tabla intermedia
+                foreach ($request->specialty as $specialtyId) {
+                    $doctor->specialties()->attach($specialtyId, ['status_id' => 1]); // Relación activa por defecto
+                }
+            }
 
             return redirect()->route('doctors.index')->with('success', __('doctors.doctor_created'));
 

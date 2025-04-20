@@ -38,4 +38,11 @@ class Specialty extends Model
     
         return $query;
     }
+
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class, 'doctor_specialty')
+            ->withPivot('status_id')
+            ->withTimestamps();
+    }
 }

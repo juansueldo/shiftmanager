@@ -25,6 +25,12 @@ class Doctor extends Model
     {
         return $this->belongsTo(Status::class, 'status');
     }
+    public function specialties()
+    {
+        return $this->belongsToMany(Specialty::class, 'doctor_specialty')
+            ->withPivot('status_id')
+            ->withTimestamps();
+    }
     public function scopeFilter($query, $params){
         $query->select('doctors.*', 'statuses.name as status_name')
             ->leftJoin('statuses', 'doctors.status', '=', 'statuses.id');
