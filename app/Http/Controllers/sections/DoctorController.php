@@ -60,9 +60,19 @@ class DoctorController extends Controller
                     if (isset($user->{$input['name']})) {
                         $input['value'] = $user->{$input['name']};
                     }
+                    if ($input['name'] === 'specialties') {
+                        foreach($user->specialties as $specialty){
+                            $options[] = [
+                                'id' => $specialty->id,
+                                'text' => $specialty->name,
+                            ];
+                        }
+                        $input['selected_data'] = $options;
+                    }
                 }
             }
         }
+
 
         return view('layouts.partials.form', compact('inputs', 'formdata', 'user'));
     }
@@ -74,9 +84,9 @@ class DoctorController extends Controller
             $doctor = Doctor::create($request->validated());
 
             // Verificar si se enviaron especialidades en la request
-            if ($request->has('specialty') && is_array($request->specialty)) {
+            if ($request->has('specialties') && is_array($request->specialties)) {
                 // Crear las relaciones en la tabla intermedia
-                foreach ($request->specialty as $specialtyId) {
+                foreach ($request->specialties as $specialtyId) {
                     $doctor->specialties()->attach($specialtyId, ['status_id' => 1]); // Relación activa por defecto
                 }
             }

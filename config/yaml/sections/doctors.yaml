@@ -107,9 +107,10 @@ inputs:
     value: ''
     col: 12
   - type: select
-    name: specialty
+    name: specialties
     label: specialty
     value: ''
+    selected_data: ''
     url: '/specialty/list'
     multiple: "true"
     col: 12
