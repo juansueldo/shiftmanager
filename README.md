@@ -55,4 +55,5 @@ composer run dev
 
 ### License
 
-This project is licensed under the [MIT License](https://opensource.org/license/MIT).
+This project is licensed under the <a href="https://opensource.org/license/MIT" target="_blank" rel="noopener noreferrer">MIT License</a>.
+
