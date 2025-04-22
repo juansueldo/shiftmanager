@@ -73,6 +73,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/data', [DoctorController::class, 'data'])->name('data');
         Route::get('/form/{id?}', [DoctorController::class, 'add'])->name('form');
         Route::post('/save', [DoctorController::class, 'store'])->name('save');
+        Route::get('/sethours/{id}', [DoctorController::class, 'setHours'])->name('sethours');
+        Route::post('/checkspecialty', [DoctorController::class, 'checkSpecialty'])->name('checkspecialty');
     });
 
     // Especialidades

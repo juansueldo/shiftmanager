@@ -85,7 +85,8 @@ $(document).ready(function () {
                 if (!value || value.length < minLength) return; // Evita enviar peticiones vacías o menores al mínimo
 
                 var formData = new FormData();
-                formData.append('identifier', value);
+                //formData.append('identifier', value);
+                formData.append(element.attr('id'), value);
                 formData.append('_token', '{{ csrf_token() }}');
 
                 updatePart(checkerPath, formData, container, 'POST', method);
@@ -99,77 +100,88 @@ $(document).ready(function () {
     });
 
     // Manejar selects con data-ajax-url
-    $('.form-floating select[data-ajax-url]').each(function () {
-    let $select = $(this);
-    let ajaxUrl = $select.data('ajax-url');
-    let method = $select.data('ajax-method') || 'GET';
+    $(document).ready(function () {
+    $('.form-floating select').each(function () {
+        let $select = $(this);
+        let ajaxUrl = $select.data('ajax-url');
+        let method = $select.data('ajax-method') || 'GET';
+        const theme = $select.data('theme') || 'default';
+        let selectedValues = $select.data('selected') || [];
 
-    // Si tiene el atributo `multi`, se convierte en multiple
-    if ($select.attr('multi') !== undefined) {
-        $select.attr('multiple', 'multiple');
-    }
+        // Si tiene el atributo `multi`, se convierte en multiple
+        if ($select.attr('multi') !== undefined) {
+            $select.attr('multiple', 'multiple');
+        }
 
-    const theme = $select.data('theme') || 'default';
+        // Convertir en array si es string tipo JSON
+        if (typeof selectedValues === 'string') {
+            try {
+                selectedValues = JSON.parse(selectedValues.replace(/'/g, '"'));
+            } catch (e) {
+                console.warn('Error al parsear data-selected', e);
+                selectedValues = [];
+            }
+        }
 
-    // Obtener los valores seleccionados del atributo data-selected (asumiendo que es un array o JSON)
-    let selectedValues = $select.data('selected') || [];
+        // Función para inicializar Select2
+        const initializeSelect2 = (options = {}) => {
+            $select.select2({
+                theme: theme,
+                width: '100%',
+                placeholder: "{{ __('messages.select_placeholder') }}",
+                allowClear: true,
+                dropdownParent: $(document.body),
+                ...options // Permite sobreescribir opciones base
+            });
 
-    // Convertir en array si es string tipo JSON
-    if (typeof selectedValues === 'string') {
-    try {
-        // Reemplazar comillas simples por dobles para hacer parse válido
-        selectedValues = JSON.parse(selectedValues.replace(/'/g, '"'));
-    } catch (e) {
-        console.warn('Error al parsear data-selected', e);
-        selectedValues = [];
-    }
-}
+            // Cargar valores seleccionados manualmente si existen
+            if (Array.isArray(selectedValues) && selectedValues.length > 0) {
+                selectedValues.forEach(option => {
+                    const newOption = new Option(option.text, option.id, true, true);
+                    $select.append(newOption);
+                });
+                $select.trigger('change');
+            }
+        };
 
-
-    // Inicializar select2 con AJAX
-    $select.select2({
-        ajax: {
-            url: ajaxUrl,
-            type: method,
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    search: params.term,
-                    page: params.page || 1
-                };
-            },
-            processResults: function (data, params) {
-                params.page = params.page || 1;
-
-                return {
-                    results: data.map(option => ({
-                        id: option.value,
-                        text: option.text
-                    })),
-                    pagination: {
-                        more: data.length >= 10
-                    }
-                };
-            },
-            cache: true
-        },
-        minimumResultsForSearch: 1,
-        width: '100%',
-        placeholder: "{{ __('messages.select_placeholder') }}",
-        allowClear: true,
-        theme: theme,
-        dropdownParent: $(document.body)
+        // Caso 1: Carga remota (tiene data-ajax-url)
+        if (ajaxUrl) {
+            initializeSelect2({
+                ajax: {
+                    url: ajaxUrl,
+                    type: method,
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.map(option => ({
+                                id: option.value,
+                                text: option.text
+                            })),
+                            pagination: {
+                                more: data.length >= 10
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                minimumResultsForSearch: 1
+            });
+        }
+        // Caso 2: Opciones ya en el HTML
+        else {
+            initializeSelect2({
+                minimumResultsForSearch: $select.find('option').length > 5 ? 1 : -1 // Mostrar buscador si hay más de 5 opciones
+            });
+        }
     });
-
-    // Cargar valores seleccionados manualmente si existen
-    if (Array.isArray(selectedValues) && selectedValues.length > 0) {
-    selectedValues.forEach(option => {
-        const newOption = new Option(option.text, option.id, true, true);
-        $select.append(newOption);
-    });
-    $select.trigger('change');
-}
 });
 
 });

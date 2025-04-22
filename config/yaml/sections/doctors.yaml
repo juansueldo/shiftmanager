@@ -25,9 +25,9 @@ table:
       dropdown: false
     - dropdown: true
       options:
-      - label: View Details
+      - label: Set hours
         data:
-          data-ajax-source: /doctors/view/{0}
+          data-ajax-source: /doctors/sethours/{0}
           data-ajax-method: replaceHtml
           data-ajax-container: '#offcanvasEnd'
           data-bs-toggle: "offcanvas" 
@@ -151,6 +151,65 @@ inputs:
     col: 12
 form:
   id: 'doctor_form'
+  title: add_doctor
+  file: 'doctors'
+  source: /doctors/save
+  method: replaceHtml
+  container: 'span#content-wrapper'
+  then: afterSaveCallback
+inputs_hours:
+  - type: hidden
+    name: id
+    value: 0
+    col: 12
+  - type: hidden
+    name: doctor_id
+    value: 0
+    col: 12
+  - type: select
+    name: specialties
+    label: specialty
+    value: ''
+    selected_data: ''
+    checker: /doctors/checkspecialty
+    method: replaceValue
+    container: 'id'
+    options: ''
+    col: 12
+  - type: select
+    name: days
+    label: days
+    value: ''
+    selected_data: ''
+    options: 
+      - value: 1
+        text: "Monday"
+      - value: 2
+        text: "Tuesday"
+      - value: 3
+        text: "Wednesday"
+      - value: 4
+        text: "Thursday"
+      - value: 5
+        text: "Friday"
+      - value: 6
+        text: "Saturday"
+      - value: 7
+        text: "Sunday"
+    multiple: "true"
+    col: 12
+  - type: time
+    name: start_time
+    label: start_time
+    value: ''
+    col: 6
+  - type: time
+    name: end_time
+    label: end_time
+    value: ''
+    col: 6
+form_hours:
+  id: 'doctor_hour_form'
   title: add_doctor
   file: 'doctors'
   source: /doctors/save

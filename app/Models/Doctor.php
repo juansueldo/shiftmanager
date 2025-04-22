@@ -29,6 +29,8 @@ class Doctor extends Model
     {
         return $this->belongsToMany(Specialty::class, 'doctor_specialty')
             ->withPivot('status_id')
+            ->withPivot('id')
+            ->wherePivot('status_id', 1)
             ->withTimestamps();
     }
     public function scopeFilter($query, $params){

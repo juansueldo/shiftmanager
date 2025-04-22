@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDoctorRequest extends FormRequest
 {
@@ -21,10 +22,18 @@ class StoreDoctorRequest extends FormRequest
      */
     public function rules(): array
     {
+        $doctorId = $this->route('id') ?? $this->input('id');
+    
         return [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'nullable|string|email|max:255|unique:doctors,email,NULL,id',
+            'email' => [
+                'nullable',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('doctors', 'email')->ignore($doctorId)
+            ],
             'phone' => 'nullable|string|max:20',
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -32,7 +41,13 @@ class StoreDoctorRequest extends FormRequest
             'zip' => 'required|string|max:20',
             'country' => 'required|string|max:255',
             'date_of_birth' => 'required|date',
-            'identifier' => 'required|string|max:50|unique:doctors,identifier,NULL,id'
+            'identifier' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('doctors', 'identifier')->ignore($doctorId)
+            ]
         ];
     }
+    
 }
