@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('doctor_specialty', function (Blueprint $table) {
+        Schema::create('availabilities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('doctor_id'); 
-            $table->unsignedBigInteger('specialty_id'); 
-            $table->unsignedBigInteger('status_id'); 
+            $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('specialty_id')->nullable();
+            $table->tinyInteger('day')->comment('0: Sunday, 1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->unsignedBigInteger('status_id');
             $table->timestamps();
 
             $table->foreign('doctor_id')->references('id')->on('doctors')
@@ -27,9 +30,6 @@ return new class extends Migration
             $table->foreign('status_id')->references('id')->on('statuses')
                 ->onUpdate('cascade')
                 ->onDelete('restrict');
-
-            // Índice único para evitar duplicados
-            $table->unique(['doctor_id', 'specialty_id']);
         });
     }
 
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctor_specialty');
+        Schema::dropIfExists('availabilities');
     }
 };

@@ -212,7 +212,7 @@ form_hours:
   id: 'doctor_hour_form'
   title: add_doctor
   file: 'doctors'
-  source: /doctors/save
+  source: /doctors/savehours
   method: replaceHtml
   container: 'span#content-wrapper'
   then: afterSaveCallback

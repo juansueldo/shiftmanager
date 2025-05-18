@@ -23,6 +23,7 @@
 
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <!-- Place this tag where you want the button to render. -->
+                
                 <li class="nav-item navbar-dropdown dropdown me-3">
                   <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
                       data-bs-toggle="dropdown">
@@ -60,7 +61,8 @@
                   </a>
                   <meta name="csrf-token" content="{{ csrf_token() }}">
                   <ul class="dropdown-menu dropdown-menu-end mt-3 py-2" style="width: 300px;">
-                      <table class="table table-bordered mb-0 text-center">
+                    <li class="dropdown-header"><span class="align-middle text-body">Shortcuts</span></li>
+                    <table class="table table-bordered mb-0 text-center">
                           <tbody>
                               <tr>
                                   <td>
@@ -105,7 +107,7 @@
                                   </td>
                               </tr>
                           </tbody>
-                      </table>
+                    </table>
                   </ul>
                 </li>
 

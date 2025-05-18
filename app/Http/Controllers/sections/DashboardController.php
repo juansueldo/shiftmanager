@@ -11,6 +11,7 @@ class DashboardController extends Controller
 {
     protected $yamlconfig;
     protected $navbarconfig;
+    protected $usersyaml;
 //    protected  $currentLocale = App::getLocale();
 
     public function __construct()
@@ -25,11 +26,16 @@ class DashboardController extends Controller
         $sidebar = $this->yamlconfig['menu'];
         $navbar = $this->navbarconfig['menu'];
         $user = Auth::user();
-        $widgets = DashboardWidget::where('user_id', $user->id, )->where('status', 1)->get();
-        $dashboard = $this->create();
+        $widgets = $this->getWidgetData(DashboardWidget::where('user_id', $user->id, )->where('status', 1)->get());
+        $dashboard = $this->create(); 
         return view('layouts.main', compact('sidebar', 'navbar', 'user', 'dashboard', 'widgets'));
     }
-
+    private function getWidgetData($widgets){
+        foreach($widgets as $widget){
+            $widget->data = $this->getYamlConfig('/widgets/'.$widget->name)['data'];
+        }
+        return $widgets;
+    }
     public function navbar(){
         $navbar = $this->navbarconfig['menu'];
         $user = Auth::user();
@@ -38,7 +44,7 @@ class DashboardController extends Controller
 
     public function create(){
         $user = Auth::user();
-        $widgets = DashboardWidget::where('user_id', $user->id, )->where('status', 1)->get();
+        $widgets = $this->getWidgetData(DashboardWidget::where('user_id', $user->id, )->where('status', 1)->get());
         return view('sections.dashboard', compact('user', 'widgets'));
     }
 
@@ -56,7 +62,6 @@ class DashboardController extends Controller
     }
     public function createWidget($name)
     {
-
         $user = Auth::user();
         // Verificar si el widget ya existe para el usuario
         $existingWidget = DashboardWidget::where('user_id', $user->id)->where('name', $name)->first();

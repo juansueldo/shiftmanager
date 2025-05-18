@@ -4,6 +4,7 @@ namespace App\Http\Controllers\sections;
 
 use App\Http\Controllers\Controller;
 use App\Models\Doctor;
+use App\Models\Availabilities;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreDoctorRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -76,7 +77,20 @@ class DoctorController extends Controller
 
         return view('layouts.partials.form', compact('inputs', 'formdata', 'user'));
     }
+    public function saveHours(Request $request){
+       foreach ($request->days as $day) {
+        Availabilities::create([
+            'doctor_id' => $request->doctor_id,
+            'specialty_id' => $request->specialties,
+            'day' => $day,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'status_id' => 1,
+            ]);
+        }       
 
+        return redirect()->route('doctors.index')->with('success', __('doctors.hours_created'));
+    }
     public function store(StoreDoctorRequest $request)
     {
         $this->authorize('create', Doctor::class);
