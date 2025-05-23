@@ -9,6 +9,8 @@ use App\Http\Controllers\sections\UserController;
 use App\Http\Controllers\sections\PatientController;
 use App\Http\Controllers\sections\SpecialtyController;
 use App\Http\Controllers\sections\DoctorController;
+use App\Http\Controllers\settings\ConnectionsController;
+use App\Http\Controllers\settings\GoogleController;
 use Illuminate\Support\Facades\Route;
 
 // Redirigir a dashboard si el usuario está autenticado
@@ -33,7 +35,7 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'destroy'])->name('login.destroy')->middleware('auth');
 
 // Rutas protegidas por autenticación
-Route::middleware('auth')->group(function () {
+//Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/main', [DashboardController::class, 'create'])->name('dashboard.create');
@@ -68,11 +70,11 @@ Route::middleware('auth')->group(function () {
     });
 
     // Doctores
-    Route::prefix('doctors')->name('doctors.')->group(function () {
+    Route::prefix('doctors')->name('doctors.')->group(function (): void {
         Route::get('/', [DoctorController::class, 'index'])->name('index');
         Route::post('/data', [DoctorController::class, 'data'])->name('data');
         Route::get('/form/{id?}', [DoctorController::class, 'add'])->name('form');
-        Route::post('/save', [DoctorController::class, 'store'])->name('save');
+        Route::post('/save', [DoctorController::class, 'store'])->name('store');
         Route::get('/sethours/{id}', [DoctorController::class, 'setHours'])->name('sethours');
         Route::post('/checkspecialty', [DoctorController::class, 'checkSpecialty'])->name('checkspecialty');
         Route::post('/savehours', [DoctorController::class, 'saveHours'])->name('savehours');
@@ -86,4 +88,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/save', [SpecialtyController::class, 'store'])->name('save');
         Route::get('/list', [SpecialtyController::class, 'list'])->name('list');
     });
-});
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/connections', [ConnectionsController::class, 'index'])->name('connections');
+        Route::get('/google', [GoogleController::class, 'redirectToGoogle'])->name('google');
+        Route::get('/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+    });
+//});

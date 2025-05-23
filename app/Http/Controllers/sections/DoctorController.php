@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use App\Models\Availabilities;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreDoctorRequest;
+use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,14 +16,12 @@ class DoctorController extends Controller
     use AuthorizesRequests;
     protected $yamlconfig;
 
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
         $this->yamlconfig = $this->getYamlConfig('sections/doctors');
     }
 
-    public function index()
-    {
+    public function index(){
         $user = Auth::user();
         $table = $this->yamlconfig['table'];
         return view('sections.doctors', compact('table', 'user'));
@@ -73,8 +72,6 @@ class DoctorController extends Controller
                 }
             }
         }
-
-
         return view('layouts.partials.form', compact('inputs', 'formdata', 'user'));
     }
     public function saveHours(Request $request){
@@ -92,46 +89,64 @@ class DoctorController extends Controller
         return redirect()->route('doctors.index')->with('success', __('doctors.hours_created'));
     }
     public function store(StoreDoctorRequest $request)
-    {
-        $this->authorize('create', Doctor::class);
-    
-        try {
-            $data = $request->validated();
-            $specialtyIds = $request->input('specialties', []);
-    
-            // Si viene el ID, actualizamos
-            if ($request->has('id')) {
-                $doctor = Doctor::findOrFail($request->id);
-                $doctor->update($data);
-            } else {
-                $doctor = Doctor::create($data);
+{
+    try {
+        $data = $request->validated();
+        $specialtyIds = $request->input('specialties', []);
+
+        if ($request->has('id') && $request->id && $request->id > 0) {
+            // Actualizar doctor existente
+            $doctor = Doctor::findOrFail($request->id);
+            $doctor->update($data);
+        } else {
+            // Crear nuevo doctor
+            $userData = [
+                'firstname' => $data['firstname'],
+                'lastname' => $data['lastname'],
+                'password' => bcrypt($data['identifier']),
+                'avatar' => 'http://127.0.0.1:8000/storage/uploads/users/9bcDcCzzjy.png'
+            ];
+
+            // Solo agregar email al usuario si existe en los datos del doctor
+            if (!empty($data['email'])) {
+                $userData['email'] = $data['email'];
             }
-    
-            // Manejo de especialidades
-            if (is_array($specialtyIds)) {
-                // Obtener las actuales del doctor
-                $currentSpecialties = $doctor->specialties()->pluck('specialty_id')->toArray();
-    
-                // Desactivar las que ya no están
-                $specialtiesToDeactivate = array_diff($currentSpecialties, $specialtyIds);
-                if (!empty($specialtiesToDeactivate)) {
-                    $doctor->specialties()->updateExistingPivot($specialtiesToDeactivate, ['status_id' => 3]);
-                }
-    
-                // Activar o crear las nuevas
-                foreach ($specialtyIds as $specialtyId) {
-                    $doctor->specialties()->syncWithoutDetaching([
-                        $specialtyId => ['status_id' => 1]
-                    ]);
-                }
-            }
-    
-            return redirect()->route('doctors.index')->with('success', __('doctors.doctor_' . ($request->has('id') ? 'updated' : 'created')));
-    
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', __('messages.error_occurred') . $e->getMessage());
+
+            $user = User::create($userData);
+            
+            // Establecer status por defecto y user_id
+            $data['status'] = 1;
+            $data['user_id'] = $user->id;
+            
+            $doctor = Doctor::create($data);
         }
+
+        // Gestionar especialidades
+        if (is_array($specialtyIds) && !empty($specialtyIds)) {
+            // Obtener las especialidades actuales del doctor
+            $currentSpecialties = $doctor->specialties()->pluck('specialty_id')->toArray();
+
+            // Desactivar especialidades que ya no están seleccionadas
+            $specialtiesToDeactivate = array_diff($currentSpecialties, $specialtyIds);
+            if (!empty($specialtiesToDeactivate)) {
+                $doctor->specialties()->updateExistingPivot($specialtiesToDeactivate, ['status_id' => 3]);
+            }
+
+            // Activar o crear las nuevas especialidades
+            foreach ($specialtyIds as $specialtyId) {
+                $doctor->specialties()->syncWithoutDetaching([
+                    $specialtyId => ['status_id' => 1]
+                ]);
+            }
+        }
+
+        return redirect()->route('doctors.index')
+            ->with('success', __('doctors.doctor_' . ($request->has('id') ? 'updated' : 'created')));
+
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', __('messages.error_occurred'));
     }
+}
     
     public function setHours($id){
         $doctor = Doctor::find($id);

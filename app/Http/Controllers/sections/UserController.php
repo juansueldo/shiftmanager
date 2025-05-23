@@ -45,8 +45,7 @@ class UserController extends Controller
             'recordsFiltered' => $data->total(),
         ]);
     }
-    private function getAvatar($avatar, $firstname, $lastname)
-    {
+    private function getAvatar($avatar, $firstname, $lastname){
         return '<div class="d-flex justify-content-start align-items-center user-name">' .
                     '<div class="avatar-wrapper">' .
                         '<div class="avatar me-2">' .

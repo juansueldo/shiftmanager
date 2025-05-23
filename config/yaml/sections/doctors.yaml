@@ -90,12 +90,24 @@ inputs:
     value: ''
     col: 6
     placeholder: John
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-minlength: 3
+      fs-error-required: user.firstname_required
+      fs-error-minlength: user.firstname_minlength
   - type: text
     name: lastname
     label: lastname
     value: ''
     placeholder: Doe
     col: 6
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-minlength: 3
+      fs-error-required: user.lastname_required
+      fs-error-minlength: user.lastname_minlength
   - type: date
     name: date_of_birth
     label: date_of_birth
@@ -106,6 +118,13 @@ inputs:
     label: email
     value: ''
     col: 12
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-email: "true"
+      fs-remote: "true"
+      fs-error-required: user.email_required
+      fs-error-email: user.email_invalid
   - type: select
     name: specialties
     label: specialty
@@ -149,6 +168,16 @@ inputs:
     label: identifier
     value: ''
     col: 12
+    data:
+      fs-validate: "true"
+      fs-number: "true"
+      fs-required: "true"
+      fs-minlength: "7"
+      fs-maxlength: "8"
+      fs-error-required: patient.identifier_required
+      fs-error-minlength: patient.identifier_minlength
+      fs-error-maxlength: patient.identifier_maxlength
+      fs-error-number: patient.identifier_number
 form:
   id: 'doctor_form'
   title: add_doctor

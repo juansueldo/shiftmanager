@@ -22,4 +22,7 @@
         'doctor_updated' => 'Doctor actualizado con éxito',
         'doctor_deleted' => 'Doctor eliminado con éxito',
         'doctor_not_found' => 'Doctor no encontrado',
+        'days'=> 'Dias',
+        'start_time'=> 'Hora de Inicio',
+        'end_time'=> 'Hora de Fin',
     ];

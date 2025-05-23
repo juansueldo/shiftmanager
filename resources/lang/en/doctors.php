@@ -22,4 +22,7 @@
         'doctor_updated' => 'Doctor Updated Successfully',
         'doctor_deleted' => 'Doctor Deleted Successfully',
         'doctor_not_found' => 'Doctor Not Found',
+        'days'=> 'Days',
+        'start_time'=> 'Start Time',
+        'end_time'=> 'End Time',
     ];
