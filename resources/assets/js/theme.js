@@ -20,6 +20,14 @@ function setupThemeToggle(toggleBtn, iconElem, htmlElem) {
         }
     }
 }
+function applySavedTheme(htmlElem) {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+        htmlElem.setAttribute("data-bs-theme", savedTheme);
+    }
+}
 
+// Ejemplo de uso:
+applySavedTheme(document.documentElement);
 
 window.setupThemeToggle = setupThemeToggle;

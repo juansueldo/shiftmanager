@@ -11,6 +11,7 @@ class Calendar extends Model
         'title',
         'description',
         'date',
+        'google_event_id',
         'patientid',
         'status'
 

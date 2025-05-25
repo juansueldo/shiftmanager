@@ -23,12 +23,20 @@ class User extends Authenticatable
     protected $fillable = [
         'firstname',
         'lastname',
+        'email',
         'avatar',
         'email',
+        'google_id',
+        'google_token',
+        'google_refresh_token',
+        'token_expires_at',
         'password',
         'language',
         'status', 
     ];
+
+    protected $dates = ['token_expires_at'];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -50,6 +58,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+             'token_expires_at' => 'datetime',
         ];
     }
 

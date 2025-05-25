@@ -11,13 +11,15 @@ use App\Http\Controllers\sections\SpecialtyController;
 use App\Http\Controllers\sections\DoctorController;
 use App\Http\Controllers\settings\ConnectionsController;
 use App\Http\Controllers\settings\GoogleController;
+use App\Http\Controllers\auth\GoogleAuthController;
 use Illuminate\Support\Facades\Route;
 
 // Redirigir a dashboard si el usuario está autenticado
 Route::get('/', function () {
     return redirect()->route('dashboard.index');
 })->middleware('auth');
-
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 // Cambiar idioma
 Route::get('/language/{lang}', [DashboardController::class, 'setLanguage'])->name('dashboard.language');
 
@@ -35,7 +37,7 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'destroy'])->name('login.destroy')->middleware('auth');
 
 // Rutas protegidas por autenticación
-//Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/main', [DashboardController::class, 'create'])->name('dashboard.create');
@@ -93,4 +95,4 @@ Route::post('/logout', [LoginController::class, 'destroy'])->name('login.destroy
         Route::get('/google', [GoogleController::class, 'redirectToGoogle'])->name('google');
         Route::get('/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
     });
-//});
+});

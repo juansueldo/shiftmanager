@@ -401,8 +401,8 @@ button.list-group-item-primary.active {
 }
 
 .btn-outline-primary {
-  color: #8c57ff;
-  border-color: #8c57ff;
+  color: #8c57ff !important;
+  border-color: #8c57ff !important;
   background: transparent;
 }
 .btn-outline-primary.waves-effect .waves-ripple {

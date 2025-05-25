@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->dateTime('date');
+            $table->string('google_event_id')->nullable();
             $table->unsignedBigInteger('patientid');
-            $table->foreign('patientid')->references('id')->on('patients') // Verifica si la tabla se llama realmente 'patients'
+            $table->foreign('patientid')->references('id')->on('patients') 
             ->onUpdate('cascade')
             ->onDelete('restrict');
 

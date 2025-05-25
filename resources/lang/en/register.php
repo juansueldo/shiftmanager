@@ -21,4 +21,6 @@
         'password_minlength'=> 'Password must be at least 8 characters',
         'password_pattern'=> 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
         'password_error_confirm' => 'Password confirmation does not match',
+        'continue_with_google' => 'Continue with Google',
+        'or' => 'or',
     ];

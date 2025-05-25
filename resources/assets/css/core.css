@@ -9760,7 +9760,7 @@ div:not(.nav-align-left):not(.nav-align-right) > .nav-tabs {
 }
 
 .form-switch .form-check-input {
-  background-color: #eae9ec;
+
   border: none;
   box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.16) inset;
 }
