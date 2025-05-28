@@ -31,7 +31,7 @@ menu:
     data-ajax-container: "span#content-wrapper"
     icon: "ri-user-3-line"
   - name: dashboard.settings
-    data-ajax-source: "/settings"
+    data-ajax-source: "/settings/billing"
     data-ajax-method: "replaceHtml"
     data-ajax-container: "span#content-wrapper"
     icon: "ri-settings-3-line"

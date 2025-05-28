@@ -17,11 +17,34 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('customers', function(Blueprint $table) {
+            $table->id();
+            $table->string('firstname');
+            $table->string('lastname');
+            $table->string('company_name')->nullable();
+            $table->string('company_email')->nullable();
+            $table->string('company_phone')->nullable();
+            $table->string('company_address')->nullable();
+            $table->string('company_city')->nullable();
+            $table->string('company_state')->nullable();
+            $table->string('company_zip')->nullable();
+            $table->string('company_country')->nullable();
+            $table->string('company_vat')->nullable();
+            $table->unsignedBigInteger('status')->default(1);
+            $table->foreign('status')->references('id')->on('statuses')
+            ->onUpdate('cascade')
+            ->onDelete('restrict');
+            $table->timestamps();
+        });
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->foreign('customer_id')->references('id')->on('customers')
+            ->onUpdate('cascade')
+            ->onDelete('set null');
             $table->string('google_id')->nullable();
             $table->text('google_token')->nullable();
             $table->text('google_refresh_token')->nullable();

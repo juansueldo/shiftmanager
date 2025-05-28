@@ -5,6 +5,7 @@ namespace App\Http\Controllers\sections;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
@@ -90,9 +91,10 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,'.$request->id,
             'password' => $request->id == 0 ? 'required|string|min:8' : 'nullable|string|min:8',
         ]);
-       
+       $usercurrent = Auth::user();
         try {
             if($request->id > 0){
+                
                 $user = User::find($request->id);
                 if ($user) {
                     $data=[];
@@ -106,10 +108,12 @@ class UserController extends Controller
                     return redirect()->route('users.index')->with('success', __('user.user_updated'));
                 }
             }else{
+                
                 User::create([
                     'firstname' => $request->firstname,
                     'lastname' => $request->lastname,
                     'email' => $request->email,
+                    'customer_id' => $usercurrent->customer_id,
                     'password' => Hash::make($request->password),
                     'avatar' => 'http://127.0.0.1:8000/storage/uploads/users/9bcDcCzzjy.png'
                 ]);

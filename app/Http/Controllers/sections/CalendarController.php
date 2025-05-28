@@ -113,8 +113,8 @@ class CalendarController extends Controller
         }
     }
 
-   protected function createGoogleCalendarEvent($request, $calendar)
-   {
+    protected function createGoogleCalendarEvent($request, $calendar)
+    {
         $user = auth()->user();
 
         $client = new \Google_Client();
@@ -192,10 +192,4 @@ class CalendarController extends Controller
             return redirect()->route('calendar.index')->with('error', __('calendar.error_occurred'));
         }
     }
-
-
-    
-
-    
-
 }

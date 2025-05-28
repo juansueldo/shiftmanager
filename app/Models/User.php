@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email',
         'avatar',
         'email',
+        'customer_id',
         'google_id',
         'google_token',
         'google_refresh_token',
@@ -67,6 +68,10 @@ class User extends Authenticatable
         return $this->belongsTo(Status::class, 'status');
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
     public function scopeFilter($query, $params){
         $query->select('users.*', 'statuses.name as status_name')
             ->leftJoin('statuses', 'users.status', '=', 'statuses.id');

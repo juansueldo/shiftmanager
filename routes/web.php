@@ -95,4 +95,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/google', [GoogleController::class, 'redirectToGoogle'])->name('google');
         Route::get('/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
     });
+    Route::get('/settings/billing', function () {
+        return view('settings.billing');
+    })->name('settings.billing');
 });
