@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DashboardWidget;
+use App\Models\RoleUser;
+use App\Models\Rol;
 use App\Models\User;
 class DashboardController extends Controller
 {
@@ -17,15 +19,16 @@ class DashboardController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->yamlconfig = $this->getYamlConfig('/menu/sidebar');
-        $this->navbarconfig = $this->getYamlConfig('/menu/navbar');
+        $user = $this->getUserData();
+        $this->yamlconfig = $this->getYamlConfig('/menu/sidebar_'.$user->rol['name']);
+        $this->navbarconfig = $this->getYamlConfig('/menu/navbar_'.$user->rol['name']);
     }
 
     public function index()
     {
         $sidebar = $this->yamlconfig['menu'];
         $navbar = $this->navbarconfig['menu'];
-        $user = Auth::user();
+        $user = $this->getUserData();
         $widgets = $this->getWidgetData(DashboardWidget::where('user_id', $user->id, )->where('status', 1)->get());
         $dashboard = $this->create(); 
         return view('layouts.main', compact('sidebar', 'navbar', 'user', 'dashboard', 'widgets'));

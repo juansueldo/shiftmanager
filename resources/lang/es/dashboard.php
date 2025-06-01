@@ -9,6 +9,7 @@ return [
     'specialties' => 'Especialidades',
     'doctors' => 'Doctores',
     'settings' => 'Configuracion',
+    'connections' => 'Conexiones',
     'english' => 'Inglés',
     'spanish' => 'Español',
     'french' => 'Frances',

@@ -12,6 +12,7 @@ use App\Http\Controllers\sections\DoctorController;
 use App\Http\Controllers\settings\ConnectionsController;
 use App\Http\Controllers\settings\GoogleController;
 use App\Http\Controllers\auth\GoogleAuthController;
+use App\Http\Controllers\settings\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 // Redirigir a dashboard si el usuario está autenticado
@@ -94,8 +95,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/connections', [ConnectionsController::class, 'index'])->name('connections');
         Route::get('/google', [GoogleController::class, 'redirectToGoogle'])->name('google');
         Route::get('/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+        Route::get('/billing', [CustomerController::class, 'index'])->name('settings.billing');
     });
-    Route::get('/settings/billing', function () {
-        return view('settings.billing');
-    })->name('settings.billing');
 });

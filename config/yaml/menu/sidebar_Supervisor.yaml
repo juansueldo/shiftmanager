@@ -1,0 +1,33 @@
+menu:
+  - name: dashboard.dashboard
+    data-ajax-source: "/main"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-home-smile-line"
+    class: "active"
+  - name: dashboard.calendar
+    data-ajax-source: "/calendar"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-calendar-todo-line"
+  - name: dashboard.medical_history
+    data-ajax-source: "/medical-history"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-file-list-3-line"
+  - name: dashboard.patients
+    data-ajax-source: "/patients"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-user-heart-line"
+  - name: dashboard.specialties
+    data-ajax-source: "/specialty"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-stethoscope-line"
+  - name: dashboard.doctors
+    data-ajax-source: "/doctors"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-user-3-line"
+  

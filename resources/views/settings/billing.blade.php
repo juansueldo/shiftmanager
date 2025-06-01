@@ -8,11 +8,11 @@
                         <div class="row">
                           <div class="mb-3 col-sm-6 fv-plugins-icon-container">
                             <label for="companyName" class="form-label">Company Name</label>
-                            <input type="text" id="companyName" name="companyName" class="form-control" placeholder="Pixinvent">
+                            <input type="text" id="companyName" name="companyName" class="form-control" placeholder="Pixinvent" value="{{ $customer['company_name'] }}">
                           <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div></div>
                           <div class="mb-3 col-sm-6 fv-plugins-icon-container">
                             <label for="billingEmail" class="form-label">Billing Email</label>
-                            <input class="form-control" type="text" id="billingEmail" name="billingEmail" placeholder="john.doe@example.com">
+                            <input class="form-control" type="text" id="billingEmail" name="billingEmail" placeholder="john.doe@example.com" value="{{ $customer['company_email'] }}">
                           <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div></div>
                           <div class="mb-3 col-sm-6">
                             <label for="taxId" class="form-label">Tax ID</label>
@@ -26,7 +26,7 @@
                             <label for="mobileNumber" class="form-label">Mobile</label>
                             <div class="input-group input-group-merge">
                               <span class="input-group-text">US (+1)</span>
-                              <input class="form-control mobile-number" type="text" id="mobileNumber" name="mobileNumber" placeholder="202 555 0111">
+                              <input class="form-control mobile-number" type="text" id="mobileNumber" name="mobileNumber" placeholder="202 555 0111" value="{{$customer['company_phone']}}" maxlength="10">
                             </div>
                           </div>
                           <div class="mb-3 col-sm-6">

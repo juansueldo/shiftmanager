@@ -7,12 +7,22 @@ use Symfony\Component\Yaml\Yaml;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+use App\Models\RoleUser;
+use App\Models\Rol;
 abstract class Controller
 {
     public function __construct(){
         $this->getLangue();
     }
 
+    protected function getUserData(){
+        if (Auth::check()) {
+            $user = Auth::user(); 
+            $user->rol = Rol::where('id', RoleUser::where('user_id', $user->id)->first()->role_id)->first();
+            return $user;
+        }
+        return null; // Si no hay usuario autenticado
+    }
     protected function getLangue(){
         if (Auth::check()) {
             $user = Auth::user();

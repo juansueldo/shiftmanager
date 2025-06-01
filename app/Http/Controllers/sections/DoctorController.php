@@ -8,6 +8,7 @@ use App\Models\Availabilities;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreDoctorRequest;
 use App\Models\User;
+use App\Models\RoleUser;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
@@ -113,6 +114,11 @@ class DoctorController extends Controller
             }
 
             $user = User::create($userData);
+
+            RoleUser::updateOrCreate(
+                    ['user_id' => $user->id, 'role_id' => 3],
+                    ['status_id' => 1] 
+                );
             
             // Establecer status por defecto y user_id
             $data['status'] = 1;

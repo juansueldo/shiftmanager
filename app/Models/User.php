@@ -59,7 +59,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-             'token_expires_at' => 'datetime',
+            'token_expires_at' => 'datetime',
         ];
     }
 
@@ -72,31 +72,52 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
-    public function scopeFilter($query, $params){
-        $query->select('users.*', 'statuses.name as status_name')
+    public function roles()
+    {
+        return $this->belongsToMany(Rol::class, 'role_user')
+                ->withPivot('status_id')
+                ->withTimestamps();
+    }
+
+    public function scopeFilter($query, $params)
+    {
+        $query->select('users.*', 'statuses.name as status_name', 'rols.name as role_name')
+            ->leftJoin('role_user', 'users.id', '=', 'role_user.user_id')
+            ->leftJoin('rols', 'role_user.role_id', '=', 'rols.id')
             ->leftJoin('statuses', 'users.status', '=', 'statuses.id');
-    
+
         if (!empty($params['search'])) {
             $search = $params['search'];
             $query->where(function ($q) use ($search) {
                 $q->where('users.firstname', 'like', "%{$search}%")
                     ->orWhere('users.lastname', 'like', "%{$search}%")
                     ->orWhere('users.email', 'like', "%{$search}%")
+                    ->orWhere('rols.name', 'like', "%{$search}%")
                     ->orWhere('statuses.name', 'like', "%{$search}%");
             });
         }
-    
+
+        // Solo permitir columnas válidas para ordenar
+        $allowedOrderColumns = [
+            'id' => 'users.id',
+            'firstname' => 'users.firstname',
+            'lastname' => 'users.lastname',
+            'email' => 'users.email',
+            'status_name' => 'statuses.name',
+            'role_name' => 'rols.name',
+        ];
+
         $orderColumn = $params['ordercolumn'] ?? 'id';
         $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : 'id';
-    
+        $orderBy = $allowedOrderColumns[$orderColumn] ?? 'users.id';
+
         $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
-    
         if (!in_array($orderMethod, ['asc', 'desc'])) {
             $orderMethod = 'asc';
         }
-    
-        $query->orderBy($orderColumn, $orderMethod);
-    
+
+        $query->orderBy($orderBy, $orderMethod);
+
         return $query;
     }
     

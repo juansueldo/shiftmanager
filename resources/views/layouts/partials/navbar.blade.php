@@ -160,7 +160,7 @@
                           </div>
                           <div class="flex-grow-1">
                           <h6 class="mb-0 small">{{ $user->firstname }} {{ $user->lastname }}</h6>
-                            <small class="text-muted">Admin</small>
+                            <small class="text-muted">{{$user->rol['name']}}</small>
                           </div>
                         </div>
                       </a>

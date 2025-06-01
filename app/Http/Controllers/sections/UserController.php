@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\RoleUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
@@ -35,7 +36,7 @@ class UserController extends Controller
 
         // Formatear datos
         foreach ($data as $key => $value) {
-            $data[$key]['firstname'] = $this->getAvatar($value['avatar'], $value['firstname'], $value['lastname']);
+            $data[$key]['firstname'] = $this->getAvatar($value['avatar'], $value['firstname'], $value['lastname'], $value['role_name']);
             $data[$key]['status_name']= $this->showStatus($data[$key]['status_name']);
             $data[$key]['actions'] = $this->getActions($this->yamlconfig['table']['actions'], [$value['id']]); // Puedes agregar más lógica aquí
         }
@@ -46,7 +47,7 @@ class UserController extends Controller
             'recordsFiltered' => $data->total(),
         ]);
     }
-    private function getAvatar($avatar, $firstname, $lastname){
+    private function getAvatar($avatar, $firstname, $lastname,$role){
         return '<div class="d-flex justify-content-start align-items-center user-name">' .
                     '<div class="avatar-wrapper">' .
                         '<div class="avatar me-2">' .
@@ -55,7 +56,7 @@ class UserController extends Controller
                     '</div>' .
                     '<div class="d-flex flex-column">' .
                         '<span class="emp_name text-truncate h6 mb-0">'.$firstname .' '.$lastname.'</span>' .
-                        '<small class="emp_post text-truncate">Cost Accountant</small>' .
+                        '<small class="emp_post text-truncate">'.$role.'</small>' .
                     '</div>' .
                 '</div>';
     }
@@ -109,7 +110,7 @@ class UserController extends Controller
                 }
             }else{
                 
-                User::create([
+                $user = User::create([
                     'firstname' => $request->firstname,
                     'lastname' => $request->lastname,
                     'email' => $request->email,
@@ -117,6 +118,11 @@ class UserController extends Controller
                     'password' => Hash::make($request->password),
                     'avatar' => 'http://127.0.0.1:8000/storage/uploads/users/9bcDcCzzjy.png'
                 ]);
+
+                RoleUser::updateOrCreate(
+                    ['user_id' => $user->id, 'role_id' => 2],
+                    ['status_id' => 1] 
+                );
     
                 //return redirect()->route('users.index')->with('success', 'User created successfully!');
                 return redirect()->route('users.index')->with('success', __('user.user_created'));

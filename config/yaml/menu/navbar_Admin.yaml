@@ -4,11 +4,11 @@ menu:
     data-ajax-method: "replaceHtml"
     data-ajax-container: "span#content-wrapper"
     icon: "ri-user-3-line"
-  - name: dashboard.settings
+  - name: dashboard.connections
     data-ajax-source: "/settings/connections"
     data-ajax-method: "replaceHtml"
     data-ajax-container: "span#content-wrapper"
-    icon: "ri-settings-3-line"
+    icon: "ri-plug-line"
   - name: dashboard.users
     data-ajax-source: "/users"
     data-ajax-method: "replaceHtml"

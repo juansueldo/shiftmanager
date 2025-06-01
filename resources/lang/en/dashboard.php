@@ -9,6 +9,7 @@ return [
     'specialties' => 'Specialties',
     'doctors' => 'Doctors',
     'settings' => 'Settings',
+    'connections' => 'Connections',
     'english' => 'English',
     'spanish' => 'Spanish',
     'french' => 'French',
