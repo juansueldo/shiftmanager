@@ -12,22 +12,31 @@ use Illuminate\Support\Facades\Auth;
 
 class GoogleAuthController extends Controller
 {
-    public function redirect()
-{
-    return Socialite::driver('google')
-        ->scopes([
-            'openid',
-            'profile',
-            'email',
-            'https://www.googleapis.com/auth/calendar'
-        ])
-        ->with(['access_type' => 'offline', 'prompt' => 'consent']) 
-        ->redirect();
-}
+    public function redirect(){
+        return Socialite::driver('google')
+            ->scopes([
+                'openid',
+                'profile',
+                'email',
+                'https://www.googleapis.com/auth/calendar'
+            ])
+            ->with(['access_type' => 'offline', 'prompt' => 'consent']) 
+            ->redirect();
+    }
 
 
     public function callback(){
         $googleUser = Socialite::driver('google')->user();
+        $user = Auth::user();
+        if ($user) {
+            User::where('id', $user->id)->update([
+                'google_id' => $googleUser->id,
+                'google_token' => $googleUser->token,
+                'google_refresh_token' => $googleUser->refreshToken,
+                'token_expires_at' => now()->addSeconds($googleUser->expiresIn),
+            ]);
+            return redirect()->intended('/dashboard')->with('success', __('connections.google_connected'));
+        }
         $is_admin = false;
 
         $names = explode(' ', $googleUser->name, 2);
@@ -78,6 +87,20 @@ class GoogleAuthController extends Controller
         Auth::login($user);
 
         return redirect()->intended('/dashboard');
+    }
+
+    public function disconnect(){
+        $user = Auth::user();
+        if ($user) {
+             User::where('id', $user->id)->update([
+                'google_id' => null,
+                'google_token' => null,
+                'google_refresh_token' => null,
+                'token_expires_at' => null,
+            ]);
+            return redirect()->route('settings.connections')->with('success', __('connections.google_disconnected'));
+        }
+        return redirect()->route('settings.connections')->with('error', __('connections.error_occurred'));
     }
 
 }

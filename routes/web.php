@@ -10,7 +10,6 @@ use App\Http\Controllers\sections\PatientController;
 use App\Http\Controllers\sections\SpecialtyController;
 use App\Http\Controllers\sections\DoctorController;
 use App\Http\Controllers\settings\ConnectionsController;
-use App\Http\Controllers\settings\GoogleController;
 use App\Http\Controllers\auth\GoogleAuthController;
 use App\Http\Controllers\settings\CustomerController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +20,7 @@ Route::get('/', function () {
 })->middleware('auth');
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+Route::get('/auth/google/disconnect', [GoogleAuthController::class, 'disconnect'])->name('auth.disconnect');
 // Cambiar idioma
 Route::get('/language/{lang}', [DashboardController::class, 'setLanguage'])->name('dashboard.language');
 
@@ -93,8 +93,6 @@ Route::middleware('auth')->group(function () {
     });
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/connections', [ConnectionsController::class, 'index'])->name('connections');
-        Route::get('/google', [GoogleController::class, 'redirectToGoogle'])->name('google');
-        Route::get('/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
         Route::get('/billing', [CustomerController::class, 'index'])->name('settings.billing');
     });
 });

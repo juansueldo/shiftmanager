@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -84,8 +85,12 @@ class User extends Authenticatable
         $query->select('users.*', 'statuses.name as status_name', 'rols.name as role_name')
             ->leftJoin('role_user', 'users.id', '=', 'role_user.user_id')
             ->leftJoin('rols', 'role_user.role_id', '=', 'rols.id')
-            ->leftJoin('statuses', 'users.status', '=', 'statuses.id');
+            ->leftJoin('statuses', 'users.status', '=', 'statuses.id'); 
 
+        $customerId = $params['customer_id'] ?? (Auth::check() ? Auth::user()->customer_id : null);
+        if ($customerId) {
+            $query->where('users.customer_id', $customerId);
+        }
         if (!empty($params['search'])) {
             $search = $params['search'];
             $query->where(function ($q) use ($search) {

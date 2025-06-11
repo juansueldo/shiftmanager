@@ -128,7 +128,7 @@
               $(document).ready(function(){
                 const originalAvatarUrl = "{{ asset($user->avatar) }}";
                 uploadFile($('#upload'), $('#uploadedAvatar'), $('#avatar'));
-                resetFile($('#resetImage'),$('#uploadedAvatar'), $('#avatar'), originalAvatarUrl)
+                resetFile($('#resetImage'),$('#uploadedAvatar'), $('#avatar'), originalAvatarUrl);
               });
 
             </script>
