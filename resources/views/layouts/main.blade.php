@@ -77,7 +77,7 @@
                       document.write(new Date().getFullYear());
                     </script>
                     , {{ __('dashboard.made_with') }} <span class="text-danger"><i class="tf-icons ri-heart-fill"></i></span> {{ __('dashboard.by') }}
-                    <a href="https://themeselection.com" target="_blank" class="footer-link">Juan Sueldo</a>
+                    <a href="https://juansueldo.github.io" target="_blank" class="footer-link">Juan Sueldo</a>
                   </div>
                   
                 </div>

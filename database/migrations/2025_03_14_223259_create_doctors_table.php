@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('email');
+            $table->unsignedBigInteger('user_id')->unique(); // Un doctor por user
+            $table->foreign('user_id')->references('id')->on('users')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->string('phone');
             $table->string('address');
             $table->string('city');

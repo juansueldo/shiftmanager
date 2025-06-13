@@ -93,7 +93,7 @@ class PatientController extends Controller
 
                 return redirect()->route('patients.index')->with('success', __('patient.patient_updated'));
             } else {
-
+                $data['customer_id'] = Auth::user()->customer_id;
                 if (Patient::where('email', $request->email)->exists()) {
                     return redirect()->back()->with('error', __('patient.email_in_use'));
                 }

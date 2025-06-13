@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('firstname');
             $table->string('lastname');
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->foreign('customer_id')->references('id')->on('customers')
+            ->onUpdate('cascade')
+            ->onDelete('set null'); 
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();

@@ -6,6 +6,7 @@
         'firstname' => 'First Name',
         'lastname' => 'Last Name',
         'email' => 'Email',
+        'date_of_birth' => 'Date of Birth',
         'status' => 'Status',
         'actions' => 'Actions',
         'identifier' => 'Identifier',

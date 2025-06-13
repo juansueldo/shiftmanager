@@ -5,6 +5,7 @@
         'doctor_id' => 'ID del Doctor',
         'firstname' => 'Nombre',
         'lastname' => 'Apellido',
+        'date_of_birth' => 'Fecha de Nacimiento',
         'email' => 'Correo Electrónico',
         'status' => 'Estado',
         'actions' => 'Acciones',

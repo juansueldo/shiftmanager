@@ -80,6 +80,10 @@ class User extends Authenticatable
                 ->withTimestamps();
     }
 
+    public function doctor(){
+        return $this->hasOne(Doctor::class);
+    }
+    
     public function scopeFilter($query, $params)
     {
         $query->select('users.*', 'statuses.name as status_name', 'rols.name as role_name')
