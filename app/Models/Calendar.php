@@ -9,6 +9,7 @@ class Calendar extends Model
 {
     protected $fillable = [
         'title',
+        'customer_id',
         'description',
         'date',
         'google_event_id',
@@ -19,6 +20,14 @@ class Calendar extends Model
 
     public function status(){
         return $this->belongsTo(Status::class, 'status');
+    }
+
+    public function patient(){
+        return $this->belongsTo(Patient::class, 'patientid');
+    }
+
+    public function customer(){
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     public function getDateFormat(){

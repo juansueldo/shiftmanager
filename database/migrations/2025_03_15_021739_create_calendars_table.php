@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('calendars', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->foreign('customer_id')->references('id')->on('customers')
+            ->onUpdate('cascade')
+            ->onDelete('set null'); 
             $table->string('title');
             $table->string('description');
             $table->dateTime('date');

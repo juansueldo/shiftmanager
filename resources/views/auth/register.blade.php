@@ -29,6 +29,7 @@
         'resources/assets/fonts/remixicon/remixicon.css',
         'resources/assets/js/theme.js',
         'resources/js/helpers.js',
+        'resources/assets/js/request.js',
         'resources/js/menu.js',
         'resources/js/config.js',
         'resources/assets/js/validation.js',
@@ -78,9 +79,10 @@
               </div>
 
               <form id="formAuthentication" class="mb-5"  
-              data-ajax-source="{{ route('register.store') }}"
-              method="POST"
-              data-ajax-validated="true">
+              action="{{ route('register.store') }}"
+              data-ajax-validated="true"
+              method="POST">
+                @csrf
                 <div class="form-floating form-floating-outline mb-5">
                   <input
                     type="text"
@@ -154,14 +156,21 @@
 
                 <div class="mb-5 py-2">
                   <div class="form-check mb-0">
-                    <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
+                  <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      id="terms-conditions" 
+                      name="terms" 
+                      
+                    />
+
                     <label class="form-check-label" for="terms-conditions">
                       {{__('register.agree')}}
                       <a href="javascript:void(0);">{{ __('register.privacy') }}</a>
                     </label>
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary d-grid w-100 mb-5">{{ __('register.sign_up') }}</button>
+                <button type="submit" id="submit-register" disabled="true" class="btn btn-primary d-grid w-100 mb-5">{{ __('register.sign_up') }}</button>
               </form>
 
               <p class="text-center mb-5">
@@ -177,11 +186,20 @@
         </div>
       </div>
     </div>
-
+    @include('layouts.partials.alert', ['session'=> $session ?? ''])
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function () {
       const formValidator = new Formshield("#formAuthentication");
+      const checkterms = document.getElementById('terms-conditions');
+      const submitRegister = document.getElementById('submit-register');
+      checkterms.addEventListener('change', function() {
+        if (checkterms.checked) {
+          submitRegister.disabled = false;
+        } else {
+          submitRegister.disabled = true;
+        }
+      });
     });
     </script>
 

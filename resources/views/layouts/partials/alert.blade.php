@@ -5,7 +5,7 @@
             title: "{{ __('dashboard.success') }}",
             text: "{{ session('success') }}",
             timer: 3000,
-            showConfirmButton: false,
+            showConfirmButton: true,
             theme: getCurrentTheme(),
         });
     </script>
@@ -18,7 +18,7 @@
             title: "{{ __('dashboard.error') }}",
             text: "{{ session('error') }}",
             timer: 3000,
-            showConfirmButton: false,
+            showConfirmButton: true,
             theme: getCurrentTheme(),
         });
     </script>

@@ -23,4 +23,7 @@ return [
     'password_error_confirm' => 'La confirmación de la contraseña no coincide',
     'continue_with_google' => 'Continuar con Google',
     'or' => 'o',
+    'terms_required' => 'Debes aceptar los términos y condiciones',
+    'terms_accepted' => 'Debes aceptar los términos y condiciones',
+    'email_error_unique' => 'Este correo electrónico ya está registrado',
 ];

@@ -93,6 +93,7 @@ Route::middleware('auth')->group(function () {
     });
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/connections', [ConnectionsController::class, 'index'])->name('connections');
-        Route::get('/billing', [CustomerController::class, 'index'])->name('settings.billing');
+        Route::get('/billing', [CustomerController::class, 'index'])->name('billing');
+        Route::post('/save', [CustomerController::class, 'store'])->name('save');
     });
 });

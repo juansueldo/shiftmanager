@@ -1,0 +1,21 @@
+<?php   
+    return [
+        'company_name' => 'Company Name',
+        'company_email' => 'Company Email',
+        'company_vat' => 'Company VAT',
+        'company_phone' => 'Company Phone',
+        'company_address' => 'Company Address',
+        'company_city' => 'Company City',
+        'company_state' => 'Company State',
+        'company_zip' => 'Company Zip',
+        'company_country' => 'Company Country',
+        'company_name_required' => 'Company Name is required',
+        'company_email_required' => 'Company Email is required',
+        'company_vat_required' => 'Company VAT is required',
+        'company_phone_required' => 'Company Phone is required',
+        'company_address_required' => 'Company Address is required',
+        'company_city_required' => 'Company City is required',
+        'company_state_required' => 'Company State is required',
+        'company_zip_required' => 'Company Zip is required',
+        'company_country_required' => 'Company Country is required',
+    ];

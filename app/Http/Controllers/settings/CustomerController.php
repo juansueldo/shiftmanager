@@ -9,16 +9,25 @@ use App\Models\Customer;
 
 class CustomerController extends Controller
 {
+    protected $yamlconfig;
     public function __construct()
     {
         parent::__construct();
+        $this->yamlconfig = $this->getYamlConfig('settings/customer');
     }
 
     public function index()
     {
         $user = Auth::user();
+        $inputs = $this->yamlconfig['inputs'];
+        $formdata = $this->yamlconfig['form'];
         $customer = Customer::where('id', $user->customer_id)->get()->first();
-        return view('settings.billing', compact('customer'));
+        foreach ($inputs as &$input) {
+            if (isset($customer->{$input['name']})) {
+                $input['value'] = $customer->{$input['name']};
+            }
+        }
+        return view('settings.billing', compact('inputs', 'formdata', 'customer'));
     }
 
     public function create()
@@ -28,9 +37,9 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        // Lógica para almacenar un nuevo cliente
-        // Validación y almacenamiento de datos
-        return redirect()->route('settings.customers.index')->with('success', __('customer.created_successfully'));
+        $customer = Customer::find($request->id);
+        $customer->update($request->all());
+        return redirect()->route('settings.billing')->with('success', __('customer.created_successfully'));
     }
 
     public function edit($id)

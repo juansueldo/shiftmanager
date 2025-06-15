@@ -28,7 +28,7 @@ class CalendarController extends Controller
     public function index()
     {
         $user= Auth::user();
-        $calendarevents = Calendar::all();
+        $calendarevents = Calendar::where('customer_id', $user->customer_id)->get();
         return view('sections.calendar', compact('calendarevents', 'user'));
     }
 
@@ -74,6 +74,7 @@ class CalendarController extends Controller
                 $patient = Patient::create([
                     'firstname'  => $request->firstname,
                     'lastname'   => $request->lastname,
+                    'customer_id' => Auth::user()->customer_id,
                     'identifier' => $request->identifier,
                     'status'     => 1,
                 ]);
@@ -89,6 +90,7 @@ class CalendarController extends Controller
                 'description' => $request->description,
                 'date'        => "{$request->date} {$request->time}:00",
                 'patientid'   => $patient->id,
+                'customer_id' => Auth::user()->customer_id,
             ];
     
             if ($request->filled('id') && $request->id != 0){

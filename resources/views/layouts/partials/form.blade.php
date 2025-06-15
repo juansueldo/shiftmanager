@@ -5,6 +5,7 @@
 <form  class="form-floating offcanvas-body" 
     id="{{ $formdata['id'] }}"
     data-ajax-validated="true"
+    data-ajax-form="true"
     data-ajax-source="{{ $formdata['source'] }}" 
     data-ajax-method="{{ $formdata['method'] }}"
     data-ajax-container="{{ $formdata['container'] }}"

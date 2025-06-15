@@ -1,0 +1,107 @@
+inputs:
+  - type: hidden
+    name: id
+    value: 0
+    col: 12
+  - type: text
+    name: company_name
+    label: company_name
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-minlength: 3
+      fs-error-required: customer.firstname_required
+      fs-error-minlength: customer.firstname_minlength
+    value: ''
+    placeholder: Shiftmanager
+    col: 6
+  - type: email
+    name: company_email
+    label: company_email
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-minlength: 3
+      fs-error-required: user.lastname_required
+      fs-error-minlength: user.lastname_minlength
+    value: ''
+    col: 6
+    placeholder: shiftmanager@mail.com
+  - type: text
+    name: company_vat
+    label: company_vat
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-error-required: user.lastname_required
+    value: ''
+    col: 6
+    placeholder: Enter your company VAT
+  - type: text
+    name: company_phone
+    label: company_phone
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-error-required: user.lastname_required
+    value: ''
+    col: 6
+    placeholder: +34 666 666 666
+  - type: text
+    name: company_address
+    label: company_address
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-error-required: user.lastname_required
+    value: ''
+    col: 12
+    placeholder: Enter your company address
+  - type: text
+    name: company_city
+    label: company_city
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-error-required: user.lastname_required
+    value: ''
+    col: 6
+    placeholder: Enter your company city
+  - type: text
+    name: company_state
+    label: company_state
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-error-required: user.lastname_required
+    value: ''
+    col: 6
+    placeholder: Enter your company state
+  - type: text
+    name: company_zip
+    label: company_zip
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-error-required: user.lastname_required
+    value: ''
+    col: 6
+    placeholder: Enter your company zip
+  - type: text
+    name: company_country
+    label: company_country
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-error-required: user.lastname_required
+    value: ''
+    col: 6
+    placeholder: Enter your company country
+form:
+  id: 'customer_form'
+  file: 'customer'
+  title: form_title
+  source: /settings/save
+  method: replaceHtml
+  container: 'span#content-wrapper'
+  then: ''

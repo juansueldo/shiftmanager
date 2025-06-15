@@ -23,4 +23,8 @@
         'password_error_confirm' => 'Password confirmation does not match',
         'continue_with_google' => 'Continue with Google',
         'or' => 'or',
+        'terms_required' => 'You must accept the terms and conditions',
+        'terms_accepted' => 'You must accept the terms and conditions',
+        'email_error_unique' => 'This email is already registered',
+        'error' => 'An error occurred while registering',
     ];

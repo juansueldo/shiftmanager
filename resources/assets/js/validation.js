@@ -28,7 +28,7 @@ class Formshield {
     };
   
     async validateInput(input) {
-        const value = input.value;
+        const value = input.type === 'checkbox' ? input.checked : input.value;
         let isValid = true;
         let message = '';
       
@@ -47,6 +47,8 @@ class Formshield {
           const attr = `data-fs-${rule}`;
           if (input.hasAttribute(attr)) {
             const param = input.getAttribute(attr);
+            // Saltar validación de minlength para checkboxes
+            if (input.type === 'checkbox' && rule === 'minlength') continue;
             const valid = this.validators[rule](value, param);
             if (!valid) {
               message = input.getAttribute(`data-fs-error-${rule}`) || 'Campo inválido';
@@ -122,8 +124,17 @@ class Formshield {
             buttonsStyling: false,
             theme: theme
           });
-        }else{
+        } else {
           this.form.setAttribute('data-ajax-validated', 'true');
+          
+          // Verificar si el formulario debe enviarse por AJAX
+          const isAjaxForm = this.form.hasAttribute('data-ajax-form');
+          
+          if (!isAjaxForm) {
+            // Si no es un formulario AJAX, permitir el envío normal
+            this.form.submit();
+          }
+          // Si es un formulario AJAX, el código existente continuará manejando el envío
         }
       });
     }
