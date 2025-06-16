@@ -27,4 +27,5 @@
         'terms_accepted' => 'You must accept the terms and conditions',
         'email_error_unique' => 'This email is already registered',
         'error' => 'An error occurred while registering',
+        'password_confirmation_error' => 'Password confirmation does not match',
     ];

@@ -59,8 +59,7 @@
               <h4 class="mb-1">{{__('register.title')}} 🚀</h4>
 
               <!-- Google Registration Button -->
-              <div class="mb-4">
-                <a href="{{ route('auth.google') }}" class="btn btn-outline-primary d-grid w-100 mb-4">
+              <a href="{{ route('auth.google') }}" class="btn btn-outline-primary d-grid w-100 mb-4">
                   <div class="d-flex align-items-center justify-content-center">
                     <svg width="18" height="18" viewBox="0 0 24 24" class="me-2">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -128,7 +127,7 @@
                         data-fs-validate="true"
                         data-fs-minlength="8"
                         data-fs-required="true"
-                        data-pattern= "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$"
+                        data-fs-pattern= "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$"
                         data-fs-error-required= "{{ __('register.password_error_required') }}"
                         data-fs-error-pattern= "{{ __('register.password_pattern') }}"
                         data-fs-error-minlength= "{{ __('register.password_minlength') }}" />
@@ -147,7 +146,10 @@
                         name="password_confirmation"
                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                         aria-describedby="password_confirmation"
-                        required />
+                        required 
+                        data-fs-validate="true" 
+                        data-fs-confirmed="password"
+                        data-fs-error-confirmed="{{__('register.password_confirmation_error')}}"/>
                       <label for="password_confirmation">{{ __('register.confirm_password') }}</label>
                     </div>
                     <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line ri-20px"></i></span>

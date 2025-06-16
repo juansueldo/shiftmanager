@@ -24,6 +24,10 @@ class Formshield {
       pattern: (value, regexString) => {
         const regex = new RegExp(regexString);
         return regex.test(value);
+      },
+      confirmed: (value, fieldName) => {
+        const originalField = document.querySelector(`[name="${fieldName}"]`);
+        return originalField && value === originalField.value;
       }
     };
   
@@ -33,12 +37,13 @@ class Formshield {
         let message = '';
       
         // Encuentra o crea el contenedor de error
-        let container = input.closest('.form-floating');
+        let container = input.closest('.form-password-toggle') || input.closest('.form-floating');
         let errorContainer = container.querySelector('.error-message');
       
         if (!errorContainer) {
           errorContainer = document.createElement('div');
           errorContainer.classList.add('error-message');
+          errorContainer.classList.add('mt-2');
           container.appendChild(errorContainer);
         }
       
@@ -49,7 +54,15 @@ class Formshield {
             const param = input.getAttribute(attr);
             // Saltar validación de minlength para checkboxes
             if (input.type === 'checkbox' && rule === 'minlength') continue;
-            const valid = this.validators[rule](value, param);
+            
+            // Manejo especial para la validación de confirmación
+            let valid;
+            if (rule === 'confirmed') {
+              valid = this.validators[rule](value, param);
+            } else {
+              valid = this.validators[rule](value, param);
+            }
+            
             if (!valid) {
               message = input.getAttribute(`data-fs-error-${rule}`) || 'Campo inválido';
               isValid = false;
@@ -101,7 +114,25 @@ class Formshield {
   
     setupListeners() {
       this.inputs.forEach(input => {
-        input.addEventListener('input', () => this.validateInput(input));
+        input.addEventListener('input', () => {
+          this.validateInput(input);
+          
+          // Si es un campo de contraseña, buscar y validar su confirmación
+          if (input.type === 'password') {
+            const confirmationField = this.form.querySelector(`[data-fs-confirmed="${input.name}"]`);
+            if (confirmationField) {
+              this.validateInput(confirmationField);
+            }
+          }
+          
+          // Si es un campo de confirmación, validar también el campo original
+          if (input.hasAttribute('data-fs-confirmed')) {
+            const originalField = this.form.querySelector(`[name="${input.getAttribute('data-fs-confirmed')}"]`);
+            if (originalField) {
+              this.validateInput(originalField);
+            }
+          }
+        });
       });
   
       this.form.addEventListener('submit', async (e) => {
