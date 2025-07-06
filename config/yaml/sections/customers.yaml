@@ -1,0 +1,71 @@
+table:
+  name: "Customers"
+  id: "customer_table"
+  path: '/customers/data'
+  file: 'customer'
+  actions:
+    - class: btn-edit
+      icon: edit
+      data:
+        data-ajax-source: /customers/form/{0}
+        data-ajax-method: replaceHtml
+        data-ajax-container: '#offcanvasEnd'
+        data-bs-toggle: "offcanvas" 
+        data-bs-target: "#offcanvasEnd"
+        aria-controls: "offcanvasEnd"
+        action: edit
+    - class: btn-delete
+      icon: delete-bin-5
+      data:
+        data-ajax-source: /customers/delete/{0}
+        data-ajax-method: replaceHtml
+        data-ajax-container: 'span#content-wrapper'
+        data-ajax-then: afterSaveCallback
+        action: delete
+      dropdown: false
+  headers:
+  - name: "customer_id"
+    key: "id"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "firstname"
+    key: "firstname"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "lastname"
+    key: "lastname"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "company_email"
+    key: "company_email"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "company_name"
+    key: "company_name"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: status
+    key: status_name
+    orderable: true
+    searchable: true
+    visible: true
+  - name: 'actions'
+    key: "actions"
+    orderable: false
+    searchable: false
+    visible: true
+    actions:
+      - name: "View"
+        icon: "ri-eye-line"
+        action: "view"
+      - name: "Edit"
+        icon: "ri-pencil-line"
+        action: "edit"
+      - name: "Delete"
+        icon: "ri-delete-bin-line"
+        action: "delete"

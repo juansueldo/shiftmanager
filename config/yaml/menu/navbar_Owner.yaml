@@ -1,0 +1,22 @@
+menu:
+  - name: dashboard.my_profile
+    data-ajax-source: "/profile/{{user.id}}"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-user-3-line"
+  - name: dashboard.connections
+    data-ajax-source: "/settings/connections"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-plug-line"
+  - name: dashboard.users
+    data-ajax-source: "/users"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-group-line"
+dashboard:
+  - name: dashboard.reports
+    data-ajax-source: "/widgets/create/reports"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-file-chart-line"

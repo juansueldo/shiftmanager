@@ -54,8 +54,7 @@ class Doctor extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-   public function scopeFilter($query, $params)
-{
+   public function scopeFilter($query, $params){
     $query->select(
             'doctors.*',
             'users.firstname as firstname',

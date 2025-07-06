@@ -12,6 +12,9 @@ use App\Http\Controllers\sections\DoctorController;
 use App\Http\Controllers\settings\ConnectionsController;
 use App\Http\Controllers\auth\GoogleAuthController;
 use App\Http\Controllers\settings\CustomerController;
+use App\Http\Controllers\sections\CustomersController;
+use App\Http\Controllers\sections\RolesController;
+use App\Http\Controllers\sections\StatusesController;
 use Illuminate\Support\Facades\Route;
 
 // Redirigir a dashboard si el usuario está autenticado
@@ -95,5 +98,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/connections', [ConnectionsController::class, 'index'])->name('connections');
         Route::get('/billing', [CustomerController::class, 'index'])->name('billing');
         Route::post('/save', [CustomerController::class, 'store'])->name('save');
+    });
+    Route::prefix('roles')->name('roles.')->group(function () {
+        Route::get('/', [RolesController::class, 'index'])->name('index');
+        Route::post('/data', [RolesController::class, 'data'])->name('data');
+        Route::get('/form/{id?}', [RolesController::class, 'add'])->name('form');
+        Route::post('/save', [RolesController::class, 'store'])->name('save');
+    });
+    Route::prefix('statuses')->name('statuses.')->group(function(){
+        Route::get('/', [StatusesController::class,'index'])->name('index');
+        Route::post('/data', [StatusesController::class,  'data'])->name('data');
+
+    });
+    Route::prefix('customers')->name('customers.')->group(function () {
+        Route::get('/',[CustomersController::class,'index'])->name('index');
+        Route::post('/data', [CustomersController::class,  'data'])->name('data');
     });
 });

@@ -1,0 +1,88 @@
+table:
+  name: "Roles"
+  id: "roles_table"
+  path: '/roles/data'
+  file: 'roles'
+  actions:
+    - class: btn-edit
+      icon: edit
+      data:
+        data-ajax-source: /roles/form/{0}
+        data-ajax-method: replaceHtml
+        data-ajax-container: '#offcanvasEnd'
+        data-bs-toggle: "offcanvas" 
+        data-bs-target: "#offcanvasEnd"
+        aria-controls: "offcanvasEnd"
+        action: edit
+      dropdown: false
+    - class: btn-delete
+      icon: delete-bin-5
+      data:
+        data-ajax-source: /roles/delete/{0}
+        data-ajax-method: replaceHtml
+        data-ajax-container: 'span#content-wrapper'
+        data-ajax-then: afterSaveCallback
+        action: delete
+      dropdown: false
+    - dropdown: true
+      options:
+      - label: View Details
+        data:
+          action: view
+      - label: Send Email
+        data:
+          action: email"
+  headers:
+  - name: "role_id"
+    key: "id"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: "name"
+    key: "name"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: 'status'
+    key: "status_name"
+    orderable: true
+    searchable: true
+    visible: true
+  - name: 'actions'
+    key: "actions"
+    orderable: false
+    searchable: false
+    visible: true
+    actions:
+      - name: "View"
+        icon: "ri-eye-line"
+        action: "view"
+      - name: "Edit"
+        icon: "ri-pencil-line"
+        action: "edit"
+      - name: "Delete"
+        icon: "ri-delete-bin-line"
+        action: "delete"
+inputs:
+  - type: hidden
+    name: id
+    value: 0
+    col: 12
+  - type: text
+    name: name
+    label: name
+    data:
+      fs-validate: "true"
+      fs-required: "true"
+      fs-error-required: roles.name_required
+    value: ''
+    col: 12
+    placeholder: Active
+form:
+  id: 'role_form'
+  title: add_role
+  file: 'roles'
+  source: /roles/save
+  method: replaceHtml
+  container: 'span#content-wrapper'
+  then: afterSaveCallback

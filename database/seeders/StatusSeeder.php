@@ -15,10 +15,10 @@ class StatusSeeder extends Seeder
     public function run(): void
     {
         DB::table('statuses')->insert([
-            ['id' => 1, 'name' => 'Active'],
-            ['id' => 2, 'name' => 'Pending'],
-            ['id' => 3, 'name' => 'Suspended'],
-            ['id' => 4, 'name' => 'Deleted'],
+            ['id' => 1, 'name' => 'Active', 'created_at'=> now(), 'updated_at' => now()],
+            ['id' => 2, 'name' => 'Pending', 'created_at'=> now(), 'updated_at' => now()],
+            ['id' => 3, 'name' => 'Suspended','created_at'=> now(), 'updated_at' => now()],
+            ['id' => 4, 'name' => 'Deleted','created_at'=> now(), 'updated_at' => now()],
         ]);
     }
 }

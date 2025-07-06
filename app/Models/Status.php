@@ -23,4 +23,28 @@ class Status extends Model
     public function calendars(){
         return $this->hasMany(Calendar::class, 'status');
     }
+    public function scopeFilter($query, $params)
+    {
+        $query->select('statuses.*');
+
+        if (!empty($params['search'])) {
+            $search = $params['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        $orderColumn = $params['ordercolumn'] ?? 'id';
+        $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : 'id';
+
+        $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
+
+        if (!in_array($orderMethod, ['asc', 'desc'])) {
+            $orderMethod = 'asc';
+        }
+
+        $query->orderBy($orderColumn, $orderMethod);
+
+        return $query;
+    }
 }

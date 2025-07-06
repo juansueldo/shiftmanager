@@ -1,0 +1,27 @@
+menu:
+  - name: dashboard.dashboard
+    data-ajax-source: "/main"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-home-smile-line"
+    class: "active"
+  - name: dashboard.calendar
+    data-ajax-source: "/calendar"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-calendar-todo-line"
+  - name: dashboard.roles
+    data-ajax-source: "/roles"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-user-settings-line"
+  - name: dashboard.statuses
+    data-ajax-source: "/statuses"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-checkbox-circle-line"
+  - name: dashboard.customers
+    data-ajax-source: "/customers"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-user-settings-line"

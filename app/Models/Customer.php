@@ -30,4 +30,30 @@ class Customer extends Model
     {
         return $this->belongsTo(Status::class);
     }
+    public function scopeFilter($query, $params)
+    {
+        $query->select('customers.*', 'statuses.name as status_name')
+            ->leftJoin('statuses', 'customers.status', '=', 'statuses.id');
+
+        if (!empty($params['search'])) {
+            $search = $params['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('customers.firstname', 'like', "%{$search}%")
+                    ->orWhere('statuses.name', 'like', "%{$search}%");
+            });
+        }
+
+        $orderColumn = $params['ordercolumn'] ?? 'customers.id';
+        $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : 'id';
+
+        $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
+
+        if (!in_array($orderMethod, ['asc', 'desc'])) {
+            $orderMethod = 'asc';
+        }
+
+        $query->orderBy($orderColumn, $orderMethod);
+
+        return $query;
+    }
 }
