@@ -15,6 +15,7 @@ use App\Http\Controllers\settings\CustomerController;
 use App\Http\Controllers\sections\CustomersController;
 use App\Http\Controllers\sections\RolesController;
 use App\Http\Controllers\sections\StatusesController;
+use App\Http\Controllers\sections\ChatController;
 use Illuminate\Support\Facades\Route;
 
 // Redirigir a dashboard si el usuario está autenticado
@@ -113,5 +114,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('customers')->name('customers.')->group(function () {
         Route::get('/',[CustomersController::class,'index'])->name('index');
         Route::post('/data', [CustomersController::class,  'data'])->name('data');
+    });
+
+    Route::prefix('chat')->name('chat.')->group(function(){
+        Route::get('/', [ChatController::class, 'index'])->name('index');
+        Route::get('/start/{id?}', [ChatController::class, 'start'])->name('start');
     });
 });

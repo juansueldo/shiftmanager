@@ -63,7 +63,7 @@ function updatePart(url, formData, container, method = 'POST', callback = null) 
 }
 
 $(document).ready(function() {
-    $(document).on('click', 'a[data-ajax-source], button[data-ajax-source]', function(e) {
+    $(document).on('click', 'a[data-ajax-source], button[data-ajax-source], li[data-ajax-source] ', function(e) {
         e.preventDefault();
         var url = base_url + $(this).data('ajax-source');
         var container = $(this).data('ajax-container');

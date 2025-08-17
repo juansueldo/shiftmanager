@@ -10,6 +10,7 @@ return [
     'doctors' => 'Doctors',
     'settings' => 'Settings',
     'connections' => 'Connections',
+    'chat'=> 'Chat',
     'english' => 'English',
     'spanish' => 'Spanish',
     'french' => 'French',

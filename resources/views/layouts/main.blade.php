@@ -10,6 +10,7 @@
     @vite([
         'resources/js/app.js',
         'resources/css/app.css', 
+        'resources/assets/css/pages/app-chat.css',
         'resources/assets/css/theme-default.css', 
         'resources/assets/css/core.css', 
         'resources/assets/css/demo.css',

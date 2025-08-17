@@ -20,6 +20,11 @@ menu:
     data-ajax-method: "replaceHtml"
     data-ajax-container: "span#content-wrapper"
     icon: "ri-user-heart-line"
+  - name: dashboard.chat
+    data-ajax-source: "/chat"
+    data-ajax-method: "replaceHtml"
+    data-ajax-container: "span#content-wrapper"
+    icon: "ri-chat-1-line"
 
 
   

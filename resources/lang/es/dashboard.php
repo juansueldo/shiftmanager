@@ -13,6 +13,7 @@ return [
     'roles' => 'Roles',
     'statuses' => 'Estados',
     'customers' => 'Clientes',
+    'chat' => 'Chat',
     'english' => 'Inglés',
     'spanish' => 'Español',
     'french' => 'Frances',
