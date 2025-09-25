@@ -1,7 +1,17 @@
 #!/bin/bash
 set -e
 
-sed -i "s/listen 80;/listen ${PORT};/" /etc/nginx/conf.d/default.conf
+# Establecer puerto por defecto si no está definido
+PORT=${PORT:-80}
+
+# Reemplazar el puerto en la configuración de Nginx
+sed -i "s/listen.*80/listen ${PORT}/" /etc/nginx/conf.d/default.conf
+sed -i "s/listen.*\[::.*80/listen [::]:${PORT}/" /etc/nginx/conf.d/default.conf
+
+# Verificar que el cambio se realizó
+echo "Puerto configurado: $PORT"
+grep "listen" /etc/nginx/conf.d/default.conf
+
 # Optimización Laravel
 php artisan config:cache
 php artisan route:cache
