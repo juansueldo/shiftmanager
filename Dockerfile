@@ -69,15 +69,21 @@ RUN composer install --no-dev --optimize-autoloader -vvv
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Configurar PHP-FPM para TCP
+RUN sed -i 's|^listen = .*|listen = 127.0.0.1:9000|' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's|^user = .*|user = www-data|' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's|^group = .*|group = www-data|' /usr/local/etc/php-fpm.d/www.conf
+
 # Configuración Nginx y Supervisor
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Directorios de logs
 RUN mkdir -p /var/log/nginx /var/log/php-fpm \
     && chown -R www-data:www-data /var/log/nginx /var/log/php-fpm
 
-# Puerto expuesto (Render lo sobreescribe con $PORT)
+# Puerto expuesto (Render usa $PORT)
 EXPOSE 80
 
 # Start script
