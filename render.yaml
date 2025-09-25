@@ -1,0 +1,73 @@
+# render.yaml
+services:
+  - type: web
+    name: laravel-app
+    env: docker
+    region: oregon
+    plan: starter
+    buildCommand: docker build -t laravel-app .
+    startCommand: docker run -p 10000:80 laravel-app
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    envVars:
+      - key: NODE_VERSION
+        value: "22.20.0"
+      - key: APP_NAME
+        value: "Laravel App"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        fromService:
+          type: web
+          name: laravel-app
+          property: host
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        fromDatabase:
+          name: laravel-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: laravel-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: laravel-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: laravel-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: laravel-db
+          property: password
+      - key: CACHE_DRIVER
+        value: redis
+      - key: SESSION_DRIVER
+        value: redis
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: laravel-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: laravel-redis
+          property: port
+
+databases:
+  - name: laravel-db
+    databaseName: laravel_production
+    user: laravel_user
+    region: oregon
+    plan: starter
+
+  - name: laravel-redis
+    type: redis
+    region: oregon
+    plan: starter
