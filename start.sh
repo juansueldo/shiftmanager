@@ -1,40 +1,27 @@
 #!/bin/bash
 set -e
 
-# Establecer puerto por defecto si no está definido
+# Puerto asignado por Render
 PORT=${PORT:-80}
+echo "=== Iniciando Nginx en puerto $PORT ==="
 
-echo "=== CONFIGURANDO PUERTO $PORT ==="
+# Reemplazar puerto en default.conf
+sed -i "s/listen .*/listen ${PORT} default_server;/g" /etc/nginx/conf.d/default.conf
+sed -i "s/listen \[::\].*/listen [::]:${PORT} default_server ipv6only=on;/g" /etc/nginx/conf.d/default.conf
 
-# Crear configuración de Nginx con el puerto correcto
-cat > /etc/nginx/conf.d/default.conf << EOF
-server {
-    listen 0.0.0.0:${PORT} default_server;
-    listen [::]:${PORT} default_server ipv6only=on;
+# Optimización Laravel
+cd /var/www/html
+chown -R www-data:www-data /var/www/html
+chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
 
-    server_name _;
-    root /var/www/html/public;
-    index index.php index.html index.htm;
+if [ -f "artisan" ]; then
+    php artisan config:cache || echo "Config cache failed"
+    php artisan route:cache || echo "Route cache failed"
+    php artisan view:cache || echo "View cache failed"
+fi
 
-    # Security Headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-
-    charset utf-8;
-
-    location / {
-        try_files \$uri \$uri/ /index.php?\$query_string;
-    }
-
-    location = /favicon.ico { 
-        access_log off; 
-        log_not_found off; 
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
+# Iniciar supervisord (PHP-FPM + Nginx)
+exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf    }
 
     location = /robots.txt { 
         access_log off; 
