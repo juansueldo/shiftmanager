@@ -6,7 +6,7 @@ services:
     region: oregon
     plan: starter
     buildCommand: docker build -t laravel-app .
-    startCommand: docker run -p 10000:80 laravel-app
+    startCommand: /start.sh
     dockerfilePath: ./Dockerfile
     dockerContext: ./
     envVars:
