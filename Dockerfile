@@ -4,16 +4,13 @@
 FROM node:22 AS frontend
 WORKDIR /app
 
-# Copiar solo package.json y package-lock.json para instalar dependencias
 COPY package*.json ./
 RUN npm ci --include=dev
 
-# Copiar archivos necesarios para el build de Vite
 COPY vite.config.js ./
 COPY resources/ ./resources
 COPY public/ ./public
 
-# Generar los assets del frontend (por defecto Laravel 12 + Vite -> public/build)
 RUN npm run build
 
 # -------------------------
@@ -21,33 +18,36 @@ RUN npm run build
 # -------------------------
 FROM php:8.2-fpm
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema y extensiones de PHP
 RUN apt-get update && apt-get install -y \
-    git unzip libonig-dev libzip-dev zip \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip
+    git unzip libonig-dev libzip-dev zip libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev curl \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip bcmath intl gd \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copiar Composer desde la imagen oficial
+# Instalar Composer (última versión estable)
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# Copiar el código de Laravel
+# Copiar Laravel
 COPY . .
 
-# Copiar frontend build correctamente (public/build)
+# Copiar frontend build
 COPY --from=frontend /app/public/build ./public/build
 
-# Instalar dependencias de PHP
-RUN composer install --no-dev --optimize-autoloader
+# Cambiar permisos para evitar errores
+RUN chown -R www-data:www-data /var/www
+RUN chmod -R 755 /var/www
 
-# Limpiar caches de Laravel
+# Instalar dependencias PHP
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+# Limpiar caches
 RUN php artisan config:clear \
  && php artisan route:clear \
  && php artisan view:clear
 
-# Puerto que Render espera
 ENV PORT=10000
 EXPOSE $PORT
 
-# Ejecutar PHP-FPM
 CMD ["php-fpm", "-R", "-F"]
