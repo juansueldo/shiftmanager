@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
+
 # Etapa de frontend
-FROM node:22.20.0-alpine AS frontend
+FROM node:22.20.0-bullseye AS frontend
 
 WORKDIR /app
 
@@ -23,21 +24,21 @@ RUN npm run --silent build || (echo "Error: npm run build failed. Checking packa
 FROM php:8.2-fpm-bullseye
 
 # Instalar dependencias del sistema y extensiones PHP
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     nginx \
     supervisor \
     git \
     unzip \
     bash \
-    icu-dev \
+    libicu-dev \
     libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    zip \
+    libjpeg-dev \
+    libfreetype6-dev \
     libzip-dev \
-    oniguruma-dev \
+    zip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl gd bcmath intl
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl gd bcmath intl \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
