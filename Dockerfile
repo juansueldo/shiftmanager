@@ -1,4 +1,4 @@
-# Dockerfile
+# Etapa de frontend
 FROM node:22.20.0-alpine AS frontend
 
 WORKDIR /app
@@ -21,12 +21,14 @@ RUN npm run --silent build || (echo "Error: npm run build failed. Checking packa
 # Etapa principal con PHP
 FROM php:8.2-fpm-alpine
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema y extensiones PHP
 RUN apk add --no-cache \
     nginx \
     supervisor \
     git \
     unzip \
+    bash \
+    icu-dev \
     libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
@@ -34,10 +36,10 @@ RUN apk add --no-cache \
     libzip-dev \
     oniguruma-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl gd
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl gd bcmath intl
 
 # Instalar Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Configurar directorio de trabajo
 WORKDIR /var/www/html
@@ -45,8 +47,8 @@ WORKDIR /var/www/html
 # Copiar archivos de dependencias de PHP
 COPY composer.json composer.lock ./
 
-# Instalar dependencias de PHP
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+# Instalar dependencias de PHP con logs detallados
+RUN composer install --no-dev --optimize-autoloader -vvv || { echo "Composer install failed"; exit 1; }
 
 # Copiar código fuente de Laravel
 COPY . .
