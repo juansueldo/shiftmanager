@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+sed -i "s/listen 80;/listen ${PORT};/" /etc/nginx/conf.d/default.conf
 # Optimización Laravel
 php artisan config:cache
 php artisan route:cache
