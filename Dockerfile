@@ -7,15 +7,16 @@ WORKDIR /app
 COPY package*.json ./
 COPY vite.config.js ./
 
-# Instalar dependencias de Node.js
-RUN npm ci --only=production
+# Verificar versiones y instalar dependencias
+RUN node --version && npm --version
+RUN npm ci --include=dev
 
 # Copiar código fuente del frontend
 COPY resources/ ./resources/
 COPY public/ ./public/
 
-# Construir assets con Vite
-RUN npm run build
+# Verificar que el script build existe y ejecutar
+RUN npm run --silent build || (echo "Error: npm run build failed. Checking package.json:" && cat package.json && exit 1)
 
 # Etapa principal con PHP
 FROM php:8.2-fpm-alpine
