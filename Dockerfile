@@ -17,13 +17,13 @@ COPY vite.config.js ./
 RUN npm run build
 
 # -------------------------
-# Stage 2 - Backend (Laravel + PHP + Composer + Nginx)
+# Stage 2 - Backend (Laravel + PHP + Composer)
 # -------------------------
-FROM php:8.2-fpm AS backend
+FROM php:8.2-fpm
 
 # Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
-    nginx supervisor git curl unzip libpq-dev libonig-dev libzip-dev zip \
+    git curl unzip libpq-dev libonig-dev libzip-dev zip \
     && docker-php-ext-install pdo pdo_mysql mbstring zip
 
 # Copiar Composer desde la imagen oficial
@@ -45,13 +45,9 @@ RUN php artisan config:clear \
  && php artisan route:clear \
  && php artisan view:clear
 
-# Configurar Nginx
-RUN rm /etc/nginx/sites-enabled/default
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+# Render espera que la app escuche en $PORT
+ENV PORT=10000
+EXPOSE $PORT
 
-# Supervisord para correr PHP-FPM + Nginx
-COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-EXPOSE 80
-
-CMD ["/usr/bin/supervisord", "-n"]
+# Instrucción para Render
+CMD ["php-fpm", "-R", "-F"]
