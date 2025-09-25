@@ -11,16 +11,15 @@ WORKDIR /app
 COPY package*.json ./
 COPY vite.config.js ./
 
-# Verificar versiones e instalar dependencias
-RUN node --version && npm --version
+# Instalar dependencias
 RUN npm ci --include=dev
 
 # Copiar código fuente del frontend
 COPY resources/ ./resources/
 COPY public/ ./public/
 
-# Ejecutar build de frontend
-RUN npm run --silent build || (echo "Error: npm run build failed. Checking package.json:" && cat package.json && exit 1)
+# Build del frontend
+RUN npm run --silent build || (echo "Error: npm run build failed" && cat package.json && exit 1)
 
 # -------------------------
 # Etapa PHP-FPM
@@ -62,7 +61,7 @@ COPY . .
 # Copiar build del frontend
 COPY --from=frontend /app/public/build ./public/build
 
-# Instalar dependencias de PHP con logs detallados
+# Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader -vvv
 
 # Configurar permisos
@@ -82,10 +81,10 @@ RUN mkdir -p /var/log/nginx
 
 EXPOSE 80
 
-# Ejecutar optimizaciones de Laravel
+# Optimización de Laravel
 RUN php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache
 
-# Comando final
+# Comando principal
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
