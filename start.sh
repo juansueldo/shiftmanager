@@ -10,5 +10,5 @@ chown -R www-data:www-data /var/www/html
 chmod -R 755 /var/www/html/storage
 chmod -R 755 /var/www/html/bootstrap/cache
 
-# Iniciar Supervisord
+# Iniciar Supervisor en primer plano
 exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf
