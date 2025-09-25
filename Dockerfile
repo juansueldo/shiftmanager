@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # Etapa de frontend
 FROM node:22.20.0-alpine AS frontend
 
@@ -19,7 +20,7 @@ COPY public/ ./public/
 RUN npm run --silent build || (echo "Error: npm run build failed. Checking package.json:" && cat package.json && exit 1)
 
 # Etapa principal con PHP
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm-bullseye
 
 # Instalar dependencias del sistema y extensiones PHP
 RUN apk add --no-cache \
