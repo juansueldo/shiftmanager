@@ -22,7 +22,7 @@ COPY public/ ./public/
 RUN npm run --silent build || (echo "Error: npm run build failed" && cat package.json && exit 1)
 
 # -------------------------
-# Etapa PHP-FPM
+# Etapa PHP-FPM + Nginx
 # -------------------------
 FROM php:8.2-fpm-bullseye
 
@@ -42,13 +42,25 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libzip-dev \
     libonig-dev \
+    libpq-dev \
     zip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) pdo pdo_mysql pdo_pgsql pgsql mbstring zip exif pcntl gd bcmath intl \
+    && docker-php-ext-install -j$(nproc) \
+        pdo \
+        pdo_mysql \
+        pdo_pgsql \
+        pgsql \
+        mbstring \
+        zip \
+        exif \
+        pcntl \
+        gd \
+        bcmath \
+        intl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar Composer
+# Instalar Composer desde la imagen oficial
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Configurar directorio de trabajo
@@ -82,6 +94,7 @@ RUN chmod +x /start.sh
 # Crear directorio para logs de Nginx
 RUN mkdir -p /var/log/nginx
 
+# Puerto expuesto
 EXPOSE 80
 
 # Comando principal
