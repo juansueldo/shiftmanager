@@ -64,27 +64,24 @@ COPY --from=frontend /app/public/build ./public/build
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader -vvv
 
-# Configurar permisos
+# Configurar permisos iniciales
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Copiar configuración de Nginx
+# Copiar configuración de Nginx y Supervisor
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/conf.d/default.conf
-
-# Copiar configuración de Supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Copiar start.sh y darle permisos
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
 # Crear directorio para logs de Nginx
 RUN mkdir -p /var/log/nginx
 
 EXPOSE 80
 
-# Optimización de Laravel
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
-
 # Comando principal
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["/start.sh"]
