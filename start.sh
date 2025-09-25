@@ -4,88 +4,134 @@ set -e
 # Establecer puerto por defecto si no está definido
 PORT=${PORT:-80}
 
-echo "=== DEBUGGING INFO ==="
-echo "PORT variable: $PORT"
-echo "User: $(whoami)"
-echo "Working directory: $(pwd)"
+echo "=== CONFIGURANDO PUERTO $PORT ==="
 
-# Crear directorios de logs si no existen
-mkdir -p /var/log/nginx /var/log/php-fpm
-chown -R www-data:www-data /var/log/nginx /var/log/php-fpm
+# Crear configuración de Nginx con el puerto correcto
+cat > /etc/nginx/conf.d/default.conf << EOF
+server {
+    listen 0.0.0.0:${PORT} default_server;
+    listen [::]:${PORT} default_server ipv6only=on;
 
-# Verificar archivos de configuración antes de modificar
-echo "=== NGINX CONFIG BEFORE ==="
-head -10 /etc/nginx/conf.d/default.conf
+    server_name _;
+    root /var/www/html/public;
+    index index.php index.html index.htm;
 
-# Reemplazar el puerto en la configuración de Nginx
-sed -i "s/listen 80/listen ${PORT}/" /etc/nginx/conf.d/default.conf
-sed -i "s/listen \[::]:80/listen [::]:${PORT}/" /etc/nginx/conf.d/default.conf
+    # Security Headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
-echo "=== NGINX CONFIG AFTER ==="
-head -10 /etc/nginx/conf.d/default.conf
+    charset utf-8;
+
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    location = /favicon.ico { 
+        access_log off; 
+        log_not_found off; 
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location = /robots.txt { 
+        access_log off; 
+        log_not_found off; 
+        expires 1d;
+    }
+
+    location /build/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        try_files \$uri =404;
+
+        location ~* \.map\$ {
+            expires 1d;
+            add_header Cache-Control "no-cache";
+        }
+    }
+
+    location ~ \.php\$ {
+        try_files \$uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)\$;
+
+        # Conexión a PHP-FPM por socket
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        fastcgi_param PATH_INFO \$fastcgi_path_info;
+        include fastcgi_params;
+        fastcgi_read_timeout 300;
+        fastcgi_buffer_size 128k;
+        fastcgi_buffers 4 256k;
+        fastcgi_busy_buffers_size 256k;
+    }
+
+    location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp|avif)\$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+        try_files \$uri =404;
+    }
+
+    location ^~ /storage/ {
+        expires 1M;
+        add_header Cache-Control "public";
+        try_files \$uri =404;
+    }
+
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    location ~ /(?:composer\.(json|lock)|package\.(json|lock)|\.env|\.git) {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    location /health {
+        access_log off;
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+    }
+
+    error_page 404 /index.php;
+    error_page 500 502 503 504 /50x.html;
+
+    location = /50x.html {
+        root /var/www/html/public;
+    }
+}
+EOF
+
+echo "=== VERIFICANDO CONFIGURACIÓN ==="
+cat /etc/nginx/conf.d/default.conf | head -5
 
 # Verificar sintaxis de Nginx
-echo "=== TESTING NGINX CONFIG ==="
 nginx -t || {
     echo "ERROR: Nginx configuration test failed"
-    cat /etc/nginx/conf.d/default.conf
     exit 1
 }
 
-# Verificar configuración de PHP-FPM
-echo "=== TESTING PHP-FPM CONFIG ==="
-php-fpm -t || {
-    echo "ERROR: PHP-FPM configuration test failed"
-    exit 1
-}
-
-# Verificar permisos de archivos críticos
-echo "=== CHECKING PERMISSIONS ==="
-ls -la /var/www/html/public/index.php || echo "index.php not found"
-ls -ld /var/www/html/storage || echo "storage directory not found"
-ls -ld /var/www/html/bootstrap/cache || echo "bootstrap/cache not found"
-
-# Optimización Laravel (con verificación)
-echo "=== LARAVEL OPTIMIZATION ==="
+echo "=== CONFIGURANDO LARAVEL ==="
 cd /var/www/html
 
+# Configurar permisos
+chown -R www-data:www-data /var/www/html
+chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Optimización Laravel
 if [ -f "artisan" ]; then
     php artisan config:cache || echo "Config cache failed"
     php artisan route:cache || echo "Route cache failed" 
     php artisan view:cache || echo "View cache failed"
-else
-    echo "WARNING: artisan not found"
 fi
 
-# Configurar permisos
-echo "=== SETTING PERMISSIONS ==="
-chown -R www-data:www-data /var/www/html
-chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Verificar que los servicios pueden iniciarse manualmente
-echo "=== MANUAL SERVICE TEST ==="
-echo "Testing PHP-FPM..."
-timeout 5 php-fpm -F &
-PHP_PID=$!
-sleep 2
-if kill -0 $PHP_PID 2>/dev/null; then
-    echo "PHP-FPM started successfully"
-    kill $PHP_PID
-else
-    echo "ERROR: PHP-FPM failed to start"
-fi
-
-echo "Testing Nginx..."
-timeout 5 nginx -g "daemon off;" &
-NGINX_PID=$!
-sleep 2
-if kill -0 $NGINX_PID 2>/dev/null; then
-    echo "Nginx started successfully"
-    kill $NGINX_PID
-else
-    echo "ERROR: Nginx failed to start"
-fi
-
-echo "=== STARTING SUPERVISOR ==="
+echo "=== INICIANDO SERVICIOS EN PUERTO $PORT ==="
 # Iniciar Supervisor
 exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf
