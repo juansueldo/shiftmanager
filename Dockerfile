@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1
 
-# Etapa de frontend
+# -------------------------
+# Etapa frontend
+# -------------------------
 FROM node:22.20.0-bullseye AS frontend
 
 WORKDIR /app
@@ -9,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY vite.config.js ./
 
-# Verificar versiones y instalar dependencias
+# Verificar versiones e instalar dependencias
 RUN node --version && npm --version
 RUN npm ci --include=dev
 
@@ -17,11 +19,16 @@ RUN npm ci --include=dev
 COPY resources/ ./resources/
 COPY public/ ./public/
 
-# Verificar que el script build existe y ejecutar
+# Ejecutar build de frontend
 RUN npm run --silent build || (echo "Error: npm run build failed. Checking package.json:" && cat package.json && exit 1)
 
-# Etapa principal con PHP
+# -------------------------
+# Etapa PHP-FPM
+# -------------------------
 FROM php:8.2-fpm-bullseye
+
+# Permitir Composer como root
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Instalar dependencias del sistema y extensiones PHP
 RUN apt-get update && apt-get install -y \
@@ -35,7 +42,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
-    libonig-dev \ 
+    libonig-dev \
     zip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl gd bcmath intl \
@@ -47,15 +54,16 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Configurar directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar archivos de dependencias de PHP
-COPY composer.json composer.lock ./
+# -------------------------
+# Copiar código completo de Laravel
+# -------------------------
+COPY . .
+
+# Copiar build del frontend
+COPY --from=frontend /app/public/build ./public/build
 
 # Instalar dependencias de PHP con logs detallados
-RUN composer install --no-dev --optimize-autoloader -vvv || { echo "Composer install failed"; exit 1; }
-
-# Copiar código fuente de Laravel
-COPY . .
-COPY --from=frontend /app/public/build ./public/build
+RUN composer install --no-dev --optimize-autoloader -vvv
 
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html \
@@ -79,4 +87,5 @@ RUN php artisan config:cache \
     && php artisan route:cache \
     && php artisan view:cache
 
+# Comando final
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
