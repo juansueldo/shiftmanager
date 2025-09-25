@@ -84,8 +84,7 @@ RUN mkdir -p /var/log/nginx /var/log/php-fpm \
     && chown -R www-data:www-data /var/log/nginx /var/log/php-fpm
 
 # Puerto expuesto (Render usa $PORT)
-EXPOSE 80
-
+EXPOSE $PORT
 # Start script
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
