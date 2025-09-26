@@ -45,4 +45,4 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 EXPOSE 80
 
 # Comando para iniciar PHP-FPM
-CMD ["php-fpm"]
+CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
