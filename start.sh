@@ -28,7 +28,6 @@ cat > /etc/nginx/conf.d/default.conf << 'EOF'
 server {
     listen 80;
     server_name _;
-
     root /var/www/html/public;
     index index.php index.html;
 
@@ -38,7 +37,7 @@ server {
 
     location ~ \.php$ {
         include fastcgi_params;
-        fastcgi_pass unix:/var/run/php/php-fpm.sock;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;  # RUTA CORREGIDA
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_index index.php;
     }
@@ -51,5 +50,5 @@ EOF
 
 # 6️⃣ Iniciar servicios
 echo "Iniciando PHP-FPM y Nginx..."
-php-fpm -D
-nginx -g "daemon off;"
+php-fpm -F & nginx -g "daemon off;"
+
