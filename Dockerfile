@@ -48,7 +48,7 @@ COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
 # Configuración Nginx
-COPY default.conf /etc/nginx/conf.d/default.conf
+COPY docker/default.conf /etc/nginx/conf.d/default.conf
 
 # Exponer puerto 80
 EXPOSE 80
