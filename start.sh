@@ -23,7 +23,10 @@ php artisan view:cache
 # 4️⃣ Asegurar permisos
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# 5️⃣ Generar configuración de Nginx dinámicamente
+# 5️⃣ Limpiar cualquier configuración de Nginx existente
+rm -f /etc/nginx/conf.d/default.conf
+
+# 6️⃣ Generar configuración de Nginx dinámicamente
 cat > /etc/nginx/conf.d/default.conf << 'EOF'
 server {
     listen 80;
@@ -51,6 +54,6 @@ EOF
 
 echo "Configuración de Nginx generada."
 
-# 6️⃣ Iniciar PHP-FPM y Nginx en primer plano
+# 7️⃣ Iniciar PHP-FPM y Nginx en primer plano
 echo "Iniciando PHP-FPM y Nginx..."
-php-fpm8.3 -F & nginx -g "daemon off;"
+php-fpm -F & nginx -g "daemon off;"
