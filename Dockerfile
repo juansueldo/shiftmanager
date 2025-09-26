@@ -22,7 +22,7 @@ RUN npm run build
 # -------------------------
 # Etapa 2: Backend (PHP + Composer)
 # -------------------------
-FROM php:8.3-fpm-bullseye AS backend   # 👈 le damos nombre a la etapa
+FROM php:8.3-fpm-bullseye AS backend
 
 # Instalar dependencias del sistema básicas
 RUN apt-get update && apt-get install -y \
