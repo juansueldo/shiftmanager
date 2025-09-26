@@ -23,10 +23,11 @@ php artisan view:cache
 # 4️⃣ Asegurar permisos
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# 5️⃣ Limpiar cualquier configuración de Nginx existente
+# 5️⃣ Limpiar cualquier configuración de Nginx por defecto
 rm -f /etc/nginx/conf.d/default.conf
+rm -f /etc/nginx/sites-enabled/default
 
-# 6️⃣ Generar configuración de Nginx dinámicamente
+# 6️⃣ Generar configuración de Nginx apuntando a Laravel
 cat > /etc/nginx/conf.d/default.conf << 'EOF'
 server {
     listen 80;
@@ -41,7 +42,7 @@ server {
 
     location ~ \.php$ {
         include fastcgi_params;
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php-fpm.sock;  # socket correcto para php:8.3-fpm
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_index index.php;
     }
@@ -52,7 +53,7 @@ server {
 }
 EOF
 
-echo "Configuración de Nginx generada."
+echo "Configuración de Nginx generada correctamente."
 
 # 7️⃣ Iniciar PHP-FPM y Nginx en primer plano
 echo "Iniciando PHP-FPM y Nginx..."
