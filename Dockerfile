@@ -47,6 +47,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # ✅ Copiar assets construidos por Vite desde la etapa frontend
 COPY --from=frontend /app/public/build ./public/build
 
+# Crear symlink de storage
+RUN php artisan storage:link
+
 # Crear directorios y configurar permisos
 RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
