@@ -27,7 +27,7 @@ FROM php:8.3-fpm-bullseye
 # Instalar dependencias del sistema y extensiones PHP necesarias
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
-    libonig-dev zlib1g-dev libicu-dev curl \
+    libonig-dev zlib1g-dev libicu-dev curl bash \
     && docker-php-ext-install pdo pdo_mysql zip gd mbstring bcmath intl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -48,13 +48,12 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --verbose
 # Configurar permisos para Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Generar cache de configuración, rutas y vistas
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+# Copiar script de inicio
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Exponer puerto
+# Exponer puerto HTTP
 EXPOSE 80
 
-# Usar PHP Built-in Server para que Render detecte el puerto HTTP
-CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
+# Ejecutar script de inicio
+CMD ["/start.sh"]
