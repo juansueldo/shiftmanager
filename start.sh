@@ -73,6 +73,11 @@ php artisan route:clear || true
 php artisan view:clear || true
 php artisan cache:clear || true
 
+
+echo "🗄️ Ejecutando migraciones y seeders..."
+php artisan migrate --force
+php artisan db:seed --force
+
 # 7️⃣ Generar caches nuevos
 echo "🗂️ Generando caches de Laravel..."
 php artisan config:cache
