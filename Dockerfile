@@ -1,7 +1,28 @@
 # -------------------------
+# Etapa 1: Frontend (Node + Vite)
+# -------------------------
+FROM node:22-bullseye AS frontend
+
+WORKDIR /app
+
+# Copiar solo package.json y package-lock.json para instalar deps
+COPY package*.json ./
+
+# Instalar dependencias Node
+RUN npm ci --include=dev
+
+# Copiar resto de recursos
+COPY vite.config.js ./
+COPY resources/ ./resources/
+COPY public/ ./public/
+
+# Construir assets para producción
+RUN npm run build
+
+# -------------------------
 # Etapa 2: Backend (PHP + Composer)
 # -------------------------
-FROM php:8.3-fpm-bullseye
+FROM php:8.3-fpm-bullseye AS backend   # 👈 le damos nombre a la etapa
 
 # Instalar dependencias del sistema básicas
 RUN apt-get update && apt-get install -y \
@@ -23,7 +44,7 @@ COPY . .
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Copiar assets construidos por Vite desde la etapa frontend
+# ✅ Copiar assets construidos por Vite desde la etapa frontend
 COPY --from=frontend /app/public/build ./public/build
 
 # Crear directorios y configurar permisos
