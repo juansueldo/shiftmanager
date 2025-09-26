@@ -74,9 +74,15 @@ php artisan view:clear || true
 php artisan cache:clear || true
 
 
-echo "🗄️ Ejecutando migraciones y seeders..."
+echo "🧹 Limpiando base de datos..."
+php artisan db:wipe --force
+
+echo "🗄️ Ejecutando migraciones..."
 php artisan migrate --force
+
+echo "🌱 Ejecutando seeders..."
 php artisan db:seed --force
+
 
 # 7️⃣ Generar caches nuevos
 echo "🗂️ Generando caches de Laravel..."
