@@ -22,8 +22,8 @@ FROM php:8.3-fpm-bullseye
 # Dependencias del sistema
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
-    libonig-dev zlib1g-dev curl \
-    && docker-php-ext-install pdo pdo_mysql zip gd mbstring
+    libonig-dev zlib1g-dev libicu-dev curl \
+    && docker-php-ext-install pdo pdo_mysql zip gd mbstring bcmath intl
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -31,8 +31,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# Instalar dependencias de PHP
-RUN composer install --no-dev --optimize-autoloader
+# Instalar dependencias PHP
+RUN composer install --no-dev --optimize-autoloader --no-interaction --verbose
+
 
 # Copiar assets construidos por Vite
 COPY --from=frontend /app/public/build ./public/build
