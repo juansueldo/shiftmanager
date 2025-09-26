@@ -5,7 +5,7 @@ FROM node:22-bullseye AS frontend
 
 WORKDIR /app
 
-# Copiar solo package.json y package-lock.json para instalar deps
+# Copiar solo package.json y package-lock.json
 COPY package*.json ./
 
 # Instalar dependencias Node
@@ -27,7 +27,7 @@ FROM php:8.3-fpm-bullseye
 # Instalar dependencias del sistema y extensiones PHP necesarias
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
-    libonig-dev zlib1g-dev libicu-dev curl bash nginx \
+    libonig-dev zlib1g-dev libicu-dev curl bash \
     && docker-php-ext-install pdo pdo_mysql zip gd mbstring bcmath intl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -52,7 +52,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Exponer puerto HTTP
+# Exponer puerto HTTP (Render lo detecta automáticamente)
 EXPOSE 80
 
 # Ejecutar script de inicio
