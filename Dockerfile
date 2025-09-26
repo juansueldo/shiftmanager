@@ -1,62 +1,47 @@
 # -------------------------
-# Stage 1 - Build Frontend (Vite)
+# Etapa de frontend (Node)
 # -------------------------
-FROM node:22 AS frontend
+FROM node:22-bullseye AS frontend
+
 WORKDIR /app
 
-# Instalar dependencias de Node
 COPY package*.json ./
 RUN npm ci --include=dev
 
-# Copiar archivos del frontend
 COPY vite.config.js ./
-COPY resources/ ./resources
-COPY public/ ./public
+COPY resources/ ./resources/
+COPY public/ ./public/
 
-# Compilar con Vite -> genera public/build
 RUN npm run build
 
 # -------------------------
-# Stage 2 - Backend (Laravel + PHP + Composer + Nginx)
+# Etapa PHP + Nginx
 # -------------------------
-FROM php:8.2-fpm
-
-# Instalar dependencias del sistema y extensiones de PHP
-RUN apt-get update && apt-get install -y \
-    nginx supervisor git unzip libonig-dev libzip-dev zip libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev curl \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip bcmath intl gd \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Copiar Composer desde la imagen oficial
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-WORKDIR /var/www
-
-# Copiar el código Laravel
-COPY . .
-
-# Copiar build del frontend desde Stage 1
-COPY --from=frontend /app/public/build ./public/build
-
-# Permisos correctos
-RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www
+FROM php:8.3-fpm-bullseye
 
 # Instalar dependencias PHP
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+RUN apt-get update && apt-get install -y \
+    libzip-dev zip unzip git curl \
+    libpng-dev libjpeg-dev libfreetype6-dev \
+    && docker-php-ext-install pdo pdo_mysql zip gd
 
-# Limpiar caches de Laravel
-RUN php artisan config:clear && php artisan route:clear && php artisan view:clear
+WORKDIR /var/www/html
 
-# Configuración de Nginx
-RUN rm /etc/nginx/sites-enabled/default
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+# Copiar archivos Laravel
+COPY . .
 
-# Configuración de Supervisor
-COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-dev --optimize-autoloader
 
-# Render expone este puerto
-ENV PORT=10000
-EXPOSE $PORT
+# Copiar assets construidos por Vite
+COPY --from=frontend /app/public/build ./public/build
 
-# Iniciar Supervisor (que lanza Nginx + PHP-FPM)
-CMD ["/usr/bin/supervisord", "-n"]
+# Configurar permisos
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Puerto expuesto
+EXPOSE 80
+
+# Comando para iniciar PHP-FPM
+CMD ["php-fpm"]
