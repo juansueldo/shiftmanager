@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-# 1️⃣ Copiar .env si no existe
+# Copiar .env si no existe
 if [ ! -f /var/www/html/.env ]; then
     cp /var/www/html/.env.example /var/www/html/.env
 fi
 
-# 2️⃣ Generar APP_KEY solo si no está definida en variable de entorno
+# Generar APP_KEY si no está definida
 if [ -z "$APP_KEY" ]; then
     echo "APP_KEY no definida, generando nueva..."
     php artisan key:generate --force
@@ -15,46 +15,13 @@ else
     sed -i "s|^APP_KEY=.*|APP_KEY=${APP_KEY}|g" /var/www/html/.env
 fi
 
-# 3️⃣ Limpiar y generar caches de Laravel
+# Limpiar y generar caches de Laravel
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# 4️⃣ Asegurar permisos
+# Ajustar permisos
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# 5️⃣ Limpiar cualquier configuración de Nginx por defecto
-rm -f /etc/nginx/conf.d/default.conf
-rm -f /etc/nginx/sites-enabled/default
-
-# 6️⃣ Generar configuración de Nginx apuntando a Laravel
-cat > /etc/nginx/conf.d/default.conf << 'EOF'
-server {
-    listen 80;
-    server_name _;
-
-    root /var/www/html/public;
-    index index.php index.html;
-
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        include fastcgi_params;
-        fastcgi_pass unix:/var/run/php/php-fpm.sock;  # socket correcto para php:8.3-fpm
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_index index.php;
-    }
-
-    location ~ /\.ht {
-        deny all;
-    }
-}
-EOF
-
-echo "Configuración de Nginx generada correctamente."
-
-# 7️⃣ Iniciar PHP-FPM y Nginx en primer plano
-echo "Iniciando PHP-FPM y Nginx..."
-php-fpm -F & nginx -g "daemon off;"
+# Iniciar PHP-FPM en primer plano
+php-fpm -F
