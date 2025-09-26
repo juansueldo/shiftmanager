@@ -64,7 +64,10 @@ echo "Directorio vendor existe: $(test -d /var/www/html/vendor && echo 'SÍ' || 
 # 5️⃣ Asegurar permisos ANTES de generar caches
 echo "🔒 Configurando permisos..."
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
+
+mkdir -p storage/framework/sessions
+chmod -R 777 storage/framework/sessions
 
 # 6️⃣ Limpiar caches existentes
 echo "🗑️ Limpiando caches existentes..."
