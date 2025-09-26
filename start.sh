@@ -24,4 +24,4 @@ php artisan view:cache
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Iniciar supervisord que levanta PHP-FPM y Nginx
-exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+exec docker/supervisord -n -c /etc/supervisor/supervisord.conf
