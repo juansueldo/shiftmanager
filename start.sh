@@ -21,7 +21,7 @@ fi
 # 3️⃣ Configurar variables de entorno para producción
 echo "⚙️ Configurando variables de entorno..."
 sed -i "s|^APP_ENV=.*|APP_ENV=production|g" /var/www/html/.env
-sed -i "s|^APP_DEBUG=.*|APP_DEBUG=false|g" /var/www/html/.env
+sed -i "s|^APP_DEBUG=.*|APP_DEBUG=true|g" /var/www/html/.env
 sed -i "s|^LOG_CHANNEL=.*|LOG_CHANNEL=stderr|g" /var/www/html/.env
 
 # Configurar base de datos si las variables están disponibles
@@ -160,6 +160,9 @@ echo "📊 Estado final:"
 echo "   - Usuario actual: $(whoami)"
 echo "   - Permisos storage: $(ls -ld /var/www/html/storage)"
 echo "   - Permisos bootstrap/cache: $(ls -ld /var/www/html/bootstrap/cache)"
+
+echo "📜 Últimas líneas de logs de Laravel:"
+tail -n 50 storage/logs/laravel.log || echo "No hay logs todavía"
 
 echo "🎯 Iniciando servicios..."
 
