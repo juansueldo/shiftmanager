@@ -1,25 +1,4 @@
 # -------------------------
-# Etapa 1: Frontend (Node + Vite)
-# -------------------------
-FROM node:22-bullseye AS frontend
-
-WORKDIR /app
-
-# Copiar solo package.json y package-lock.json para instalar deps
-COPY package*.json ./
-
-# Instalar dependencias Node
-RUN npm ci --include=dev
-
-# Copiar resto de recursos
-COPY vite.config.js ./
-COPY resources/ ./resources/
-COPY public/ ./public/
-
-# Construir assets para producción
-RUN npm run build
-
-# -------------------------
 # Etapa 2: Backend (PHP + Composer)
 # -------------------------
 FROM php:8.3-fpm-bullseye
@@ -38,14 +17,14 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copiar todo el proyecto
+# Copiar proyecto (pero sin public/build, que vendrá del frontend)
 COPY . .
-
-# Copiar assets construidos por Vite desde la etapa frontend
-COPY --from=frontend /app/public/build ./public/build
 
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Copiar assets construidos por Vite desde la etapa frontend
+COPY --from=frontend /app/public/build ./public/build
 
 # Crear directorios y configurar permisos
 RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
