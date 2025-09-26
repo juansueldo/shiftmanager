@@ -83,6 +83,14 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan storage:link || true
+
+if [ ! -f public/build/manifest.json ]; then
+    echo "❌ Vite manifest.json no encontrado, construyendo assets..."
+    npm install
+    npm run build
+else
+    echo "✅ Vite manifest.json encontrado"
+fi
 # 8️⃣ Verificar configuración de Laravel
 echo "🔍 Verificando configuración de Laravel..."
 php artisan --version
