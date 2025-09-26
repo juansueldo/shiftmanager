@@ -5,18 +5,18 @@ FROM node:22-bullseye AS frontend
 
 WORKDIR /app
 
-# Copiar solo package.json y package-lock.json para instalar deps
+# Copiar solo package.json y package-lock.json
 COPY package*.json ./
 
-# Instalar dependencias Node
+# Instalar dependencias
 RUN npm ci --include=dev
 
-# Copiar resto de recursos
+# Copiar recursos
 COPY vite.config.js ./
 COPY resources/ ./resources/
 COPY public/ ./public/
 
-# Construir assets para producción
+# Build de Vite para producción
 RUN npm run build
 
 # -------------------------
@@ -28,7 +28,7 @@ FROM php:8.3-fpm-bullseye AS backend
 RUN apt-get update && apt-get install -y \
     git unzip curl bash nginx netcat-openbsd \
     libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
-    libonig-dev zlib1g-dev libicu-dev libpq-dev \
+    libonig-dev zlib1g-dev libicu-dev libpq-dev nodejs npm \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip gd mbstring bcmath intl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -38,13 +38,13 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copiar proyecto (sin public/build, viene del frontend)
+# Copiar backend
 COPY . .
 
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# ✅ Copiar assets construidos por Vite desde frontend
+# Copiar assets de frontend
 COPY --from=frontend /app/public/build ./public/build
 
 # Crear directorios y permisos
@@ -52,8 +52,8 @@ RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions sto
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Crear symlink de storage (necesario para Laravel)
-RUN php artisan storage:link
+# Crear symlink de storage
+RUN php artisan storage:link || true
 
 # Limpiar configuraciones por defecto de Nginx
 RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
