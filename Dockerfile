@@ -8,7 +8,7 @@ WORKDIR /app
 # Copiar solo package.json y package-lock.json
 COPY package*.json ./
 
-# Instalar dependencias
+# Instalar dependencias Node
 RUN npm ci --include=dev
 
 # Copiar recursos
@@ -24,11 +24,13 @@ RUN npm run build
 # -------------------------
 FROM php:8.3-fpm-bullseye AS backend
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema + Node 22
 RUN apt-get update && apt-get install -y \
     git unzip curl bash nginx netcat-openbsd \
     libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
-    libonig-dev zlib1g-dev libicu-dev libpq-dev nodejs npm \
+    libonig-dev zlib1g-dev libicu-dev libpq-dev \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip gd mbstring bcmath intl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -44,7 +46,7 @@ COPY . .
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Copiar assets de frontend
+# Copiar assets construidos desde frontend
 COPY --from=frontend /app/public/build ./public/build
 
 # Crear directorios y permisos
