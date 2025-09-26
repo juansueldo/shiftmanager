@@ -82,7 +82,7 @@ echo "🗂️ Generando caches de Laravel..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-
+php artisan storage:link || true
 # 8️⃣ Verificar configuración de Laravel
 echo "🔍 Verificando configuración de Laravel..."
 php artisan --version
