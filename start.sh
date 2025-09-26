@@ -24,6 +24,37 @@ sed -i "s|^APP_ENV=.*|APP_ENV=production|g" /var/www/html/.env
 sed -i "s|^APP_DEBUG=.*|APP_DEBUG=false|g" /var/www/html/.env
 sed -i "s|^LOG_CHANNEL=.*|LOG_CHANNEL=stderr|g" /var/www/html/.env
 
+# Configurar base de datos si las variables están disponibles
+if [ ! -z "$DATABASE_URL" ]; then
+    echo "🗄️ Configurando DATABASE_URL desde variable de entorno"
+    sed -i "s|^DATABASE_URL=.*|DATABASE_URL=${DATABASE_URL}|g" /var/www/html/.env
+fi
+
+if [ ! -z "$DB_CONNECTION" ]; then
+    echo "🗄️ Configurando DB_CONNECTION: $DB_CONNECTION"
+    sed -i "s|^DB_CONNECTION=.*|DB_CONNECTION=${DB_CONNECTION}|g" /var/www/html/.env
+fi
+
+if [ ! -z "$DB_HOST" ]; then
+    sed -i "s|^DB_HOST=.*|DB_HOST=${DB_HOST}|g" /var/www/html/.env
+fi
+
+if [ ! -z "$DB_PORT" ]; then
+    sed -i "s|^DB_PORT=.*|DB_PORT=${DB_PORT}|g" /var/www/html/.env
+fi
+
+if [ ! -z "$DB_DATABASE" ]; then
+    sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${DB_DATABASE}|g" /var/www/html/.env
+fi
+
+if [ ! -z "$DB_USERNAME" ]; then
+    sed -i "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USERNAME}|g" /var/www/html/.env
+fi
+
+if [ ! -z "$DB_PASSWORD" ]; then
+    sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=${DB_PASSWORD}|g" /var/www/html/.env
+fi
+
 # 4️⃣ Verificar estructura de archivos
 echo "📁 Verificando estructura de archivos..."
 echo "Directorio público: $(ls -la /var/www/html/public/ | head -5)"
