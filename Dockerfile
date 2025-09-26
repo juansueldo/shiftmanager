@@ -24,7 +24,7 @@ RUN npm run build
 # -------------------------
 FROM php:8.3-fpm-bullseye AS backend
 
-# Instalar dependencias del sistema básicas
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
     git unzip curl bash nginx netcat-openbsd \
     libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
@@ -38,22 +38,22 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copiar proyecto (pero sin public/build, que vendrá del frontend)
+# Copiar proyecto (sin public/build, viene del frontend)
 COPY . .
 
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# ✅ Copiar assets construidos por Vite desde la etapa frontend
+# ✅ Copiar assets construidos por Vite desde frontend
 COPY --from=frontend /app/public/build ./public/build
 
-# Crear symlink de storage
-RUN php artisan storage:link
-
-# Crear directorios y configurar permisos
+# Crear directorios y permisos
 RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
+
+# Crear symlink de storage (necesario para Laravel)
+RUN php artisan storage:link
 
 # Limpiar configuraciones por defecto de Nginx
 RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
