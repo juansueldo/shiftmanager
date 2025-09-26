@@ -24,14 +24,13 @@ RUN npm run build
 # -------------------------
 FROM php:8.3-fpm-bullseye
 
-# Instalar dependencias del sistema y extensiones PHP necesarias
+# Instalar dependencias del sistema básicas
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
-    libonig-dev zlib1g-dev libicu-dev curl bash nginx netcat-openbsd \
-    libxml2-dev libcurl4-openssl-dev pkg-config libssl-dev \
+    git unzip curl bash nginx netcat-openbsd \
+    libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
+    libonig-dev zlib1g-dev libicu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql zip gd mbstring bcmath intl \
-        xml curl dom fileinfo json tokenizer ctype \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Instalar Composer
@@ -39,30 +38,19 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copiar archivos de configuración primero
-COPY composer.json composer.lock ./
-COPY artisan ./
-
-# Instalar dependencias PHP sin optimizaciones primero
-RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction
-
-# Copiar resto del proyecto
+# Copiar todo el proyecto
 COPY . .
 
 # Copiar assets construidos por Vite desde la etapa frontend
 COPY --from=frontend /app/public/build ./public/build
 
-# Finalizar instalación de Composer con optimizaciones
-RUN composer dump-autoload --optimize --no-interaction
+# Instalar dependencias PHP
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Crear directorios necesarios y configurar permisos
-RUN mkdir -p /var/www/html/storage/logs \
-    && mkdir -p /var/www/html/storage/framework/cache \
-    && mkdir -p /var/www/html/storage/framework/sessions \
-    && mkdir -p /var/www/html/storage/framework/views \
-    && mkdir -p /var/www/html/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Crear directorios y configurar permisos
+RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 # Limpiar configuraciones por defecto de Nginx
 RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
