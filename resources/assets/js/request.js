@@ -63,12 +63,15 @@ function updatePart(url, formData, container, method = 'POST', callback = null) 
 }
 
 $(document).ready(function() {
-    $(document).on('click', 'a[data-ajax-source], button[data-ajax-source], li[data-ajax-source] ', function(e) {
-        e.preventDefault();
-        var url = base_url + $(this).data('ajax-source');
-        var container = $(this).data('ajax-container');
-        updatePart(url, null, container, 'GET');
-    });
+    $(document).on('click', 'a[data-ajax-source], button[data-ajax-source], li[data-ajax-source]', function(e) {
+    e.preventDefault();
+    var url = base_url + $(this).data('ajax-source');
+    var container = $(this).data('ajax-container');
+    var callbackName = $(this).data('ajax-then');
+    var callback = window[callbackName];
+
+    updatePart(url, null, container, 'GET', callback);
+});
     $(document).on('submit', 'form[data-ajax-source]', function(e) {
         e.preventDefault();
         var form = $(this);

@@ -37,7 +37,7 @@
                   <!-- Chats -->
                   <ul class="list-unstyled chat-contact-list py-2 mb-0" id="chat-list">
                     @foreach ($customers as $customer)
-                    <li class="chat-contact-list-item mb-1" data-ajax-source="/chat/start/{{ $customer->id }}" data-ajax-method="replaceHtml" data-ajax-container="div#app-chat-conversation"> 
+                    <li class="chat-contact-list-item mb-1" data-ajax-source="/chat/start/{{ $customer->id }}" data-ajax-method="replaceHtml" data-ajax-container="div#app-chat-conversation" data-ajax-then="updateBox"> 
                       <a class="d-flex align-items-center">
                         <div class="flex-shrink-0 avatar avatar-online">
                         <span class="avatar-initial rounded-circle bg-label-success">

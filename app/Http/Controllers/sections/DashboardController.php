@@ -51,10 +51,7 @@ class DashboardController extends Controller
         return view('sections.dashboard', compact('user', 'widgets'));
     }
 
-    public function landing(){
-        return view('auth.landing');
-    }
-
+    
     public function setLanguage($locale)
     {
         $currentuser = Auth::user();

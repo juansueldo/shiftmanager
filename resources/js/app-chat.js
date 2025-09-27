@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
-    new PerfectScrollbar('.app-chat-contacts .sidebar-body', {
-      wheelPropagation: false
+    // Inicialización global
+    window.chatContactsScrollbar = new PerfectScrollbar('.app-chat-contacts .sidebar-body', {
+        wheelPropagation: false,
+        suppressScrollX: true
     });
 });
 function debounce(t,a){let c;return(...e)=>{
@@ -100,3 +102,22 @@ c.chatHistoryHeader?.addEventListener("click",()=>{
             let e=new a,t=!1;c.speechToText.on("click",function(){
                 t||e.start(),e.onspeechstart=()=>t=!0,e.onresult=e=>{
                     $(this).closest(".form-send-message").find(".message-input").val(e.results[0][0].transcript)},e.onspeechend=()=>t=!1,e.onerror=()=>t=!1})}})()});
+
+
+
+function updateBox() {
+    const chatConversation = document.getElementById('app-chat-conversation');
+    chatConversation.classList.remove('align-items-center');
+
+    // ✅ Actualiza el scroll en vez de crear otro
+    if (window.chatContactsScrollbar) {
+        window.chatContactsScrollbar.update();
+    } else {
+        // fallback si no existía
+        window.chatContactsScrollbar = new PerfectScrollbar('.app-chat-contacts .sidebar-body', {
+            wheelPropagation: false,
+            suppressScrollY: true
+        });
+    }
+}
+window.updateBox = updateBox;
