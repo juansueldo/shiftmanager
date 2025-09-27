@@ -16,6 +16,7 @@ use App\Http\Controllers\sections\CustomersController;
 use App\Http\Controllers\sections\RolesController;
 use App\Http\Controllers\sections\StatusesController;
 use App\Http\Controllers\sections\ChatController;
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 
 // Redirigir a dashboard si el usuario está autenticado
@@ -29,7 +30,7 @@ Route::get('/auth/google/disconnect', [GoogleAuthController::class, 'disconnect'
 Route::get('/language/{lang}', [DashboardController::class, 'setLanguage'])->name('dashboard.language');
 
 // Página de inicio
-Route::get('/landing', [DashboardController::class, 'landing'])->name('home');
+Route::get('/landing', [LandingController::class, 'index'])->name('home');
 
 // Rutas de autenticación
 Route::middleware('guest')->group(function () {
