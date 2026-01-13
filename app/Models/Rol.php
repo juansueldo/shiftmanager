@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\DatatableFilter;
 
 class Rol extends Model
 {
+    use DatatableFilter;
+    
     protected $fillable = [
         'name',
         'status'
@@ -21,30 +24,34 @@ class Rol extends Model
                 ->withTimestamps();
     }
 
-    public function scopeFilter($query, $params)
+    /**
+     * Get datatable configuration for Rol model
+     *
+     * @return array
+     */
+    protected function getDatatableConfig(): array
     {
-        $query->select('rols.*', 'statuses.name as status_name')
-            ->leftJoin('statuses', 'rols.status', '=', 'statuses.id');
-
-        if (!empty($params['search'])) {
-            $search = $params['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('rols.name', 'like', "%{$search}%")
-                    ->orWhere('statuses.name', 'like', "%{$search}%");
-            });
-        }
-
-        $orderColumn = $params['ordercolumn'] ?? 'rols.id';
-        $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : 'id';
-
-        $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
-
-        if (!in_array($orderMethod, ['asc', 'desc'])) {
-            $orderMethod = 'asc';
-        }
-
-        $query->orderBy($orderColumn, $orderMethod);
-
-        return $query;
+        return [
+            'select' => ['rols.*', 'statuses.name as status_name'],
+            'joins' => [
+                [
+                    'table' => 'statuses',
+                    'first' => 'rols.status',
+                    'operator' => '=',
+                    'second' => 'statuses.id',
+                ],
+            ],
+            'searchable' => [
+                'rols.name',
+                'statuses.name',
+            ],
+            'filter_by_customer' => false,
+            'default_order_column' => 'id',
+            'allowed_order_columns' => [
+                'rols.id' => 'rols.id',
+                'rols.name' => 'rols.name',
+                'statuses.name' => 'statuses.name',
+            ],
+        ];
     }
 }

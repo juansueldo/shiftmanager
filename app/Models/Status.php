@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Traits\DatatableFilter;
 
 class Status extends Model
 {
-    use HasFactory;
+    use HasFactory, DatatableFilter;
 
     protected $fillable = ['name'];
 
@@ -23,28 +24,26 @@ class Status extends Model
     public function calendars(){
         return $this->hasMany(Calendar::class, 'status');
     }
-    public function scopeFilter($query, $params)
+
+    /**
+     * Get datatable configuration for Status model
+     *
+     * @return array
+     */
+    protected function getDatatableConfig(): array
     {
-        $query->select('statuses.*');
-
-        if (!empty($params['search'])) {
-            $search = $params['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            });
-        }
-
-        $orderColumn = $params['ordercolumn'] ?? 'id';
-        $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : 'id';
-
-        $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
-
-        if (!in_array($orderMethod, ['asc', 'desc'])) {
-            $orderMethod = 'asc';
-        }
-
-        $query->orderBy($orderColumn, $orderMethod);
-
-        return $query;
+        return [
+            'select' => ['statuses.*'],
+            'joins' => [],
+            'searchable' => [
+                'name',
+            ],
+            'filter_by_customer' => false,
+            'default_order_column' => 'id',
+            'allowed_order_columns' => [
+                'id' => 'id',
+                'name' => 'name',
+            ],
+        ];
     }
 }

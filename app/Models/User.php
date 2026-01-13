@@ -9,11 +9,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Traits\DatatableFilter;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, DatatableFilter;
     use HasAttributes;
 
     /**
@@ -84,50 +85,54 @@ class User extends Authenticatable
         return $this->hasOne(Doctor::class);
     }
     
-    public function scopeFilter($query, $params)
+    /**
+     * Get datatable configuration for User model
+     *
+     * @return array
+     */
+    protected function getDatatableConfig(): array
     {
-        $query->select('users.*', 'statuses.name as status_name', 'rols.name as role_name')
-            ->leftJoin('role_user', 'users.id', '=', 'role_user.user_id')
-            ->leftJoin('rols', 'role_user.role_id', '=', 'rols.id')
-            ->leftJoin('statuses', 'users.status', '=', 'statuses.id'); 
-
-        $customerId = $params['customer_id'] ?? (Auth::check() ? Auth::user()->customer_id : null);
-        if ($customerId) {
-            $query->where('users.customer_id', $customerId);
-        }
-        if (!empty($params['search'])) {
-            $search = $params['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('users.firstname', 'like', "%{$search}%")
-                    ->orWhere('users.lastname', 'like', "%{$search}%")
-                    ->orWhere('users.email', 'like', "%{$search}%")
-                    ->orWhere('rols.name', 'like', "%{$search}%")
-                    ->orWhere('statuses.name', 'like', "%{$search}%");
-            });
-        }
-
-        // Solo permitir columnas válidas para ordenar
-        $allowedOrderColumns = [
-            'id' => 'users.id',
-            'firstname' => 'users.firstname',
-            'lastname' => 'users.lastname',
-            'email' => 'users.email',
-            'status_name' => 'statuses.name',
-            'role_name' => 'rols.name',
+        return [
+            'select' => ['users.*', 'statuses.name as status_name', 'rols.name as role_name'],
+            'joins' => [
+                [
+                    'table' => 'role_user',
+                    'first' => 'users.id',
+                    'operator' => '=',
+                    'second' => 'role_user.user_id',
+                ],
+                [
+                    'table' => 'rols',
+                    'first' => 'role_user.role_id',
+                    'operator' => '=',
+                    'second' => 'rols.id',
+                ],
+                [
+                    'table' => 'statuses',
+                    'first' => 'users.status',
+                    'operator' => '=',
+                    'second' => 'statuses.id',
+                ],
+            ],
+            'searchable' => [
+                'users.firstname',
+                'users.lastname',
+                'users.email',
+                'rols.name',
+                'statuses.name',
+            ],
+            'filter_by_customer' => true,
+            'customer_column' => 'users.customer_id',
+            'default_order_column' => 'id',
+            'allowed_order_columns' => [
+                'id' => 'users.id',
+                'firstname' => 'users.firstname',
+                'lastname' => 'users.lastname',
+                'email' => 'users.email',
+                'status_name' => 'statuses.name',
+                'role_name' => 'rols.name',
+            ],
         ];
-
-        $orderColumn = $params['ordercolumn'] ?? 'id';
-        $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : 'id';
-        $orderBy = $allowedOrderColumns[$orderColumn] ?? 'users.id';
-
-        $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
-        if (!in_array($orderMethod, ['asc', 'desc'])) {
-            $orderMethod = 'asc';
-        }
-
-        $query->orderBy($orderBy, $orderMethod);
-
-        return $query;
     }
-    
+
 }
