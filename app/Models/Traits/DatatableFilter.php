@@ -53,7 +53,10 @@ trait DatatableFilter
 
         // Map column alias to actual column if using allowed columns
         if (! empty($config['allowed_order_columns'])) {
-            $orderBy = $config['allowed_order_columns'][$orderColumn] ?? $config['allowed_order_columns'][$config['default_order_column']];
+            // Ensure default_order_column exists in allowed_order_columns for fallback
+            $defaultColumn = $config['allowed_order_columns'][$config['default_order_column']]
+                ?? reset($config['allowed_order_columns']);
+            $orderBy = $config['allowed_order_columns'][$orderColumn] ?? $defaultColumn;
         } else {
             $orderBy = $orderColumn;
         }

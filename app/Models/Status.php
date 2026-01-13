@@ -36,7 +36,7 @@ class Status extends Model
             'select' => ['statuses.*'],
             'joins' => [],
             'searchable' => [
-                'name',
+                'statuses.name',
             ],
             'filter_by_customer' => false,
             'default_order_column' => 'id',
