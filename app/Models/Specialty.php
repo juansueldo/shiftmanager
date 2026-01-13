@@ -2,23 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Traits\DatatableFilter;
+use Illuminate\Database\Eloquent\Model;
 
 class Specialty extends Model
 {
     use DatatableFilter;
-    
-    protected $fillable =[
+
+    protected $fillable = [
         'name',
-        'status'
+        'status',
     ];
 
     /**
      * Get datatable configuration for Specialty model
-     *
-     * @return array
      */
     protected function getDatatableConfig(): array
     {

@@ -2,32 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\DatatableFilter;
+use Illuminate\Database\Eloquent\Model;
 
 class Rol extends Model
 {
     use DatatableFilter;
-    
+
     protected $fillable = [
         'name',
-        'status'
+        'status',
     ];
+
     public function status()
     {
         return $this->belongsTo(Status::class, 'status');
     }
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'role_user')
-                ->withPivot('status_id')
-                ->withTimestamps();
+            ->withPivot('status_id')
+            ->withTimestamps();
     }
 
     /**
      * Get datatable configuration for Rol model
-     *
-     * @return array
      */
     protected function getDatatableConfig(): array
     {

@@ -9,8 +9,8 @@ trait DatatableFilter
     /**
      * Generic scope filter for datatable operations
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeFilter($query, $params)
@@ -34,7 +34,7 @@ trait DatatableFilter
         }
 
         // Apply search filters
-        if (!empty($params['search']) && !empty($config['searchable'])) {
+        if (! empty($params['search']) && ! empty($config['searchable'])) {
             $search = $params['search'];
             $query->where(function ($q) use ($search, $config) {
                 foreach ($config['searchable'] as $index => $column) {
@@ -52,14 +52,14 @@ trait DatatableFilter
         $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : $config['default_order_column'];
 
         // Map column alias to actual column if using allowed columns
-        if (!empty($config['allowed_order_columns'])) {
+        if (! empty($config['allowed_order_columns'])) {
             $orderBy = $config['allowed_order_columns'][$orderColumn] ?? $config['allowed_order_columns'][$config['default_order_column']];
         } else {
             $orderBy = $orderColumn;
         }
 
         $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
-        if (!in_array($orderMethod, ['asc', 'desc'])) {
+        if (! in_array($orderMethod, ['asc', 'desc'])) {
             $orderMethod = 'asc';
         }
 
@@ -71,25 +71,23 @@ trait DatatableFilter
     /**
      * Get datatable configuration for this model
      * Override this method in your model to customize behavior
-     *
-     * @return array
      */
     protected function getDatatableConfig(): array
     {
         return [
             // Columns to select
-            'select' => [$this->getTable() . '.*'],
-            
+            'select' => [$this->getTable().'.*'],
+
             // Joins configuration
             'joins' => [],
-            
+
             // Searchable columns
             'searchable' => [],
-            
+
             // Filter by customer
             'filter_by_customer' => false,
-            'customer_column' => $this->getTable() . '.customer_id',
-            
+            'customer_column' => $this->getTable().'.customer_id',
+
             // Order configuration
             'default_order_column' => 'id',
             'allowed_order_columns' => [],

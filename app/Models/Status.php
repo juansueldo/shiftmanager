@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Traits\DatatableFilter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
-    use HasFactory, DatatableFilter;
+    use DatatableFilter, HasFactory;
 
     protected $fillable = ['name'];
 
@@ -17,18 +17,18 @@ class Status extends Model
         return $this->hasMany(User::class, 'status');
     }
 
-    public function doctors(){
+    public function doctors()
+    {
         return $this->hasMany(Doctor::class, 'status');
     }
 
-    public function calendars(){
+    public function calendars()
+    {
         return $this->hasMany(Calendar::class, 'status');
     }
 
     /**
      * Get datatable configuration for Status model
-     *
-     * @return array
      */
     protected function getDatatableConfig(): array
     {

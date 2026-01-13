@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\DatatableFilter;
+use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
     use DatatableFilter;
-    
+
     protected $fillable = [
         'firstname',
         'lastname',
@@ -21,7 +21,7 @@ class Customer extends Model
         'company_zip',
         'company_country',
         'company_vat',
-        'status'
+        'status',
     ];
 
     public function users()
@@ -36,8 +36,6 @@ class Customer extends Model
 
     /**
      * Get datatable configuration for Customer model
-     *
-     * @return array
      */
     protected function getDatatableConfig(): array
     {

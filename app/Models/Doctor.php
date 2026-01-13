@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Traits\DatatableFilter;
+use Illuminate\Database\Eloquent\Model;
 
 class Doctor extends Model
 {
     use DatatableFilter;
-    
+
     protected $fillable = [
         'user_id',
         'phone',
@@ -20,13 +19,14 @@ class Doctor extends Model
         'country',
         'date_of_birth',
         'identifier',
-        'status'
+        'status',
     ];
 
     public function status()
     {
         return $this->belongsTo(Status::class, 'status');
     }
+
     public function specialties()
     {
         return $this->belongsToMany(Specialty::class, 'doctor_specialty')
@@ -35,6 +35,7 @@ class Doctor extends Model
             ->wherePivot('status_id', 1)
             ->withTimestamps();
     }
+
     public function activeSpecialties()
     {
         return $this->belongsToMany(Specialty::class, 'doctor_specialty')
@@ -54,14 +55,14 @@ class Doctor extends Model
     {
         return $query->where('status', 1);
     }
-    public function user(){
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
     /**
      * Get datatable configuration for Doctor model
-     *
-     * @return array
      */
     protected function getDatatableConfig(): array
     {
@@ -71,7 +72,7 @@ class Doctor extends Model
                 'users.firstname as firstname',
                 'users.lastname as lastname',
                 'users.email as email',
-                'statuses.name as status_name'
+                'statuses.name as status_name',
             ],
             'joins' => [
                 [

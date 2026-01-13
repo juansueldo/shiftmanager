@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Traits\DatatableFilter;
+use Illuminate\Database\Eloquent\Model;
 
 class Patient extends Model
 {
     use DatatableFilter;
-    
+
     protected $fillable = [
         'firstname',
         'lastname',
         'customer_id',
-        'email',    
+        'email',
         'phone',
         'address',
         'city',
@@ -23,13 +22,14 @@ class Patient extends Model
         'country',
         'date_of_birth',
         'identifier',
-        'status'
+        'status',
     ];
 
     public function status()
     {
         return $this->belongsTo(Status::class, 'status');
     }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
@@ -37,8 +37,6 @@ class Patient extends Model
 
     /**
      * Get datatable configuration for Patient model
-     *
-     * @return array
      */
     protected function getDatatableConfig(): array
     {

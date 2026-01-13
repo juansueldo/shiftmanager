@@ -3,18 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Traits\DatatableFilter;
+use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasAttributes;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Traits\DatatableFilter;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, DatatableFilter;
+    use DatatableFilter, HasFactory, Notifiable;
+
     use HasAttributes;
 
     /**
@@ -35,11 +35,10 @@ class User extends Authenticatable
         'token_expires_at',
         'password',
         'language',
-        'status', 
+        'status',
     ];
 
     protected $dates = ['token_expires_at'];
-
 
     /**
      * The attributes that should be hidden for serialization.
@@ -74,21 +73,21 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
+
     public function roles()
     {
         return $this->belongsToMany(Rol::class, 'role_user')
-                ->withPivot('status_id')
-                ->withTimestamps();
+            ->withPivot('status_id')
+            ->withTimestamps();
     }
 
-    public function doctor(){
+    public function doctor()
+    {
         return $this->hasOne(Doctor::class);
     }
-    
+
     /**
      * Get datatable configuration for User model
-     *
-     * @return array
      */
     protected function getDatatableConfig(): array
     {
@@ -134,5 +133,4 @@ class User extends Authenticatable
             ],
         ];
     }
-
 }
