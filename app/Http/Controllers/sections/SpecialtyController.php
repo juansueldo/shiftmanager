@@ -65,18 +65,24 @@ class SpecialtyController extends Controller
 
     public function store(Request $request)
     {
+        $customerId = tenant()->id ?? Auth::user()->customer_id;
+
         $request->validate([
-            'name' => 'required|string|max:255|unique:specialties,name,' . $request->id,
+            'name' => 'required|string|max:255|unique:specialties,name,' . $request->id . ',id,customer_id,' . $customerId,
         ]);
 
         try {
             if ($request->id > 0) {
                 $specialty = Specialty::findOrFail($request->id);
                 $specialty->update(['name' => $request->input('name')]);
-                return redirect()->route('specialty.index')->with('success',__('specialty.specialty_updated'));
+                return redirect()->route('specialty.index', ['slug' => tenant_slug()])->with('success',__('specialty.specialty_updated'));
             } else {
-                Specialty::create(['name' => $request->input('name')]);
-                return redirect()->route('specialty.index')->with('success', __('specialty.specialty_created'));
+                Specialty::create([
+                    'name' => $request->input('name'),
+                    'customer_id' => $customerId,
+                    'status' => 1,
+                ]);
+                return redirect()->route('specialty.index', ['slug' => tenant_slug()])->with('success', __('specialty.specialty_created'));
             }
         } catch (\Exception $e) {
             return redirect()->back()->with('error', __('messages.error_occurred') . ' ' . $e->getMessage());
@@ -84,7 +90,14 @@ class SpecialtyController extends Controller
     }
 
     public function list(){
-        $specialties= Specialty::all();
+        $customerId = tenant()->id ?? (Auth::check() ? Auth::user()->customer_id : null);
+        
+        $query = Specialty::query();
+        if ($customerId) {
+            $query->where('customer_id', $customerId);
+        }
+        
+        $specialties = $query->get();
         $data=[];
         $data[]=[
             'value' => '',

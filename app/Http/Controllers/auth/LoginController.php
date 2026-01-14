@@ -26,6 +26,13 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            // Redirect to tenant-specific dashboard
+            $user = Auth::user();
+            if ($user->customer && $user->customer->slug) {
+                return redirect()->route('dashboard.index', ['slug' => $user->customer->slug]);
+            }
+
+            // Fallback if no customer or slug
             return redirect()->intended('/dashboard');
         }
 

@@ -42,10 +42,16 @@ class RegisterController extends Controller
                 'terms.accepted' => __('register.terms_accepted'),
             ]);
 
+            // Generate slug from company name or firstname
+            $baseName = $request->company_name ?? $request->firstname . ' ' . $request->lastname;
+            $slug = Customer::generateSlug($baseName);
+
             $customer = Customer::create([
                 'firstname' => $request->firstname,
                 'lastname' => $request->lastname,
+                'slug' => $slug,
                 'company_email' => $request->email,
+                'status' => 1,
             ]);
 
             // Crear un nuevo usuario
@@ -65,10 +71,10 @@ class RegisterController extends Controller
             // Autenticar al usuario registrado
             Auth::login($user);
 
-            // Redirigir al dashboard
-            return redirect()->route('dashboard.index');
+            // Redirigir al dashboard with tenant slug
+            return redirect()->route('dashboard.index', ['slug' => $customer->slug]);
         } catch (\Exception $e) {
-            return redirect()->route('register.index')->with('error', __('register.error'));
+            return redirect()->route('register.index')->with('error', __('register.error') . ' ' . $e->getMessage());
         }
     }
 }

@@ -18,25 +18,21 @@ use App\Http\Controllers\sections\StatusesController;
 use App\Http\Controllers\sections\ChatController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\SetTenantFromSlug;
 
-// Root redirect - redirect to tenant dashboard if authenticated
+// Redirigir a dashboard si el usuario está autenticado
 Route::get('/', function () {
-    if (auth()->check() && auth()->user()->customer) {
-        return redirect()->route('dashboard.index', ['slug' => auth()->user()->customer->slug]);
-    }
-    return redirect()->route('home');
+    return redirect()->route('dashboard.index');
 })->middleware('auth');
-
-// Google auth routes (can work with or without tenant context)
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 Route::get('/auth/google/disconnect', [GoogleAuthController::class, 'disconnect'])->name('auth.disconnect');
+// Cambiar idioma
+Route::get('/language/{lang}', [DashboardController::class, 'setLanguage'])->name('dashboard.language');
 
-// Landing page
+// Página de inicio
 Route::get('/landing', [LandingController::class, 'index'])->name('home');
 
-// Authentication routes (outside tenant context)
+// Rutas de autenticación
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.store');
@@ -46,11 +42,8 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [LoginController::class, 'destroy'])->name('login.destroy')->middleware('auth');
 
-// Tenant-scoped routes (all routes within a customer context)
-Route::prefix('{slug}')->middleware(['auth', SetTenantFromSlug::class])->group(function () {
-    // Language switcher
-    Route::get('/language/{lang}', [DashboardController::class, 'setLanguage'])->name('dashboard.language');
-    
+// Rutas protegidas por autenticación
+Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/main', [DashboardController::class, 'create'])->name('dashboard.create');
@@ -60,15 +53,14 @@ Route::prefix('{slug}')->middleware(['auth', SetTenantFromSlug::class])->group(f
     Route::post('/widgets/update', [DashboardController::class, 'updateWidgets'])->name('dashboard.widgets.update');
     Route::get('/widgets/create/{name}', [DashboardController::class, 'createWidget'])->name('dashboard.widgets.create');
     Route::get('/widgets/delete/{id}', [DashboardController::class, 'deleteWidget'])->name('dashboard.widgets.delete');
-    
-    // Calendar
+    // Calendario
     Route::prefix('calendar')->name('calendar.')->group(function () {
         Route::get('/', [CalendarController::class, 'index'])->name('index');
         Route::get('/add/{id?}', [CalendarController::class, 'add'])->name('add');
         Route::post('/save', [CalendarController::class, 'store'])->name('save');
     });
 
-    // Users
+    // Usuarios
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::post('/data', [UserController::class, 'data'])->name('data');
@@ -76,7 +68,7 @@ Route::prefix('{slug}')->middleware(['auth', SetTenantFromSlug::class])->group(f
         Route::post('/save', [UserController::class, 'store'])->name('save');
     });
 
-    // Patients
+    // Pacientes
     Route::prefix('patients')->name('patients.')->group(function () {
         Route::get('/', [PatientController::class, 'index'])->name('index');
         Route::post('/data', [PatientController::class, 'data'])->name('data');
@@ -85,7 +77,7 @@ Route::prefix('{slug}')->middleware(['auth', SetTenantFromSlug::class])->group(f
         Route::post('/checkidentifier', [PatientController::class, 'checkidentifier'])->name('checkidentifier');
     });
 
-    // Doctors
+    // Doctores
     Route::prefix('doctors')->name('doctors.')->group(function (): void {
         Route::get('/', [DoctorController::class, 'index'])->name('index');
         Route::post('/data', [DoctorController::class, 'data'])->name('data');
@@ -96,7 +88,7 @@ Route::prefix('{slug}')->middleware(['auth', SetTenantFromSlug::class])->group(f
         Route::post('/savehours', [DoctorController::class, 'saveHours'])->name('savehours');
     });
 
-    // Specialties
+    // Especialidades
     Route::prefix('specialty')->name('specialty.')->group(function () {
         Route::get('/', [SpecialtyController::class, 'index'])->name('index');
         Route::post('/data', [SpecialtyController::class, 'data'])->name('data');
@@ -104,35 +96,27 @@ Route::prefix('{slug}')->middleware(['auth', SetTenantFromSlug::class])->group(f
         Route::post('/save', [SpecialtyController::class, 'store'])->name('save');
         Route::get('/list', [SpecialtyController::class, 'list'])->name('list');
     });
-    
-    // Settings
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/connections', [ConnectionsController::class, 'index'])->name('connections');
         Route::get('/billing', [CustomerController::class, 'index'])->name('billing');
         Route::post('/save', [CustomerController::class, 'store'])->name('save');
     });
-    
-    // Roles
     Route::prefix('roles')->name('roles.')->group(function () {
         Route::get('/', [RolesController::class, 'index'])->name('index');
         Route::post('/data', [RolesController::class, 'data'])->name('data');
         Route::get('/form/{id?}', [RolesController::class, 'add'])->name('form');
         Route::post('/save', [RolesController::class, 'store'])->name('save');
     });
-    
-    // Statuses
     Route::prefix('statuses')->name('statuses.')->group(function(){
         Route::get('/', [StatusesController::class,'index'])->name('index');
         Route::post('/data', [StatusesController::class,  'data'])->name('data');
+
     });
-    
-    // Customers
     Route::prefix('customers')->name('customers.')->group(function () {
         Route::get('/',[CustomersController::class,'index'])->name('index');
         Route::post('/data', [CustomersController::class,  'data'])->name('data');
     });
 
-    // Chat
     Route::prefix('chat')->name('chat.')->group(function(){
         Route::get('/', [ChatController::class, 'index'])->name('index');
         Route::get('/start/{id?}', [ChatController::class, 'start'])->name('start');
