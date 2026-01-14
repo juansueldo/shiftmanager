@@ -11,8 +11,14 @@ class Rol extends Model
 
     protected $fillable = [
         'name',
+        'customer_id',
         'status',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
 
     public function status()
     {
@@ -45,7 +51,8 @@ class Rol extends Model
                 'rols.name',
                 'statuses.name',
             ],
-            'filter_by_customer' => false,
+            'filter_by_customer' => true,
+            'customer_column' => 'rols.customer_id',
             'default_order_column' => 'id',
             'allowed_order_columns' => [
                 'rols.id' => 'rols.id',
