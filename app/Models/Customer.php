@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\DatatableFilter;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    use DatatableFilter;
+
     protected $fillable = [
         'firstname',
         'lastname',
@@ -18,7 +21,7 @@ class Customer extends Model
         'company_zip',
         'company_country',
         'company_vat',
-        'status'
+        'status',
     ];
 
     public function users()
@@ -30,30 +33,33 @@ class Customer extends Model
     {
         return $this->belongsTo(Status::class);
     }
-    public function scopeFilter($query, $params)
+
+    /**
+     * Get datatable configuration for Customer model
+     */
+    protected function getDatatableConfig(): array
     {
-        $query->select('customers.*', 'statuses.name as status_name')
-            ->leftJoin('statuses', 'customers.status', '=', 'statuses.id');
-
-        if (!empty($params['search'])) {
-            $search = $params['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('customers.firstname', 'like', "%{$search}%")
-                    ->orWhere('statuses.name', 'like', "%{$search}%");
-            });
-        }
-
-        $orderColumn = $params['ordercolumn'] ?? 'customers.id';
-        $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : 'id';
-
-        $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
-
-        if (!in_array($orderMethod, ['asc', 'desc'])) {
-            $orderMethod = 'asc';
-        }
-
-        $query->orderBy($orderColumn, $orderMethod);
-
-        return $query;
+        return [
+            'select' => ['customers.*', 'statuses.name as status_name'],
+            'joins' => [
+                [
+                    'table' => 'statuses',
+                    'first' => 'customers.status',
+                    'operator' => '=',
+                    'second' => 'statuses.id',
+                ],
+            ],
+            'searchable' => [
+                'customers.firstname',
+                'statuses.name',
+            ],
+            'filter_by_customer' => false,
+            'default_order_column' => 'id',
+            'allowed_order_columns' => [
+                'customers.id' => 'customers.id',
+                'customers.firstname' => 'customers.firstname',
+                'statuses.name' => 'statuses.name',
+            ],
+        ];
     }
 }

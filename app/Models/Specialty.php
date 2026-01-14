@@ -2,41 +2,45 @@
 
 namespace App\Models;
 
+use App\Models\Traits\DatatableFilter;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Specialty extends Model
 {
-    protected $fillable =[
+    use DatatableFilter;
+
+    protected $fillable = [
         'name',
-        'status'
+        'status',
     ];
 
-    public function scopeFilter($query, $params)
+    /**
+     * Get datatable configuration for Specialty model
+     */
+    protected function getDatatableConfig(): array
     {
-        $query->select('specialties.*', 'statuses.name as status_name')
-            ->leftJoin('statuses', 'specialties.status', '=', 'statuses.id');
-    
-        if (!empty($params['search'])) {
-            $search = $params['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('specialties.name', 'like', "%{$search}%")
-                    ->orWhere('statuses.name', 'like', "%{$search}%");
-            });
-        }
-    
-        $orderColumn = $params['ordercolumn'] ?? 'specialties.id';
-        $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : 'id';
-    
-        $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
-    
-        if (!in_array($orderMethod, ['asc', 'desc'])) {
-            $orderMethod = 'asc';
-        }
-    
-        $query->orderBy($orderColumn, $orderMethod);
-    
-        return $query;
+        return [
+            'select' => ['specialties.*', 'statuses.name as status_name'],
+            'joins' => [
+                [
+                    'table' => 'statuses',
+                    'first' => 'specialties.status',
+                    'operator' => '=',
+                    'second' => 'statuses.id',
+                ],
+            ],
+            'searchable' => [
+                'specialties.name',
+                'statuses.name',
+            ],
+            'filter_by_customer' => false,
+            'default_order_column' => 'id',
+            'allowed_order_columns' => [
+                'specialties.id' => 'specialties.id',
+                'specialties.name' => 'specialties.name',
+                'statuses.name' => 'statuses.name',
+            ],
+        ];
     }
 
     public function doctors()

@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Traits\DatatableFilter;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Patient extends Model
 {
+    use DatatableFilter;
+
     protected $fillable = [
         'firstname',
         'lastname',
         'customer_id',
-        'email',    
+        'email',
         'phone',
         'address',
         'city',
@@ -20,48 +22,52 @@ class Patient extends Model
         'country',
         'date_of_birth',
         'identifier',
-        'status'
+        'status',
     ];
 
     public function status()
     {
         return $this->belongsTo(Status::class, 'status');
     }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
-    public function scopeFilter($query, $params){
-        $query->select('patients.*', 'statuses.name as status_name')
-            ->leftJoin('statuses', 'patients.status', '=', 'statuses.id');
-         $customerId = $params['customer_id'] ?? (Auth::check() ? Auth::user()->customer_id : null);
-        if ($customerId) {
-            $query->where('patients.customer_id', $customerId);
-        }
-        if (!empty($params['search'])) {
-            $search = $params['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('patients.firstname', 'like', "%{$search}%")
-                    ->orWhere('patients.lastname', 'like', "%{$search}%")
-                    ->orWhere('patients.email', 'like', "%{$search}%")
-                    ->orWhere('patients.identifier', 'like', "%{$search}%")
-                    ->orWhere('statuses.name', 'like', "%{$search}%");
-            });
-        }
-    
-        $orderColumn = $params['ordercolumn'] ?? 'patients.id';
-        $orderColumn = is_string($orderColumn) ? strtolower($orderColumn) : 'id';
-    
-        $orderMethod = strtolower($params['ordermethod'] ?? 'asc');
-    
-        if (!in_array($orderMethod, ['asc', 'desc'])) {
-            $orderMethod = 'asc';
-        }
-    
-        $query->orderBy($orderColumn, $orderMethod);
-    
-        return $query;
+    /**
+     * Get datatable configuration for Patient model
+     */
+    protected function getDatatableConfig(): array
+    {
+        return [
+            'select' => ['patients.*', 'statuses.name as status_name'],
+            'joins' => [
+                [
+                    'table' => 'statuses',
+                    'first' => 'patients.status',
+                    'operator' => '=',
+                    'second' => 'statuses.id',
+                ],
+            ],
+            'searchable' => [
+                'patients.firstname',
+                'patients.lastname',
+                'patients.email',
+                'patients.identifier',
+                'statuses.name',
+            ],
+            'filter_by_customer' => true,
+            'customer_column' => 'patients.customer_id',
+            'default_order_column' => 'id',
+            'allowed_order_columns' => [
+                'patients.id' => 'patients.id',
+                'patients.firstname' => 'patients.firstname',
+                'patients.lastname' => 'patients.lastname',
+                'patients.email' => 'patients.email',
+                'patients.identifier' => 'patients.identifier',
+                'statuses.name' => 'statuses.name',
+            ],
+        ];
     }
-    
 }
