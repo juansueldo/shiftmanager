@@ -32,8 +32,8 @@ class LoginController extends Controller
                 return redirect()->route('dashboard.index', ['slug' => $user->customer->slug]);
             }
 
-            // Fallback if no customer or slug
-            return redirect()->intended('/dashboard');
+            // Fallback to home page if no customer or slug (should not happen in normal flow)
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
@@ -48,6 +48,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('login');
+        return redirect()->route('login');
     }
 }
