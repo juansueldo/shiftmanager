@@ -10,7 +10,12 @@ class Status extends Model
 {
     use DatatableFilter, HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'customer_id'];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
 
     public function users()
     {
@@ -38,7 +43,8 @@ class Status extends Model
             'searchable' => [
                 'statuses.name',
             ],
-            'filter_by_customer' => false,
+            'filter_by_customer' => true,
+            'customer_column' => 'statuses.customer_id',
             'default_order_column' => 'id',
             'allowed_order_columns' => [
                 'id' => 'id',

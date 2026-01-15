@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\DatatableFilter;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Customer extends Model
 {
@@ -12,6 +13,7 @@ class Customer extends Model
     protected $fillable = [
         'firstname',
         'lastname',
+        'slug',
         'company_name',
         'company_email',
         'company_phone',
@@ -35,6 +37,23 @@ class Customer extends Model
     }
 
     /**
+     * Generate a unique slug from company name or firstname
+     */
+    public static function generateSlug(string $name): string
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (static::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        return $slug;
+    }
+
+    /**
      * Get datatable configuration for Customer model
      */
     protected function getDatatableConfig(): array
@@ -51,6 +70,7 @@ class Customer extends Model
             ],
             'searchable' => [
                 'customers.firstname',
+                'customers.slug',
                 'statuses.name',
             ],
             'filter_by_customer' => false,

@@ -26,7 +26,14 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/dashboard');
+            // Redirect to tenant-specific dashboard
+            $user = Auth::user();
+            if ($user->customer && $user->customer->slug) {
+                return redirect()->route('dashboard.index', ['slug' => $user->customer->slug]);
+            }
+
+            // Fallback to home page if no customer or slug (should not happen in normal flow)
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
@@ -41,6 +48,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('login');
+        return redirect()->route('login');
     }
 }

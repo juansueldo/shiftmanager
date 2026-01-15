@@ -11,8 +11,14 @@ class Specialty extends Model
 
     protected $fillable = [
         'name',
+        'customer_id',
         'status',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
 
     /**
      * Get datatable configuration for Specialty model
@@ -33,7 +39,8 @@ class Specialty extends Model
                 'specialties.name',
                 'statuses.name',
             ],
-            'filter_by_customer' => false,
+            'filter_by_customer' => true,
+            'customer_column' => 'specialties.customer_id',
             'default_order_column' => 'id',
             'allowed_order_columns' => [
                 'specialties.id' => 'specialties.id',
